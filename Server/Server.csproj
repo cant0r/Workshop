@@ -22,5 +22,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ModelProvider\ModelProvider.csproj" />
+  </ItemGroup>
+
 
 </Project>
