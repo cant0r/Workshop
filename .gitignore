@@ -10,6 +10,7 @@
 *.userosscache
 *.sln.docstates
 csh*.txt
+Avail*.txt
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
