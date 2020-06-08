@@ -39,6 +39,9 @@ namespace Server.Repositories
             modelBuilder.Entity<Manager>().HasIndex("PhoneNumber").IsUnique();
             modelBuilder.Entity<Client>().HasIndex("PhoneNumber").IsUnique();
             modelBuilder.Entity<Auto>().HasIndex("LicencePlate").IsUnique();
+            modelBuilder.Entity<Technician>().HasIndex("Email").IsUnique();
+            modelBuilder.Entity<Manager>().HasIndex("Email").IsUnique();
+            modelBuilder.Entity<Client>().HasIndex("Email").IsUnique();
         }
     }
 }
