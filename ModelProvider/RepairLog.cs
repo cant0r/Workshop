@@ -14,7 +14,6 @@ namespace ModelProvider
         [Required]
         public string Description { get; set; }
 
-        [Required]
         public virtual Repair Repair { get; set; }
 
     }

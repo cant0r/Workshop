@@ -17,6 +17,7 @@ namespace ModelProvider
         [Required]
         public string PhoneNumber { get; set; }
 
+        [Required]
         public virtual ICollection<RepairTechnician> RepairTechnician { get; set; }
 
     }

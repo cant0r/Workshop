@@ -34,11 +34,6 @@ namespace Server.Repositories
             modelBuilder.Entity<RepairTechnician>().HasOne(job => job.Technician)
                .WithMany(jt => jt.RepairTechnician)
                .HasForeignKey(job => job.TechnicianId);
-
-            modelBuilder.Entity<Technician>().HasIndex("PhoneNumber").IsUnique();
-            modelBuilder.Entity<Manager>().HasIndex("PhoneNumber").IsUnique();
-            modelBuilder.Entity<Client>().HasIndex("PhoneNumber").IsUnique();
-            modelBuilder.Entity<Auto>().HasIndex("LicencePlate").IsUnique();
         }
     }
 }

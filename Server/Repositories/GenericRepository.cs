@@ -31,7 +31,7 @@ namespace Server.Repositories
         public IEnumerable<TEntity> GetAll()
         {
             using var ctx = new WorkshopContext();
-            return ctx.Set<TEntity>().ToList();
+            return ctx.Set<TEntity>();
         }
 
         public void Remove(TEntity ent)

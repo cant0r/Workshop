@@ -16,6 +16,8 @@ namespace ModelProvider
 
         public string Description { get; set; }
 
+        [Required]
+        public virtual Manager Manager { get; set; }
 
         [Required]
         public virtual State State { get; set; }
