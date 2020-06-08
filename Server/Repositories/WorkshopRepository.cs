@@ -63,16 +63,6 @@ namespace Server.Repositories
         public void RegisterAuto(Auto auto)
         {
             using var ctx = new WorkshopContext();
-
-            var validOwner = (from client in ctx.Clients
-                              where client.Id == auto.Client.Id
-                              select client).FirstOrDefault();
-            if (validOwner is null)
-            {
-                // TODO Log invalid owner id
-                return;
-            }
-
             ctx.Automobiles.Add(auto);
             ctx.SaveChanges();
         }
@@ -92,12 +82,9 @@ namespace Server.Repositories
         {
             using var ctx = new WorkshopContext();
             var rep = ctx.Repairs.Find(repair.Id);
+            rep.State = State.Cancelled;
+            UpdateRepair(repair);
 
-            if (controlMessage == rep.Id.ToString())
-            {
-                rep.State = State.Cancelled;
-                UpdateRepair(repair);
-            }
         }
     }
 }
