@@ -13,17 +13,25 @@ namespace Server.Repositories
             using var ctx = new WorkshopContext();
             return ctx.Repairs.ToList();
         }
-        public IEnumerable<Technician> GetTechniciansByRepairID(long id)
+        public IEnumerable<Repair> GetFinishedRepairs()
         {
             using var ctx = new WorkshopContext();
-            var technicianIdNumbers = (from jt in ctx.RepairTechnicians
-                                       where jt.RepairID == id
-                                       select jt.TechnicianId);
-            return (from t in ctx.Technicians
-                    where technicianIdNumbers.Contains(t.Id)
-                    select t);
+            return (from repairs in ctx.Repairs
+                    where repairs.State == State.Done
+                    select repairs);
         }
-
+        public IEnumerable<Repair> GetNewRepairs()
+        {
+            using var ctx = new WorkshopContext();
+            return (from repairs in ctx.Repairs
+                    where repairs.State == State.New
+                    select repairs);
+        }
+        public IEnumerable<RepairLog> GetRepairLogs()
+        {
+            using var ctx = new WorkshopContext();
+            return ctx.Set<RepairLog>().ToList();
+        }
         public RepairLog GetRepairLogByRepairID(long id)
         {
             using var ctx = new WorkshopContext();
@@ -37,13 +45,17 @@ namespace Server.Repositories
             using var ctx = new WorkshopContext();
             return ctx.Technicians.ToList();
         }
-        public IEnumerable<Repair> GetFinishedRepairs()
+        public IEnumerable<Technician> GetTechniciansByRepairID(long id)
         {
             using var ctx = new WorkshopContext();
-            return (from repairs in ctx.Repairs
-                    where repairs.State == State.Done
-                    select repairs);
+            var technicianIdNumbers = (from jt in ctx.RepairTechnicians
+                                       where jt.RepairID == id
+                                       select jt.TechnicianId);
+            return (from t in ctx.Technicians
+                    where technicianIdNumbers.Contains(t.Id)
+                    select t);
         }
+       
         public IEnumerable<Client> GetClients()
         {
             using var ctx = new WorkshopContext();

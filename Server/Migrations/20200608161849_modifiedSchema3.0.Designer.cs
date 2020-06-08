@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Server.Repositories;
 
 namespace Server.Migrations
 {
     [DbContext(typeof(WorkshopContext))]
-    partial class WorkshopContextModelSnapshot : ModelSnapshot
+    [Migration("20200608161849_modifiedSchema3.0")]
+    partial class modifiedSchema30
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +36,7 @@ namespace Server.Migrations
 
                     b.Property<string>("LicencePlate")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Model")
                         .IsRequired()
@@ -43,9 +45,6 @@ namespace Server.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
-
-                    b.HasIndex("LicencePlate")
-                        .IsUnique();
 
                     b.ToTable("Automobiles");
                 });
@@ -67,12 +66,9 @@ namespace Server.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PhoneNumber")
-                        .IsUnique();
 
                     b.ToTable("Clients");
                 });
@@ -94,15 +90,12 @@ namespace Server.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("RepairId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PhoneNumber")
-                        .IsUnique();
 
                     b.HasIndex("RepairId");
 
@@ -185,12 +178,9 @@ namespace Server.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PhoneNumber")
-                        .IsUnique();
 
                     b.ToTable("Technicians");
                 });
