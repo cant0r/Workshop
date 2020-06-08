@@ -8,7 +8,7 @@ namespace Server.Repositories
 {
     public class WorkshopRepository
     {
-        public IEnumerable<Repair> GetRepairsInProgress()
+        public IEnumerable<Repair> GetRepairs()
         {
             using var ctx = new WorkshopContext();
             return ctx.Repairs.ToList();
@@ -27,16 +27,19 @@ namespace Server.Repositories
                     where repairs.State == State.New
                     select repairs);
         }
-        public IEnumerable<RepairLog> GetRepairLogs()
-        {
-            using var ctx = new WorkshopContext();
-            return ctx.Set<RepairLog>().ToList();
-        }
-        public RepairLog GetRepairLogByRepairID(long id)
+        public IEnumerable<RepairLog> GetRepairLogs(long repairID)
         {
             using var ctx = new WorkshopContext();
             return (from logs in ctx.RepairLogs
-                    where logs.Id == id
+                    where logs.Repair.Id == repairID
+                    select logs).ToList();
+        }
+        public RepairLog GetLatestRepairLog(long repairID)
+        {
+            using var ctx = new WorkshopContext();
+            return (from logs in ctx.RepairLogs
+                    where logs.Repair.Id == repairID
+                    orderby logs.Id descending
                     select logs).FirstOrDefault();
         }
 
