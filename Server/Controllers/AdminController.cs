@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using ModelProvider;
 using Server.Repositories;
@@ -176,6 +172,7 @@ namespace Server.Controllers
         public ActionResult UpdateManagerRange(IEnumerable<Manager> man)
         {
             var repo = new GenericRepository<Manager>();
+            // TODO: May want to check on existence here
             repo.UpdateAll(man);
             return Ok();
         }
