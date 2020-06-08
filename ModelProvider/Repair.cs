@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ModelProvider
 {
-    public class Job
+    public class Repair
     {
         [Key]
         public long Id { get; set; }
@@ -17,12 +17,12 @@ namespace ModelProvider
         public string Description { get; set; }
 
         [Required]
-        public virtual Manager JobManager { get; set; }
+        public virtual Manager Manager { get; set; }
 
         [Required]
-        public virtual State WorkState { get; set; }
+        public virtual State State { get; set; }
 
         [Required]
-        public virtual ICollection<JobTechnician> JobTechnicians { get; set; }
+        public virtual ICollection<RepairTechnician> RepairTechnicians { get; set; }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ModelProvider
 {
-    public class JobLog
+    public class RepairLog
     {
         [Key]
         public long Id { get; set; }
@@ -14,7 +14,7 @@ namespace ModelProvider
         [Required]
         public string Description { get; set; }
 
-        public virtual Job Job { get; set; }
+        public virtual Repair Repair { get; set; }
 
     }
 }

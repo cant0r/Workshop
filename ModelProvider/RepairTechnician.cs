@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace ModelProvider
 {
-    public class JobTechnician
+    public class RepairTechnician
     {
-        public long JobId { get; set; }
-        public virtual Job Job { get; set; }
+        public long RepairID { get; set; }
+        public virtual Repair Repair { get; set; }
 
         public long TechnicianId { get; set; }
         public virtual Technician Technician { get; set; }
