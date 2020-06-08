@@ -12,11 +12,12 @@ namespace Server.Repositories
 
         public DbSet<Auto> Automobiles { get; set; }
         public DbSet<Client> Clients { get; set; }
-        public DbSet<Job> Jobs { get; set; } 
-        public DbSet<JobLog> JobLogs { get; set; }
+        public DbSet<Repair> Repairs { get; set; } 
+        public DbSet<RepairLog> RepairLogs { get; set; }
         public DbSet<Technician> Technicians { get; set; }
         public DbSet<Manager> Managers { get; set; }
-        public DbSet<State> States { get; set; }
+
+        public DbSet<RepairTechnician> RepairTechnicians { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -26,12 +27,12 @@ namespace Server.Repositories
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<JobTechnician>().HasKey(k => new { k.JobId, k.TechnicianId });
-            modelBuilder.Entity<JobTechnician>().HasOne(job => job.Job)
-                .WithMany(jt => jt.JobTechnicians)
-                .HasForeignKey(job => job.JobId);
-            modelBuilder.Entity<JobTechnician>().HasOne(job => job.Technician)
-               .WithMany(jt => jt.JobTechnicians)
+            modelBuilder.Entity<RepairTechnician>().HasKey(k => new { k.RepairID, k.TechnicianId });
+            modelBuilder.Entity<RepairTechnician>().HasOne(job => job.Repair)
+                .WithMany(jt => jt.RepairTechnicians)
+                .HasForeignKey(job => job.RepairID);
+            modelBuilder.Entity<RepairTechnician>().HasOne(job => job.Technician)
+               .WithMany(jt => jt.RepairTechnician)
                .HasForeignKey(job => job.TechnicianId);
         }
     }
