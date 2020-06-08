@@ -13,6 +13,7 @@ csh*.txt
 Avail*.txt
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
+Forms/*
 
 # Build results
 [Dd]ebug/
