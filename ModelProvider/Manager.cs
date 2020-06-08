@@ -18,6 +18,7 @@ namespace ModelProvider
         [Required]
         public string PhoneNumber { get; set; }
 
-        public virtual Technician Technician { get; set; }
+        [Required]
+        public virtual Repair Repair { get; set; }
     }
 }
