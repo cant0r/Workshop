@@ -99,6 +99,86 @@ namespace Server.Controllers
             return Ok();
         }
         #endregion
+        #region CRUDManegers
+        [Route("managers")]
+        [HttpPost]
+        public ActionResult AddManager(Manager man)
+        {
+            var manRepo = new GenericRepository<Manager>();
+            manRepo.Add(man);
+            return Ok();
+        }
+        [Route("managers")]
+        [HttpPost]
+        public ActionResult AddManagerRange(IEnumerable<Manager> man)
+        {
+            var manRepo = new GenericRepository<Manager>();
+            manRepo.AddAll(man);
+            return Ok();
+        }
 
+        [Route("managers")]
+        [HttpGet]
+        public ActionResult<IEnumerable<Manager>> GetManagers()
+        {
+            var them = new GenericRepository<Manager>().GetAll();
+            return Ok(them);
+        }
+
+        [Route("managers/{id:long}")]
+        [HttpGet]
+        public ActionResult<Manager> GetManagerByID(long id)
+        {
+            var man = new GenericRepository<Manager>().Get(id);
+
+            if (man is null)
+                return NotFound();
+            else
+                return Ok(man);
+        }
+        [Route("managers/{id:long}")]
+        [HttpDelete]
+        public ActionResult RemoveManagerByID(long id)
+        {
+            var repo = new GenericRepository<Manager>();
+            var man = repo.Get(id);
+            repo.Remove(man);
+
+            return Ok();
+        }
+        [Route("managers")]
+        [HttpDelete]
+        public ActionResult RemoveManagerRange(IEnumerable<Manager> man)
+        {
+            var repo = new GenericRepository<Manager>();
+            repo.RemoveAll(man);
+
+            return Ok();
+        }
+
+        [Route("managers")]
+        [HttpPut]
+        public ActionResult UpdateTechnician(Manager man)
+        {
+            var repo = new GenericRepository<Manager>();
+
+            if (repo.Get(man.Id) is null)
+                AddManager(man);
+            else
+            {
+                repo.Update(man);
+            }
+            return Ok();
+
+        }
+        [Route("managers")]
+        [HttpPut]
+        public ActionResult UpdateManagerRange(IEnumerable<Manager> man)
+        {
+            var repo = new GenericRepository<Manager>();
+            repo.UpdateAll(man);
+            return Ok();
+        }
+        #endregion
     }
 }
