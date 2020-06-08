@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Server.Repositories;
 
 namespace Server.Migrations
 {
     [DbContext(typeof(WorkshopContext))]
-    partial class WorkshopContextModelSnapshot : ModelSnapshot
+    [Migration("20200608125952_initialWorkshopFIXED2.0")]
+    partial class initialWorkshopFIXED20
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -114,17 +116,19 @@ namespace Server.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("ManagerId")
+                    b.Property<long>("JobManagerId")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("State")
+                    b.Property<int>("WorkStateId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AutoId");
 
-                    b.HasIndex("ManagerId");
+                    b.HasIndex("JobManagerId");
+
+                    b.HasIndex("WorkStateId");
 
                     b.ToTable("Repairs");
                 });
@@ -140,29 +144,45 @@ namespace Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("RepairId")
+                    b.Property<long?>("JobId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RepairId");
+                    b.HasIndex("JobId");
 
                     b.ToTable("RepairLogs");
                 });
 
             modelBuilder.Entity("ModelProvider.RepairTechnician", b =>
                 {
-                    b.Property<long>("RepairID")
+                    b.Property<long>("JobId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("TechnicianId")
                         .HasColumnType("bigint");
 
-                    b.HasKey("RepairID", "TechnicianId");
+                    b.HasKey("JobId", "TechnicianId");
 
                     b.HasIndex("TechnicianId");
 
                     b.ToTable("RepairTechnicians");
+                });
+
+            modelBuilder.Entity("ModelProvider.State", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("States");
                 });
 
             modelBuilder.Entity("ModelProvider.Technician", b =>
@@ -213,30 +233,36 @@ namespace Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ModelProvider.Manager", "Manager")
+                    b.HasOne("ModelProvider.Manager", "JobManager")
                         .WithMany()
-                        .HasForeignKey("ManagerId")
+                        .HasForeignKey("JobManagerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ModelProvider.State", "WorkState")
+                        .WithMany()
+                        .HasForeignKey("WorkStateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("ModelProvider.RepairLog", b =>
                 {
-                    b.HasOne("ModelProvider.Repair", "Repair")
+                    b.HasOne("ModelProvider.Repair", "Job")
                         .WithMany()
-                        .HasForeignKey("RepairId");
+                        .HasForeignKey("JobId");
                 });
 
             modelBuilder.Entity("ModelProvider.RepairTechnician", b =>
                 {
-                    b.HasOne("ModelProvider.Repair", "Repair")
-                        .WithMany("RepairTechnicians")
-                        .HasForeignKey("RepairID")
+                    b.HasOne("ModelProvider.Repair", "Job")
+                        .WithMany("JobTechnicians")
+                        .HasForeignKey("JobId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ModelProvider.Technician", "Technician")
-                        .WithMany("RepairTechnician")
+                        .WithMany("JobTechnicians")
                         .HasForeignKey("TechnicianId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Server.Repositories;
 
 namespace Server.Migrations
 {
     [DbContext(typeof(WorkshopContext))]
-    partial class WorkshopContextModelSnapshot : ModelSnapshot
+    [Migration("20200608132658_nowWithEnums")]
+    partial class nowWithEnums
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -114,17 +116,17 @@ namespace Server.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("ManagerId")
+                    b.Property<long>("RepairManagerId")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("State")
+                    b.Property<int>("WorkState")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AutoId");
 
-                    b.HasIndex("ManagerId");
+                    b.HasIndex("RepairManagerId");
 
                     b.ToTable("Repairs");
                 });
@@ -213,9 +215,9 @@ namespace Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ModelProvider.Manager", "Manager")
+                    b.HasOne("ModelProvider.Manager", "RepairManager")
                         .WithMany()
-                        .HasForeignKey("ManagerId")
+                        .HasForeignKey("RepairManagerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
