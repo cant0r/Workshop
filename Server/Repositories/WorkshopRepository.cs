@@ -8,12 +8,12 @@ namespace Server.Repositories
 {
     public class WorkshopRepository
     {
-       public IEnumerable<Repair> GetRepairsInProgress()
+        public IEnumerable<Repair> GetRepairsInProgress()
         {
             using var ctx = new WorkshopContext();
             return ctx.Repairs.ToList();
         }
-       public IEnumerable<Technician> GetTechniciansByRepairID(long id)
+        public IEnumerable<Technician> GetTechniciansByRepairID(long id)
         {
             using var ctx = new WorkshopContext();
             var technicianIdNumbers = (from jt in ctx.RepairTechnicians
@@ -23,16 +23,16 @@ namespace Server.Repositories
                     where technicianIdNumbers.Contains(t.Id)
                     select t);
         }
-     
-       public RepairLog GetRepairLogByRepairID(long id)
+
+        public RepairLog GetRepairLogByRepairID(long id)
         {
             using var ctx = new WorkshopContext();
             return (from logs in ctx.RepairLogs
                     where logs.Id == id
                     select logs).FirstOrDefault();
         }
-      
-       public IEnumerable<Technician> GetTechnicians()
+
+        public IEnumerable<Technician> GetTechnicians()
         {
             using var ctx = new WorkshopContext();
             return ctx.Technicians.ToList();
@@ -49,27 +49,55 @@ namespace Server.Repositories
             using var ctx = new WorkshopContext();
             return ctx.Clients.ToList();
         }
-            //Get cars (police.hu)
         public IEnumerable<Auto> GetAutomobiles()
         {
             using var ctx = new WorkshopContext();
             return ctx.Automobiles.ToList();
         }
-
-            //Creations of jobs:
-            //1. Register Client
-            //2. Register Auto
-            //3. Updated JoinTable if necessary
-            //4. Create job, check for valid manager
-
-            //Update jobs:
-            //1. Using an overview form
-
-            //Delete jobs: inside database form
-            //For confirmation the job id must be given via a messageboc thingy
-            //the server receives said id
-
-
-
+        public void RegisterClient(Client client)
+        {
+            using var ctx = new WorkshopContext();
+            ctx.Clients.Add(client);
+            ctx.SaveChanges();
         }
+        public void RegisterAuto(Auto auto)
+        {
+            using var ctx = new WorkshopContext();
+
+            var validOwner = (from client in ctx.Clients
+                              where client.Id == auto.Client.Id
+                              select client).FirstOrDefault();
+            if (validOwner is null)
+            {
+                // TODO Log invalid owner id
+                return;
+            }
+
+            ctx.Automobiles.Add(auto);
+            ctx.SaveChanges();
+        }
+        public void CreateRepair(Repair repair)
+        {
+            using var ctx = new WorkshopContext();
+            ctx.Repairs.Add(repair);
+            ctx.SaveChanges();
+        }
+        public void UpdateRepair(Repair repair)
+        {
+            using var ctx = new WorkshopContext();
+            ctx.Repairs.Update(repair);
+            ctx.SaveChanges();
+        }
+        public void RemoveRepair(Repair repair, string controlMessage)
+        {
+            using var ctx = new WorkshopContext();
+            var rep = ctx.Repairs.Find(repair.Id);
+
+            if (controlMessage == rep.Id.ToString())
+            {
+                rep.State = State.Cancelled;
+                UpdateRepair(repair);
+            }
+        }
+    }
 }
