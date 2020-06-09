@@ -9,7 +9,7 @@ namespace Server.Controllers
     [ApiController]
     public class TechnicianController : ControllerBase
     {
-        [Route("new")]
+        [Route("repair/new")]
         [HttpGet]
         public ActionResult<IEnumerable<Repair>> GetNewRepairJobs()
         {
@@ -19,7 +19,7 @@ namespace Server.Controllers
                 return NotFound();
             return Ok(repairs);
         }
-        [Route("inprogress")]
+        [Route("repair/inprogress")]
         [HttpGet]
         public ActionResult<IEnumerable<Repair>> GetTakenRepairJobs()
         {
@@ -29,7 +29,7 @@ namespace Server.Controllers
                 return NotFound();
             return Ok(repairs);
         }
-        [Route("new")]
+        [Route("repair/new")]
         [HttpPost]
         public ActionResult TakeRepairJob(Repair repair)
         {
@@ -39,7 +39,7 @@ namespace Server.Controllers
             workshopRepo.UpdateRepair(repair);
             return Ok();
         }
-        [Route("logs")]
+        [Route("logs/add")]
         [HttpPost]
         public ActionResult AddRepairLog(RepairLog log)
         {
@@ -57,7 +57,7 @@ namespace Server.Controllers
                 return NotFound();
             return Ok(logs);
         }
-        [Route("logs")]
+        [Route("logs/remove")]
         [HttpPost]
         public ActionResult RemoveRepairLog(RepairLog log)
         {
@@ -65,7 +65,7 @@ namespace Server.Controllers
             workshopRepo.RemoveRepairLog(log);
             return Ok();
         }
-        [Route("logs")]
+        [Route("logs/update")]
         [HttpPost]
         public ActionResult UpdateRepairLog(RepairLog log)
         {
