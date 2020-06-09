@@ -68,6 +68,7 @@ namespace Server.Repositories
             ctx.RepairLogs.Update(log);
         }
         #endregion
+        #region ManagerGetters
         public IEnumerable<Technician> GetTechnicians()
         {
             using var ctx = new WorkshopContext();
@@ -94,6 +95,7 @@ namespace Server.Repositories
             using var ctx = new WorkshopContext();
             return ctx.Automobiles.ToList();
         }
+        #endregion
         public void RegisterClient(Client client)
         {
             using var ctx = new WorkshopContext();
@@ -119,7 +121,7 @@ namespace Server.Repositories
             ctx.Repairs.Update(repair);
             ctx.SaveChanges();
         }
-        public void RemoveRepair(Repair repair, string controlMessage)
+        public void AbortRepair(Repair repair)
         {
             using var ctx = new WorkshopContext();
             var rep = ctx.Repairs.Find(repair.Id);
