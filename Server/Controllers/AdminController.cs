@@ -169,7 +169,6 @@ namespace Server.Controllers
         public ActionResult UpdateManagerRange(IEnumerable<Manager> man)
         {
             var repo = new GenericRepository<Manager>();
-            // TODO: May want to check on existence here
             repo.UpdateAll(man);
             return Ok();
         }
