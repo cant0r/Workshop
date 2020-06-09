@@ -8,6 +8,7 @@ namespace Server.Repositories
 {
     public class WorkshopRepository
     {
+        #region Repairs
         public IEnumerable<Repair> GetRepairs()
         {
             using var ctx = new WorkshopContext();
@@ -27,6 +28,15 @@ namespace Server.Repositories
                     where repairs.State == State.New
                     select repairs);
         }
+        public IEnumerable<Repair> GetTakenRepairs()
+        {
+            using var ctx = new WorkshopContext();
+            return (from repairs in ctx.Repairs
+                    where repairs.State == State.InProgress
+                    select repairs);
+        }
+        #endregion
+        #region Logs
         public IEnumerable<RepairLog> GetRepairLogs(long repairID)
         {
             using var ctx = new WorkshopContext();
@@ -42,7 +52,22 @@ namespace Server.Repositories
                     orderby logs.Id descending
                     select logs).FirstOrDefault();
         }
-
+        public void AddRepairLog(RepairLog log)
+        {
+            using var ctx = new WorkshopContext();
+            ctx.RepairLogs.Add(log);
+        }
+        public void RemoveRepairLog(RepairLog log)
+        {
+            using var ctx = new WorkshopContext();
+            ctx.RepairLogs.Remove(log);
+        }
+        public void UpdateRepairLog(RepairLog log)
+        {
+            using var ctx = new WorkshopContext();
+            ctx.RepairLogs.Update(log);
+        }
+        #endregion
         public IEnumerable<Technician> GetTechnicians()
         {
             using var ctx = new WorkshopContext();
@@ -84,6 +109,7 @@ namespace Server.Repositories
         public void CreateRepair(Repair repair)
         {
             using var ctx = new WorkshopContext();
+            
             ctx.Repairs.Add(repair);
             ctx.SaveChanges();
         }
