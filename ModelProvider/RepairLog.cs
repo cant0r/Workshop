@@ -15,6 +15,9 @@ namespace ModelProvider
         public string Description { get; set; }
 
         [Required]
+        public DateTime Date { get; set; }
+
+        [Required]
         public virtual Repair Repair { get; set; }
 
     }
