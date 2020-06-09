@@ -5,11 +5,6 @@ using Server.Repositories;
 
 namespace Server.Controllers
 {
-
-    /*
-     * Add, AddAll, Get, GetAll, Remove, RemoveAll, Update, UpdateAll
-     */
-
     [Route("api/admin/schema")]
     [ApiController]
     public class AdminController : ControllerBase
@@ -118,6 +113,8 @@ namespace Server.Controllers
         public ActionResult<IEnumerable<Manager>> GetManagers()
         {
             var them = new GenericRepository<Manager>().GetAll();
+            if (them is null)
+                return NotFound();
             return Ok(them);
         }
 
@@ -154,7 +151,7 @@ namespace Server.Controllers
 
         [Route("managers")]
         [HttpPut]
-        public ActionResult UpdateTechnician(Manager man)
+        public ActionResult UpdateManager(Manager man)
         {
             var repo = new GenericRepository<Manager>();
 
