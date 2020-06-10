@@ -23,8 +23,7 @@ namespace Client_Manager
 
         public MainWindow()
         {
-            InitializeComponent();
-            
+            InitializeComponent();            
         }
 
         private void databaseBtn_Click(object sender, RoutedEventArgs e)
