@@ -1,11 +1,12 @@
 ﻿<Window x:Class="Client_Manager.DatabaseView"
+        xmlns:uc="clr-namespace:Client_Manager.CustomControls"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client_Manager"
         mc:Ignorable="d"
-        Title="Database" Height="Auto" Width="800" Background="#7ec8e3"
+        Title="Database" Height="Auto" Width="1200" Background="#7ec8e3" Closing="Window_Closing"
         >
     <Window.Resources>
         <Style x:Key="FocusVisual">
@@ -106,7 +107,10 @@
                 Click="backBtn_Click"></Button>
         </Grid>
         <ScrollViewer Grid.Row="0" Grid.Column="1" Width="Auto" Height="Auto">
-
+            <StackPanel x:Name="entryPanel">
+               
+                
+            </StackPanel>
         </ScrollViewer>
     </Grid>
 

@@ -32,5 +32,11 @@ namespace Client_Manager
             DialogResult = true;
             Close();
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+            Application.Current.Shutdown(0);
+        }
     }
 }
