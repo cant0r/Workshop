@@ -13,11 +13,11 @@ using System.Windows.Shapes;
 namespace Client_Manager
 {
     /// <summary>
-    /// Interaction logic for RepairLogViewer.xaml
+    /// Interaction logic for RepairLogView.xaml
     /// </summary>
-    public partial class RepairLogViewer : Window
+    public partial class RepairLogView : Window
     {
-        public RepairLogViewer()
+        public RepairLogView()
         {
             InitializeComponent();
         }
