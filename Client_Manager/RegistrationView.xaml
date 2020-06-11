@@ -8,79 +8,7 @@
         Title="RegistrationView"  Height="600" Width="800"
         Background="#7ec8e3"
         Closing="Window_Closing">
-    <Window.Resources>
-        <Style TargetType="TextBlock">
-            <Setter Property="Height" Value="Auto"></Setter>
-            <Setter Property="Width" Value="Auto"></Setter>
-            <Setter Property="Background" Value="#d4f1f4"></Setter>
-            <Setter Property="Foreground" Value="Navy"></Setter>
-            <Setter Property="Margin" Value="10"></Setter>
-        </Style>
-        <Style TargetType="Label">
-            <Setter Property="Foreground" Value="#05445e"></Setter>
-            <Setter Property="FontSize" Value="16pt"></Setter>
-            <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
-            <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
-            <Setter Property="Height" Value="Auto"></Setter>
-            <Setter Property="Width" Value="Auto"></Setter>
-        </Style>
-        <Style x:Key="FocusVisual">
-            <Setter Property="Control.Template">
-                <Setter.Value>
-                    <ControlTemplate>
-                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
-        <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
-        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
-        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
-        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
-        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
-        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
-        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
-        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
-        <Style TargetType="{x:Type Button}">
-            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
-            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Padding" Value="1"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
-                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsDefaulted" Value="true">
-                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="#75e6da"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
-                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </Window.Resources>
-    <ScrollViewer>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -102,18 +30,18 @@
             <Label Grid.Row="1" Grid.Column="0" Content="Ügyfél neve:"></Label>
             <Label Grid.Row="2" Grid.Column="0" Content="Ügyfél email:"></Label>
             <Label Grid.Row="3" Grid.Column="0" Content="Ügyfél telefonszám:"></Label>
-            <TextBlock x:Name="clientNameTblock" Grid.Row="1" Grid.Column="1"></TextBlock>
-            <TextBlock x:Name="clientEmailTblock" Grid.Row="2" Grid.Column="1"></TextBlock>
-            <TextBlock x:Name="clientPhoneTblock" Grid.Row="3" Grid.Column="1" ></TextBlock>
+            <TextBox x:Name="clientNameTblock" Grid.Row="1" Grid.Column="1"></TextBox>
+            <TextBox x:Name="clientEmailTblock" Grid.Row="2" Grid.Column="1"></TextBox>
+            <TextBox x:Name="clientPhoneTblock" Grid.Row="3" Grid.Column="1" ></TextBox>
             <Label Grid.Row="4" Grid.Column="0" Content="Autó adatai:"  HorizontalAlignment="Left" FontWeight="Bold"></Label>
             <Label Grid.Row="5" Grid.Column="0" Content="Autó márka:"></Label>
             <Label Grid.Row="6" Grid.Column="0" Content="Autó modell:"></Label>
             <Label Grid.Row="7" Grid.Column="0" Content="Rendszámtábla:"></Label>
-            <TextBlock x:Name="autoBrandTblock" Grid.Row="5" Grid.Column="1"></TextBlock>
-            <TextBlock x:Name="autoModelTblock" Grid.Row="6" Grid.Column="1"></TextBlock>
-            <TextBlock x:Name="autoPlateTblock" Grid.Row="7" Grid.Column="1" ></TextBlock>
-            <Button Grid.Row="9" Grid.Column="0" x:Name="backBtn" Foreground="#05445e" Background="#d4f1f4" Height="Auto" Width="Auto" Content="&#x2906;" FontSize="36pt"></Button>
-            <Button Grid.Row="9" Grid.Column="1" x:Name="nextBtn" Foreground="#05445e" Background="#d4f1f4" Height="Auto" Width="Auto" Content="Mentés, és tovább" FontSize="32pt"></Button>
+            <TextBox x:Name="autoBrandTblock" Grid.Row="5" Grid.Column="1"></TextBox>
+            <TextBox x:Name="autoModelTblock" Grid.Row="6" Grid.Column="1"></TextBox>
+            <TextBox x:Name="autoPlateTblock" Grid.Row="7" Grid.Column="1" ></TextBox>
+            <Button Click="backBtn_Click" Grid.Row="9" Grid.Column="0" x:Name="backBtn" Content="&#x2906;"></Button>
+            <Button Grid.Row="9" Grid.Column="1" x:Name="nextBtn" Content="Mentés"></Button>
         </Grid>
     </ScrollViewer>
 </Window>
