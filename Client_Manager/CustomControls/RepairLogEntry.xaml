@@ -75,17 +75,17 @@
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
             <Border Grid.Row="0" Grid.Column="0"  BorderThickness="2pt" BorderBrush="#05445e" Grid.RowSpan="2"></Border>
-            <UniformGrid Grid.Row="0" Grid.Column="0" Rows="2" Columns="1">
-                <Label Content="SzerelőID" Height="Auto" Width="Auto" FontSize="24pt" HorizontalContentAlignment="Center"
-                       VerticalContentAlignment="Center"></Label>
-                <Label Content="1337" Height="Auto" Width="Auto" FontSize="22pt" FontWeight="Bold"
+            <UniformGrid Background="#05445e" Grid.Row="0" Grid.Column="0" Rows="2" Columns="1">
+                <Label Background="#189ab4" Foreground="LightCyan" Margin="10" Content="SzerelőID" Height="Auto" Width="Auto" FontSize="24pt" HorizontalContentAlignment="Center"
+                       VerticalContentAlignment="Center" ></Label>
+                <Label Background="#189ab4" Foreground="LightCyan" Margin="10" Content="1337" Height="Auto" Width="Auto" FontSize="22pt" FontWeight="Bold"
                        HorizontalContentAlignment="Center"
                        VerticalContentAlignment="Center" x:Name="techIDLbl"></Label>
             </UniformGrid>
-            <UniformGrid Grid.Row="1" Grid.Column="0" Rows="2" Columns="1">
-                <Label Content="Bejegyezve" Height="Auto" Width="Auto" FontSize="24pt" HorizontalContentAlignment="Center"
+            <UniformGrid Background="#05445e" Grid.Row="1" Grid.Column="0" Rows="2" Columns="1">
+                <Label Background="#189ab4" Foreground="LightCyan" Margin="10" Content="Bejegyezve" Height="Auto" Width="Auto" FontSize="24pt" HorizontalContentAlignment="Center"
                        VerticalContentAlignment="Center"></Label>
-                <Label Content="1986.04.28" Height="Auto" Width="Auto" FontSize="22pt" FontWeight="Bold"
+                <Label Background="#189ab4" Foreground="LightCyan" Margin="10" Content="1986.04.28" Height="Auto" Width="Auto" FontSize="22pt" FontWeight="Bold"
                        HorizontalContentAlignment="Center"
                        VerticalContentAlignment="Center" x:Name="dobLbl"></Label>
             </UniformGrid>
