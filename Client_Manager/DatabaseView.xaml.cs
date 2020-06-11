@@ -28,15 +28,13 @@ namespace Client_Manager
 
         private void backBtn_Click(object sender, RoutedEventArgs e)
         {
-
             DialogResult = true;
             Close();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            e.Cancel = true;
-            Application.Current.Shutdown(0);
+            DialogResult = true;
         }
     }
 }
