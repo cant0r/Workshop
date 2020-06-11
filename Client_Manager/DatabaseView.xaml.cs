@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Client_Manager.CustomControls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,11 +24,11 @@ namespace Client_Manager
         public DatabaseView()
         {
             InitializeComponent();
-           
         }
 
         private void backBtn_Click(object sender, RoutedEventArgs e)
         {
+            
             DialogResult = true;
             Close();
         }

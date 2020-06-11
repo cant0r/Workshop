@@ -108,7 +108,6 @@
         </Grid>
         <ScrollViewer Grid.Row="0" Grid.Column="1" Width="Auto" Height="Auto">
             <StackPanel x:Name="entryPanel">
-                <uc:RepairEntryBox></uc:RepairEntryBox>
             </StackPanel>
         </ScrollViewer>
     </Grid>
