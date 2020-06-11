@@ -95,11 +95,11 @@
 
             </StackPanel>
             <UniformGrid  Grid.Row="0" Grid.Column="2">
-                <Button   Width="Auto"  Background="#d4f1f4" Foreground="#05445e"
+                <Button  x:Name="repairLogBtn" Width="Auto"  Background="#d4f1f4" Foreground="#05445e"
                     Content="JAVÍTÁSI NAPLÓ" FontSize="16pt"></Button>
             </UniformGrid>
             <UniformGrid Grid.Row="1" Grid.Column="2">
-                <Button    Content="Szerkesztés" Width="Auto"
+                <Button x:Name="editBtn"   Content="Szerkesztés" Width="Auto"
                       Background="#d4f1f4" Foreground="#05445e" FontSize="16pt"></Button>
             </UniformGrid>
 
