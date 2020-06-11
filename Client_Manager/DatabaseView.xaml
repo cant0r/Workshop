@@ -101,7 +101,7 @@
                 FontSize="24pt" FontStyle="Normal"  Background="#d4f1f4" Foreground="#05445e"
                 Margin="0" x:Name="autosBtn"></Button>
             <Button Grid.Row="5" Grid.Column="0" Width="Auto" Height="Auto" Content="&#8592;"
-                FontSize="48pt" FontStyle="Normal"  Background="#d4f1f4" Foreground="#05445e"
+                FontSize="24pt" FontStyle="Normal"  Background="#d4f1f4" Foreground="#05445e" FontWeight="Heavy"
                 VerticalContentAlignment="Center"
                 Margin="0,0,0,0" x:Name="backBtn"
                 Click="backBtn_Click"></Button>
