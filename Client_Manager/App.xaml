@@ -4,6 +4,20 @@
              xmlns:local="clr-namespace:Client_Manager"
              StartupUri="Views/MainWindow.xaml">
     <Application.Resources>
+        <Style TargetType="Border">
+            <Setter Property="BorderBrush" Value="#05445e"></Setter>
+            <Setter Property="BorderThickness" Value="2pt"></Setter>
+            <Setter Property="Height" Value="Auto"></Setter>
+            <Setter Property="Width" Value="Auto"></Setter>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Height" Value="Auto"></Setter>
+            <Setter Property="Width" Value="Auto"></Setter>
+            <Setter Property="Background" Value="#d4f1f4"></Setter>
+            <Setter Property="Foreground" Value="Navy"></Setter>
+            <Setter Property="FontSize" Value="13pt"></Setter>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="True"></Setter>
+        </Style>
         <Style TargetType="TextBox">
             <Setter Property="Height" Value="Auto"></Setter>
             <Setter Property="Width" Value="Auto"></Setter>
