@@ -20,7 +20,7 @@ namespace Client_Manager.Models
         private WorkshopClient() 
         {
             httpClient = new HttpClient();
-            baseUri = "https://localhost:5000/api/workshop/manager";
+            baseUri = "https://localhost:5001/api/workshop/manager";
             URIparts = new Dictionary<Type, string>() 
             {
                 { typeof(Auto), "/autos" },
@@ -55,10 +55,9 @@ namespace Client_Manager.Models
                 return null;
             }
             var result = httpClient.GetAsync(baseUri + URIPart).Result;
-
             if(!result.IsSuccessStatusCode)
             {
-                throw new InvalidOperationException(result.StatusCode + '\n' + result.ReasonPhrase);
+                MessageBox.Show("There's no data available!");
             }
             var rawContent = result.Content.ReadAsStringAsync().Result;
             return JsonConvert.DeserializeObject<List<TEntity>>(rawContent);
