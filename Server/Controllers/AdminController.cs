@@ -173,86 +173,86 @@ namespace Server.Controllers
             return Ok();
         }
         #endregion
-        #region CRUDDiscounts
-        [Route("discount")]
+        #region CRUDBonus
+        [Route("bonus")]
         [HttpPost]
-        public ActionResult AddDiscount(Discount discount)
+        public ActionResult AddBonus(Bonus bonus)
         {
-            var repo = new GenericRepository<Discount>();
-            repo.Add(discount);
+            var repo = new GenericRepository<Bonus>();
+            repo.Add(bonus);
             return Ok();
         }
-        [Route("discount")]
+        [Route("bonus")]
         [HttpPost]
-        public ActionResult AddDiscountsRange(IEnumerable<Discount> discount)
+        public ActionResult AddBonusRange(IEnumerable<Bonus> bonus)
         {
-            var repo = new GenericRepository<Discount>();
-            repo.AddAll(discount);
+            var repo = new GenericRepository<Bonus>();
+            repo.AddAll(bonus);
             return Ok();
         }
 
-        [Route("discount")]
+        [Route("bonus")]
         [HttpGet]
-        public ActionResult<IEnumerable<Discount>> GetDiscounts()
+        public ActionResult<IEnumerable<Bonus>> GetBonuses()
         {
-            var them = new GenericRepository<Discount>().GetAll();
+            var them = new GenericRepository<Bonus>().GetAll();
             if (them is null)
                 return NotFound();
             return Ok(them);
         }
 
-        [Route("discounts/{id:long}")]
+        [Route("bonus/{id:long}")]
         [HttpGet]
-        public ActionResult<Discount> GetDiscountrByID(long id)
+        public ActionResult<Bonus> GetBonusByID(string id)
         {
-            var discount = new GenericRepository<Discount>().Get(id);
+            var bonus = new GenericRepository<Bonus>().Get(id);
 
-            if (discount is null)
+            if (bonus is null)
                 return NotFound();
             else
-                return Ok(discount);
+                return Ok(bonus);
         }
-        [Route("discounts/{id:long}")]
+        [Route("bonus/{id:string}")]
         [HttpDelete]
-        public ActionResult RemoveDiscountByID(long id)
+        public ActionResult RemoveBonusByID(string id)
         {
-            var repo = new GenericRepository<Discount>();
-            var discount = repo.Get(id);
-            repo.Remove(discount);
+            var repo = new GenericRepository<Bonus>();
+            var bonus = repo.Get(id);
+            repo.Remove(bonus);
 
             return Ok();
         }
-        [Route("discounts")]
+        [Route("bonus")]
         [HttpDelete]
-        public ActionResult RemoveDiscountRange(IEnumerable<Discount> discount)
+        public ActionResult RemoveBonusRange(IEnumerable<Bonus> bonus)
         {
-            var repo = new GenericRepository<Discount>();
-            repo.RemoveAll(discount);
+            var repo = new GenericRepository<Bonus>();
+            repo.RemoveAll(bonus);
 
             return Ok();
         }
 
-        [Route("discount")]
+        [Route("bonus")]
         [HttpPut]
-        public ActionResult UpdateDiscount(Discount discount)
+        public ActionResult UpdateBonus(Bonus bonus)
         {
-            var repo = new GenericRepository<Discount>();
+            var repo = new GenericRepository<Bonus>();
 
-            if (repo.Get(discount.Name) is null)
-                AddDiscount(discount);
+            if (repo.Get(bonus.Name) is null)
+                AddBonus(bonus);
             else
             {
-                repo.Update(discount);
+                repo.Update(bonus);
             }
             return Ok();
 
         }
-        [Route("discount")]
+        [Route("bonus")]
         [HttpPut]
-        public ActionResult UpdateDiscountRange(IEnumerable<Discount> discount)
+        public ActionResult UpdateBonusRange(IEnumerable<Bonus> bonus)
         {
-            var repo = new GenericRepository<Discount>();
-            repo.UpdateAll(discount);
+            var repo = new GenericRepository<Bonus>();
+            repo.UpdateAll(bonus);
             return Ok();
         }
         #endregion

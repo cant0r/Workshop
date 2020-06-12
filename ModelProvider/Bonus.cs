@@ -5,12 +5,12 @@ using System.Text;
 
 namespace ModelProvider
 {
-    public class Discount
+    public class Bonus
     {
         [Key]
         public string Name { get; set; }
 
         [Required]
-        public int Percentage { get; set; }
+        public long Price { get; set; }
     }
 }

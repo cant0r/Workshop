@@ -150,16 +150,16 @@ namespace Server.Controllers
             }
 
         }
-        [Route("discounts/all")]
+        [Route("bonus/all")]
         [HttpGet]
-        public ActionResult<IEnumerable<Auto>> GetDiscounts()
+        public ActionResult<IEnumerable<Bonus>> GetBonuses()
         {
-            var workshopRepo = new GenericRepository<Discount>();
-            var discounts = workshopRepo.GetAll();
-            if (discounts is null)
+            var repo = new GenericRepository<Bonus>();
+            var bonuses = repo.GetAll();
+            if (bonuses is null)
                 return NotFound();
             else
-                return Ok(discounts);
+                return Ok(bonuses);
         }
 
     }
