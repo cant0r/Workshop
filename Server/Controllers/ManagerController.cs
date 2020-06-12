@@ -150,6 +150,17 @@ namespace Server.Controllers
             }
 
         }
+        [Route("discounts/all")]
+        [HttpGet]
+        public ActionResult<IEnumerable<Auto>> GetDiscounts()
+        {
+            var workshopRepo = new GenericRepository<Discount>();
+            var discounts = workshopRepo.GetAll();
+            if (discounts is null)
+                return NotFound();
+            else
+                return Ok(discounts);
+        }
 
     }
 }
