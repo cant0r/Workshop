@@ -41,9 +41,11 @@
                     <RowDefinition Height="5*"/>
                 </Grid.RowDefinitions>
                 <Label Grid.Row="0" Grid.Column="0" Content="Válasszon bónuszokat!" HorizontalAlignment="Left"/>
-                <ListBox x:Name="bonusLbox" Grid.Row="1" Grid.Column="0">
-                    
-                </ListBox>
+                <ScrollViewer  Grid.Row="1" Grid.Column="0" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    <StackPanel x:Name="bonusLbox">
+                        
+                    </StackPanel>
+                </ScrollViewer>
             </Grid>
         </Border>
         <Border Grid.Row="2" Grid.Column="1" Margin="5">

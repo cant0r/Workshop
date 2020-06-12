@@ -11,8 +11,9 @@ namespace ModelProvider
         [Key]
         public long Id { get; set; }
         [Required]
-        [MaxLength(64)]
         public string Name { get; set; }
+        [Required]
+        public string Password { get; set; }
         public string Email { get; set; }
         [Required]
         public string PhoneNumber { get; set; }

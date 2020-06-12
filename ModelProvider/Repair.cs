@@ -22,7 +22,7 @@ namespace ModelProvider
         [Required]
         public virtual State State { get; set; }
 
-        
+        public virtual IEnumerable<Bonus> Bonuses { get; set; }
         public virtual ICollection<RepairTechnician> RepairTechnicians { get; set; }
     }
 }

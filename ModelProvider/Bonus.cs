@@ -12,5 +12,6 @@ namespace ModelProvider
 
         [Required]
         public long Price { get; set; }
+
     }
 }

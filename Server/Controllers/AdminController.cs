@@ -18,7 +18,7 @@ namespace Server.Controllers
             techRepo.Add(tech);
             return Ok();
         }
-        [Route("technicians")]
+        [Route("technicians/multiple")]
         [HttpPost]
         public ActionResult AddTechnicianRange(IEnumerable<Technician> tech)
         {
@@ -56,7 +56,7 @@ namespace Server.Controllers
 
             return Ok();
         }
-        [Route("technicians")]
+        [Route("technicians/multiple")]
         [HttpDelete]
         public ActionResult RemoveTechnicianRange(IEnumerable<Technician> tech)
         {
@@ -81,7 +81,7 @@ namespace Server.Controllers
             return Ok();
                  
         }
-        [Route("technicians")]
+        [Route("technicians/multiple")]
         [HttpPut]
         public ActionResult UpdateTechnicianRange(IEnumerable<Technician> tech)
         {
@@ -99,7 +99,7 @@ namespace Server.Controllers
             manRepo.Add(man);
             return Ok();
         }
-        [Route("managers")]
+        [Route("managers/multiple")]
         [HttpPost]
         public ActionResult AddManagerRange(IEnumerable<Manager> man)
         {
@@ -139,7 +139,7 @@ namespace Server.Controllers
 
             return Ok();
         }
-        [Route("managers")]
+        [Route("managers/multiple")]
         [HttpDelete]
         public ActionResult RemoveManagerRange(IEnumerable<Manager> man)
         {
@@ -164,7 +164,7 @@ namespace Server.Controllers
             return Ok();
 
         }
-        [Route("managers")]
+        [Route("managers/multiple")]
         [HttpPut]
         public ActionResult UpdateManagerRange(IEnumerable<Manager> man)
         {
@@ -182,7 +182,7 @@ namespace Server.Controllers
             repo.Add(bonus);
             return Ok();
         }
-        [Route("bonus")]
+        [Route("bonus/multiple")]
         [HttpPost]
         public ActionResult AddBonusRange(IEnumerable<Bonus> bonus)
         {
@@ -212,7 +212,7 @@ namespace Server.Controllers
             else
                 return Ok(bonus);
         }
-        [Route("bonus/{id:string}")]
+        [Route("bonus/{id}")]
         [HttpDelete]
         public ActionResult RemoveBonusByID(string id)
         {
@@ -222,7 +222,7 @@ namespace Server.Controllers
 
             return Ok();
         }
-        [Route("bonus")]
+        [Route("bonus/multiple")]
         [HttpDelete]
         public ActionResult RemoveBonusRange(IEnumerable<Bonus> bonus)
         {
@@ -247,7 +247,7 @@ namespace Server.Controllers
             return Ok();
 
         }
-        [Route("bonus")]
+        [Route("bonus/multiple")]
         [HttpPut]
         public ActionResult UpdateBonusRange(IEnumerable<Bonus> bonus)
         {

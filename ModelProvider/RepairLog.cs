@@ -12,6 +12,9 @@ namespace ModelProvider
         public long Id { get; set; }
 
         [Required]
+        public long TechnicianId { get; set; }
+
+        [Required]
         public string Description { get; set; }
 
         [Required]
