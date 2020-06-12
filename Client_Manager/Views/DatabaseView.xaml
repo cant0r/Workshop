@@ -28,22 +28,22 @@
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
-            <Button Grid.Row="0" Grid.Column="0"  Content="Folyamatban"
+            <Button Grid.Row="0" Grid.Column="0"  Content="Folyamatban" Click="progressBtn_Click"
                 FontSize="24pt"
                 Margin="0" x:Name="progressBtn"></Button>
-            <Button Grid.Row="1" Grid.Column="0" Content="Lezárva"
+            <Button Grid.Row="1" Grid.Column="0" Content="Lezárva" Click="closedBtn_Click"
                 FontSize="24pt"
                 Margin="0" x:Name="closedBtn"></Button>
-            <Button Grid.Row="2" Grid.Column="0"  Content="Szerelők"
+            <Button Grid.Row="2" Grid.Column="0"  Content="Szerelők" Click="techniciansBtn_Click"
                 FontSize="24pt" 
                 Margin="0" x:Name="techniciansBtn"></Button>
-            <Button Grid.Row="3" Grid.Column="0" Content="Ügyfelek"
+            <Button Grid.Row="3" Grid.Column="0" Content="Ügyfelek" Click="clientsBtn_Click"
                 FontSize="24pt"
                 Margin="0" x:Name="clientsBtn"></Button>
-            <Button Grid.Row="4" Grid.Column="0" Width="Auto" Height="Auto" Content="Járművek"
+            <Button Grid.Row="4" Grid.Column="0" Width="Auto" Height="Auto" Content="Járművek" Click="autosBtn_Click"
                 FontSize="24pt"
                 Margin="0" x:Name="autosBtn"></Button>
-            <Button Grid.Row="5" Grid.Column="0" Width="Auto" Height="Auto" Content="&#8592;"
+            <Button Grid.Row="5" Grid.Column="0" Width="Auto" Height="Auto" Content="&#8592;" 
                 FontSize="24pt" FontWeight="Heavy"
                 VerticalContentAlignment="Center"
                 Margin="0,0,0,0" x:Name="backBtn"
