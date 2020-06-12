@@ -36,7 +36,7 @@ namespace Server.Repositories
                     select repairs);
         }
         #endregion
-        #region Logs
+        #region RepairLogs
         public IEnumerable<RepairLog> GetRepairLogs(long repairID)
         {
             using var ctx = new WorkshopContext();
@@ -68,7 +68,7 @@ namespace Server.Repositories
             ctx.RepairLogs.Update(log);
         }
         #endregion
-        #region ManagerGetters
+        #region Getters_Used_By_Manager
         public IEnumerable<Technician> GetTechnicians()
         {
             using var ctx = new WorkshopContext();
@@ -96,6 +96,7 @@ namespace Server.Repositories
             return ctx.Automobiles.ToList();
         }
         #endregion
+        #region Registration&Repair_Methods_For_Manager
         public void RegisterClient(Client client)
         {
             using var ctx = new WorkshopContext();
@@ -129,5 +130,6 @@ namespace Server.Repositories
             UpdateRepair(repair);
 
         }
+        #endregion
     }
 }
