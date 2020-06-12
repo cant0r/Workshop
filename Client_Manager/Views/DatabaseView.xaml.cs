@@ -1,5 +1,6 @@
 ﻿using Client_Manager.CustomControls;
 using Client_Manager.Models;
+using ModelProvider;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,12 +25,12 @@ namespace Client_Manager
     {
         private Button activeButton;
 
-        private Manager theManager;
+        private ManagerService theManager;
 
         public DatabaseView()
         {
             InitializeComponent();
-            theManager = Manager.GetInstance();
+            theManager = ManagerService.GetInstance();
             DispatcherTimer timer = new DispatcherTimer();
             timer.Tick += (object sender, EventArgs args) =>
             {
@@ -72,7 +73,37 @@ namespace Client_Manager
             //Justification for the Button casting: Only a single Button instance's click event is tied to this method.
             MakeButtonActive((Button)sender);
 
+            foreach(Repair r in theManager.Repairs)
+            {
+                var repairEntry = new RepairEntryBox();
+                repairEntry.descriptionTblock.Text = r.Description;
+                repairEntry.repairIdLbl.Content = r.Id.ToString();
+                repairEntry.repairStateLbl.Content = r.State;
 
+                var techIDs = (from repair in r.RepairTechnicians
+                               where repair.RepairID == r.Id
+                               select repair.TechnicianId);
+
+                var techs = theManager.Technicians.FindAll(t => techIDs.Contains(t.Id));
+                foreach (Technician t in techs)
+                {
+                    repairEntry.techsLbox.Items.Add(t.Name);
+                }
+
+                repairEntry.repairLogBtn.Click += (object sender, RoutedEventArgs args) => 
+                {
+                    new RepairLogView(r.Id).ShowDialog();
+                };
+
+                repairEntry.editBtn.Click += (object sender, RoutedEventArgs args) =>
+                {
+
+                };
+
+                entryPanel.Children.Add(repairEntry);
+
+            }
+            
 
         }
 
