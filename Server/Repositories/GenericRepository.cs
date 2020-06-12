@@ -28,6 +28,11 @@ namespace Server.Repositories
             using var ctx = new WorkshopContext();
             return ctx.Set<TEntity>().Find(id);
         }
+        public TEntity Get<TKeyType>(TKeyType id)
+        {
+            using var ctx = new WorkshopContext();
+            return ctx.Set<TEntity>().Find(id);
+        }
         public IEnumerable<TEntity> GetAll()
         {
             using var ctx = new WorkshopContext();

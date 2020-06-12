@@ -12,6 +12,8 @@ namespace Server.Repositories
 
         public DbSet<Auto> Automobiles { get; set; }
         public DbSet<Client> Clients { get; set; }
+
+        public DbSet<Discount> Discounts { get; set; }
         public DbSet<Repair> Repairs { get; set; } 
         public DbSet<RepairLog> RepairLogs { get; set; }
         public DbSet<Technician> Technicians { get; set; }
