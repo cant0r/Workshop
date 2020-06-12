@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Client_Manager.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -37,6 +38,7 @@ namespace Client_Manager
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            WorkshopClient.GetInstance().Dispose();
             Application.Current.Shutdown(0);
         }
 
