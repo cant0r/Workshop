@@ -173,5 +173,88 @@ namespace Server.Controllers
             return Ok();
         }
         #endregion
+        #region CRUDDiscounts
+        [Route("discount")]
+        [HttpPost]
+        public ActionResult AddDiscount(Discount discount)
+        {
+            var repo = new GenericRepository<Discount>();
+            repo.Add(discount);
+            return Ok();
+        }
+        [Route("discount")]
+        [HttpPost]
+        public ActionResult AddDiscountsRange(IEnumerable<Discount> discount)
+        {
+            var repo = new GenericRepository<Discount>();
+            repo.AddAll(discount);
+            return Ok();
+        }
+
+        [Route("discount")]
+        [HttpGet]
+        public ActionResult<IEnumerable<Discount>> GetDiscounts()
+        {
+            var them = new GenericRepository<Discount>().GetAll();
+            if (them is null)
+                return NotFound();
+            return Ok(them);
+        }
+
+        [Route("discounts/{id:long}")]
+        [HttpGet]
+        public ActionResult<Discount> GetDiscountrByID(long id)
+        {
+            var discount = new GenericRepository<Discount>().Get(id);
+
+            if (discount is null)
+                return NotFound();
+            else
+                return Ok(discount);
+        }
+        [Route("discounts/{id:long}")]
+        [HttpDelete]
+        public ActionResult RemoveDiscountByID(long id)
+        {
+            var repo = new GenericRepository<Discount>();
+            var discount = repo.Get(id);
+            repo.Remove(discount);
+
+            return Ok();
+        }
+        [Route("discounts")]
+        [HttpDelete]
+        public ActionResult RemoveDiscountRange(IEnumerable<Discount> discount)
+        {
+            var repo = new GenericRepository<Discount>();
+            repo.RemoveAll(discount);
+
+            return Ok();
+        }
+
+        [Route("discount")]
+        [HttpPut]
+        public ActionResult UpdateDiscount(Discount discount)
+        {
+            var repo = new GenericRepository<Discount>();
+
+            if (repo.Get(discount.Name) is null)
+                AddDiscount(discount);
+            else
+            {
+                repo.Update(discount);
+            }
+            return Ok();
+
+        }
+        [Route("discount")]
+        [HttpPut]
+        public ActionResult UpdateDiscountRange(IEnumerable<Discount> discount)
+        {
+            var repo = new GenericRepository<Discount>();
+            repo.UpdateAll(discount);
+            return Ok();
+        }
+        #endregion
     }
 }
