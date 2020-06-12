@@ -41,7 +41,7 @@
             <TextBox x:Name="autoModelTblock" Grid.Row="6" Grid.Column="1"></TextBox>
             <TextBox x:Name="autoPlateTblock" Grid.Row="7" Grid.Column="1" ></TextBox>
             <Button Click="backBtn_Click" Grid.Row="9" Grid.Column="0" x:Name="backBtn" Content="&#x2906;"></Button>
-            <Button Grid.Row="9" Grid.Column="1" x:Name="nextBtn" Content="Mentés"></Button>
+            <Button Click="nextBtn_Click" Grid.Row="9" Grid.Column="1" x:Name="nextBtn" Content="&#x2907;"></Button>
         </Grid>
     </ScrollViewer>
 </Window>

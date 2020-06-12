@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Client_Manager.Views;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -24,12 +25,21 @@ namespace Client_Manager
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            DialogResult = true;
+           
         }
 
         private void backBtn_Click(object sender, RoutedEventArgs e)
         {
+            DialogResult = true;
             Close();
+        }
+
+        private void nextBtn_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = true;
+            Hide();
+            if (new RepairView().ShowDialog() == true)
+                Close();
         }
     }
 }
