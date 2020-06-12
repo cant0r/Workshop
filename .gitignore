@@ -341,3 +341,4 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 /WHAT_TO_DO_NOW.txt
+/.WHAT_TO_DO_NOW.txt.swp
