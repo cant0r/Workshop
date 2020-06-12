@@ -11,7 +11,7 @@ namespace Server.Controllers
     [ApiController]
     public class ManagerController : ControllerBase
     {
-        [Route("repair/all")]
+        [Route("repair")]
         [HttpGet]
         public ActionResult<IEnumerable<Repair>> GetAllRepairs()
         {
@@ -22,7 +22,7 @@ namespace Server.Controllers
             else
                 return Ok(repairs);
         }
-        [Route("repair/new")]
+        [Route("repair")]
         [HttpPost]
         public ActionResult CreateRepair(Repair repair)
         {
@@ -30,23 +30,23 @@ namespace Server.Controllers
             workshopRepo.CreateRepair(repair);
             return Ok();
         }
-        [Route("repair/update")]
-        [HttpPost]
+        [Route("repair")]
+        [HttpPut]
         public ActionResult UpdateRepair(Repair repair)
         {
             var workshopRepo = new WorkshopRepository();
             workshopRepo.UpdateRepair(repair);
             return Ok();
         }
-        [Route("repair/abort")]
-        [HttpPost]
+        [Route("repair")]
+        [HttpDelete]
         public ActionResult AbortRepair(Repair repair)
         {
             var workshopRepo = new WorkshopRepository();
             workshopRepo.AbortRepair(repair);
             return Ok();
         }
-        [Route("logs/{repairID:long}")]
+        [Route("logs")]
         [HttpGet]
         public ActionResult<IEnumerable<RepairLog>> GetRepairLogs(long repairID)
         {
@@ -57,18 +57,7 @@ namespace Server.Controllers
             else
                 return Ok(repairs);
         }
-        [Route("logs/{repairID:long}/latest")]
-        [HttpGet]
-        public ActionResult<RepairLog> GetLatestRepairLog(long repairID)
-        {
-            var workshopRepo = new WorkshopRepository();
-            var repair = workshopRepo.GetLatestRepairLog(repairID);
-            if (repair is null)
-                return NotFound();
-            else
-                return Ok(repair);
-        }
-        [Route("technicians/all")]
+        [Route("technicians")]
         [HttpGet]
         public ActionResult<IEnumerable<Technician>> GetTechnicians()
         {
@@ -90,7 +79,7 @@ namespace Server.Controllers
             else
                 return Ok(techs);
         }
-        [Route("clients/all")]
+        [Route("clients")]
         [HttpGet]
         public ActionResult<IEnumerable<Client>> GetClients()
         {
@@ -101,8 +90,8 @@ namespace Server.Controllers
             else
                 return Ok(clients);
         }
-        [Route("clients/register")]
-        [HttpGet]
+        [Route("clients")]
+        [HttpPost]
         public ActionResult RegisterClient(Client client)
         {
             var workshopRepo = new WorkshopRepository();
@@ -120,7 +109,7 @@ namespace Server.Controllers
             }
                
         }
-        [Route("autos/all")]
+        [Route("autos")]
         [HttpGet]
         public ActionResult<IEnumerable<Auto>> GetAutomobiles()
         {
@@ -131,8 +120,8 @@ namespace Server.Controllers
             else
                 return Ok(autos);
         }
-        [Route("autos/register")]
-        [HttpGet]
+        [Route("autos")]
+        [HttpPost]
         public ActionResult RegisterAuto(Auto auto)
         {
             var workshopRepo = new WorkshopRepository();
@@ -150,7 +139,7 @@ namespace Server.Controllers
             }
 
         }
-        [Route("bonus/all")]
+        [Route("bonus")]
         [HttpGet]
         public ActionResult<IEnumerable<Bonus>> GetBonuses()
         {
