@@ -1,4 +1,5 @@
 ﻿using Client_Manager.Views;
+using ModelProvider;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,9 +19,32 @@ namespace Client_Manager
     /// </summary>
     public partial class RegistrationView : Window
     {
-        public RegistrationView()
+        private Repair repair = null;
+
+        public RegistrationView(Repair repair=null)
         {
             InitializeComponent();
+            this.repair = repair;
+            if(!(this.repair is null)) LoadRepair(this.repair);
+        }
+
+        private void LoadRepair(Repair repair)
+        {
+            if (repair is null)
+            {
+                MessageBox.Show("NULL was received as argument", "The given Repair type argument is null", MessageBoxButton.OK);
+                Close();
+            }
+            var auto = repair.Auto;
+
+            autoBrandTblock.Text = auto.Brand.ToString();
+            autoModelTblock.Text = auto.Model.ToString();
+            autoPlateTblock.Text = auto.LicencePlate.ToString();
+
+            clientNameTblock.Text = auto.Client.Name.ToString();
+            clientEmailTblock.Text = auto.Client.Email.ToString();
+            clientPhoneTblock.Text = auto.Client.PhoneNumber.ToString();
+
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -38,7 +62,7 @@ namespace Client_Manager
         {
             DialogResult = true;
             Hide();
-            if (new RepairView().ShowDialog() == true)
+            if (new RepairView(repair).ShowDialog() == true)
                 Close();
         }
     }
