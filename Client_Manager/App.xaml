@@ -44,6 +44,15 @@
             <Setter Property="IsEnabled" Value="True"></Setter>
             <Setter Property="FontSize" Value="16pt"></Setter>
         </Style>
+        <Style TargetType="PasswordBox">
+            <Setter Property="Height" Value="Auto"></Setter>
+            <Setter Property="Width" Value="Auto"></Setter>
+            <Setter Property="Background" Value="#d4f1f4"></Setter>
+            <Setter Property="Foreground" Value="Navy"></Setter>
+            <Setter Property="Margin" Value="10"></Setter>
+            <Setter Property="IsEnabled" Value="True"></Setter>
+            <Setter Property="FontSize" Value="16pt"></Setter>
+        </Style>
         <Style TargetType="Label">
             <Setter Property="Foreground" Value="#05445e"></Setter>
             <Setter Property="FontSize" Value="16pt"></Setter>
