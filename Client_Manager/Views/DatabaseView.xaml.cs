@@ -4,6 +4,7 @@ using ModelProvider;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -13,6 +14,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
@@ -36,7 +38,7 @@ namespace Client_Manager
             {
                 entryPanel.Children.Clear();
                 theManager.ParseDatabase();
-                
+
             };
             timer.Interval = TimeSpan.FromMinutes(5);
             timer.Start();
@@ -57,23 +59,9 @@ namespace Client_Manager
             btn.Background = btn.Foreground;
             btn.Foreground = temp;
         }
-
-        private void backBtn_Click(object sender, RoutedEventArgs e)
+        private void LoadRepairsViaPredicate(Func<Repair, bool> predicate)
         {
-            Close();
-        }
-
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            DialogResult = true;
-        }
-
-        private void progressBtn_Click(object sender, RoutedEventArgs e)
-        {
-            //Justification for the Button casting: Only a single Button instance's click event is tied to this method.
-            MakeButtonActive((Button)sender);
-
-            foreach(Repair r in theManager.Repairs)
+            foreach (Repair r in theManager.Repairs.FindAll(r => predicate(r)))
             {
                 var repairEntry = new RepairEntryBox();
                 repairEntry.descriptionTblock.Text = r.Description;
@@ -90,26 +78,43 @@ namespace Client_Manager
                     repairEntry.techsLbox.Items.Add(t.Name);
                 }
 
-                repairEntry.repairLogBtn.Click += (object sender, RoutedEventArgs args) => 
+                repairEntry.repairLogBtn.Click += (object sender, RoutedEventArgs args) =>
                 {
                     new RepairLogView(r.Id).ShowDialog();
                 };
 
                 repairEntry.editBtn.Click += (object sender, RoutedEventArgs args) =>
                 {
-
+                    new RegistrationView(r).ShowDialog();
                 };
 
                 entryPanel.Children.Add(repairEntry);
 
             }
-            
+        }
+        private void backBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
 
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            DialogResult = true;
+        }
+
+        private void progressBtn_Click(object sender, RoutedEventArgs e)
+        {
+            //Justification for the Button casting: Only a single Button instance's click event is tied to this method.
+            MakeButtonActive((Button)sender);
+            LoadRepairsViaPredicate(
+                (Repair r) => { return r.State == State.InProgress || r.State == State.New; });
         }
 
         private void closedBtn_Click(object sender, RoutedEventArgs e)
-        {          
+        {
             MakeButtonActive((Button)sender);
+            LoadRepairsViaPredicate(
+                (Repair r) => { return r.State == State.Cancelled || r.State == State.Done; });
         }
 
         private void techniciansBtn_Click(object sender, RoutedEventArgs e)

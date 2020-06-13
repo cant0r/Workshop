@@ -5,6 +5,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
+
+//TODO FEJEZD BE!!!
+
 namespace Server.Controllers
 {
     [Route("api/workshop/manager")]
