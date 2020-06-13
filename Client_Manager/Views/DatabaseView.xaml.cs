@@ -3,6 +3,7 @@ using Client_Manager.Models;
 using ModelProvider;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -10,7 +11,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -28,6 +28,8 @@ namespace Client_Manager
         private Button activeButton;
 
         private ManagerService theManager;
+
+        private object dataGridSource;
 
         public DatabaseView()
         {
@@ -61,6 +63,7 @@ namespace Client_Manager
         }
         private void LoadRepairsViaPredicate(Func<Repair, bool> predicate)
         {
+            entryPanel.Children.Clear();
             foreach (Repair r in theManager.Repairs.FindAll(r => predicate(r)))
             {
                 var repairEntry = new RepairEntryBox();
@@ -92,6 +95,29 @@ namespace Client_Manager
 
             }
         }
+        private void LoadDataIntoGrid<TEntity>(IEnumerable<TEntity> data)
+        {
+            entryPanel.Children.Clear();
+            dataGridSource = data;
+            DataGrid dataTable = new DataGrid();
+            dataTable.ItemsSource = data;
+            dataTable.IsReadOnly = true;
+
+            TextBox searchTbox = new TextBox();
+
+            searchTbox.TextChanged += (object sender, TextChangedEventArgs args) =>
+            {
+                if (searchTbox.Text.Length == 0)
+                    dataTable.ItemsSource = (System.Collections.IEnumerable)dataGridSource;
+                else
+                    dataTable.ItemsSource = 
+                        dataTable.ItemsSource.OfType<TEntity>().Where(i => i.ToString().Contains(searchTbox.Text));
+            };
+
+            entryPanel.Children.Add(searchTbox);
+            entryPanel.Children.Add(dataTable);
+        }
+
         private void backBtn_Click(object sender, RoutedEventArgs e)
         {
             Close();
@@ -120,16 +146,19 @@ namespace Client_Manager
         private void techniciansBtn_Click(object sender, RoutedEventArgs e)
         {
             MakeButtonActive((Button)sender);
+            LoadDataIntoGrid(theManager.Technicians);
         }
 
         private void clientsBtn_Click(object sender, RoutedEventArgs e)
         {
             MakeButtonActive((Button)sender);
+            LoadDataIntoGrid(theManager.Clients);
         }
 
         private void autosBtn_Click(object sender, RoutedEventArgs e)
         {
             MakeButtonActive((Button)sender);
+            LoadDataIntoGrid(theManager.Autos);
         }
     }
 }

@@ -4,6 +4,13 @@
              xmlns:local="clr-namespace:Client_Manager"
              StartupUri="Views/MainWindow.xaml">
     <Application.Resources>
+        <Style TargetType="DataGrid">
+            <Setter Property="Background" Value="#05445e"></Setter>
+            <Setter Property="Foreground" Value="#05445e"></Setter>
+            <Setter Property="Height" Value="Auto"></Setter>
+            <Setter Property="Width" Value="Auto"></Setter>
+            <Setter Property="FontSize" Value="12pt"></Setter>
+        </Style>
         <Style TargetType="Border">
             <Setter Property="BorderBrush" Value="#05445e"></Setter>
             <Setter Property="BorderThickness" Value="2pt"></Setter>
