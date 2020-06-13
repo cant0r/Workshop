@@ -12,26 +12,26 @@ namespace Server.Repositories
         public IEnumerable<Repair> GetRepairs()
         {
             using var ctx = new WorkshopContext();
-            return ctx.Repairs.ToList();
+            return ctx.Repairs.Include(r => r.Auto).ThenInclude(a => a.Client).Include(r => r.Bonuses).Include(r => r.RepairTechnicians).ToList();
         }
         public IEnumerable<Repair> GetFinishedRepairs()
         {
             using var ctx = new WorkshopContext();
-            return (from repairs in ctx.Repairs
+            return (from repairs in ctx.Repairs.Include(r => r.Auto).ThenInclude(a => a.Client).Include(r => r.Bonuses).Include(r => r.RepairTechnicians)
                     where repairs.State == State.Done
                     select repairs);
         }
         public IEnumerable<Repair> GetNewRepairs()
         {
             using var ctx = new WorkshopContext();
-            return (from repairs in ctx.Repairs
+            return (from repairs in ctx.Repairs.Include(r => r.Auto).ThenInclude(a => a.Client).Include(r => r.Bonuses).Include(r => r.RepairTechnicians)
                     where repairs.State == State.New
                     select repairs);
         }
         public IEnumerable<Repair> GetTakenRepairs()
         {
             using var ctx = new WorkshopContext();
-            return (from repairs in ctx.Repairs
+            return (from repairs in ctx.Repairs.Include(r => r.Auto).ThenInclude(a => a.Client).Include(r => r.Bonuses).Include(r => r.RepairTechnicians)
                     where repairs.State == State.InProgress
                     select repairs);
         }
@@ -72,28 +72,32 @@ namespace Server.Repositories
         public IEnumerable<Technician> GetTechnicians()
         {
             using var ctx = new WorkshopContext();
-            return ctx.Technicians.ToList();
+            return ctx.Technicians
+                .Include(t => t.RepairTechnician)
+                .ToList();
         }
         public IEnumerable<Technician> GetTechniciansByRepairID(long id)
         {
             using var ctx = new WorkshopContext();
-            var technicianIdNumbers = (from jt in ctx.RepairTechnicians
+            var technicianIdNumbers = (from jt in ctx.RepairTechnicians.Include(rt => rt.Technician).Include(rt => rt.Repair)
                                        where jt.RepairID == id
                                        select jt.TechnicianId);
             return (from t in ctx.Technicians
                     where technicianIdNumbers.Contains(t.Id)
                     select t);
         }
-       
+
         public IEnumerable<Client> GetClients()
         {
             using var ctx = new WorkshopContext();
-            return ctx.Clients.ToList();
+            return ctx.Clients
+                .ToList();
         }
         public IEnumerable<Auto> GetAutomobiles()
         {
             using var ctx = new WorkshopContext();
-            return ctx.Automobiles.ToList();
+            return ctx.Automobiles.Include(a => a.Client)
+                .ToList();
         }
         #endregion
         #region Registration&Repair_Methods_For_Manager
@@ -112,7 +116,7 @@ namespace Server.Repositories
         public void CreateRepair(Repair repair)
         {
             using var ctx = new WorkshopContext();
-            
+
             ctx.Repairs.Add(repair);
             ctx.SaveChanges();
         }
