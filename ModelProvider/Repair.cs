@@ -15,6 +15,8 @@ namespace ModelProvider
         [ForeignKey("Id")]
         public virtual Auto Auto { get; set; }
 
+        public virtual Manager Manager { get; set; }
+
         public string Description { get; set; }
 
         [Required]

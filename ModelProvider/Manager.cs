@@ -17,6 +17,6 @@ namespace ModelProvider
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
 
-        public virtual Technician Technician { get; set; }
+        public virtual IEnumerable<Repair> Repair { get; set; }
     }
 }
