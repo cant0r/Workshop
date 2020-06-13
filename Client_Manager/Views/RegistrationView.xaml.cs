@@ -1,9 +1,11 @@
-﻿using Client_Manager.Views;
+﻿using Client_Manager.Models;
+using Client_Manager.Views;
 using ModelProvider;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -19,13 +21,13 @@ namespace Client_Manager
     /// </summary>
     public partial class RegistrationView : Window
     {
-        private Repair repair = null;
+        private Repair repair;
 
-        public RegistrationView(Repair repair=null)
+        public RegistrationView(Repair repair = null)
         {
             InitializeComponent();
             this.repair = repair;
-            if(!(this.repair is null)) LoadRepair(this.repair);
+            if (!(this.repair is null)) LoadRepair(this.repair);
         }
 
         private void LoadRepair(Repair repair)
@@ -49,7 +51,7 @@ namespace Client_Manager
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-           
+
         }
 
         private void backBtn_Click(object sender, RoutedEventArgs e)
@@ -60,10 +62,59 @@ namespace Client_Manager
 
         private void nextBtn_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = true;
-            Hide();
-            if (new RepairView(repair).ShowDialog() == true)
-                Close();
+
+            var regValidator = new RegistrationFormValidator();
+
+            if (regValidator.ValidateClientInput(new List<TextBox> { clientNameTblock, clientPhoneTblock, clientEmailTblock })
+                &&
+                regValidator.ValidateAutoInput(new List<TextBox> { autoBrandTblock, autoModelTblock, autoPlateTblock }))
+            {
+
+                if (repair is null)
+                    AssembleNewRepairRecord();
+                else
+                    UpdateRepairRecord();                
+
+                DialogResult = true;
+                Hide();
+                if (new RepairView(repair).ShowDialog() == true)
+                    Close();
+            }
+
+
+        }
+        public void UpdateRepairRecord()
+        {
+            repair.Auto.Client.Name = clientNameTblock.Text;
+            repair.Auto.Client.Email = clientEmailTblock.Text;
+            repair.Auto.Client.PhoneNumber = clientPhoneTblock.Text;
+
+            repair.Auto.Brand = autoBrandTblock.Text;
+            repair.Auto.Model = autoModelTblock.Text;
+            repair.Auto.LicencePlate = autoPlateTblock.Text;
+         
+        }
+        public void AssembleNewRepairRecord()
+        {
+            Client newClient = new Client();
+            newClient.Name = clientNameTblock.Text;
+            newClient.Email = clientEmailTblock.Text;
+            newClient.PhoneNumber = clientPhoneTblock.Text;
+
+            Auto auto = new Auto();
+            auto.Brand = autoBrandTblock.Text;
+            auto.Model = autoModelTblock.Text;
+            auto.LicencePlate = autoPlateTblock.Text;
+            auto.Client = newClient;
+
+            repair = new Repair();
+            repair.Auto = auto;
+            repair.State = State.New;
+            repair.Price = 0;
+            repair.Bonuses = new List<Bonus>();
+            repair.Description = "";
+            repair.RepairTechnicians = new List<RepairTechnician>();
+
         }
     }
 }
