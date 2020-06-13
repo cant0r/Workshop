@@ -21,11 +21,11 @@
             </Grid.RowDefinitions>
             <StackPanel Grid.Column="0" Grid.Row="0" Height="Auto" Width="Auto">
                 <Label FontSize="16pt" Foreground="#05445e" Content="ID:"  Width="Auto" Height="Auto" x:Name="repairIdLbl"></Label>
-                <Label FontSize="16pt" Foreground="#05445e" Content="AAA-666"  Width="Auto" Height="Auto" x:Name="licencePlateLbl"></Label>
+                <Label FontSize="16pt" Foreground="#05445e"  Width="Auto" Height="Auto" x:Name="licencePlateLbl"></Label>
             </StackPanel>
             <StackPanel Grid.Column="1" Grid.Row="0" Height="Auto" Width="Auto">
                 <Label FontWeight="Bold" HorizontalContentAlignment="Center" FontSize="16pt" Foreground="#05445e" Content="Állapot"  Width="Auto" Height="Auto"></Label>
-                <Label HorizontalAlignment="Center" FontSize="16pt" Foreground="#05445e" Content="Javítás alatt"  Width="Auto" Height="Auto" x:Name="repairStateLbl"></Label>
+                <Label HorizontalAlignment="Center" FontSize="16pt" Foreground="#05445e"  Width="Auto" Height="Auto" x:Name="repairStateLbl"></Label>
             </StackPanel>
 
             <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2" Height="Auto">
@@ -33,7 +33,7 @@
                            IsEnabled="False" Width="Auto" x:Name="descriptionTblock"
                        Background="#7ec8e3" Foreground="#05445e"
                        ScrollViewer.CanContentScroll="True"
-                       TextWrapping="Wrap"
+                       TextWrapping="Wrap" FontSize="22pt"
                        Text=""></TextBlock>
 
             </StackPanel>
