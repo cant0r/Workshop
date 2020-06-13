@@ -44,5 +44,14 @@ namespace Client_Manager.Models
             Technicians = workshopClient.RetrieveEntities<Technician>() ?? new List<Technician>();
         }
 
+        public void UploadRepair(Repair r)
+        {
+            workshopClient.UploadRepair(r);
+        }
+        public void UploadUpdatedRepair(Repair r)
+        {
+            workshopClient.UploadUpdatedRepair(r);
+        }
+
     }
 }
