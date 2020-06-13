@@ -39,11 +39,12 @@ namespace Client_Manager.Views
 
         private void LoadRepair(Repair repair)
         {
+            //ITT BECRASHELT VALAHOGY
             theRepair = repair;
             realPriceLbl.Content = theRepair.Price;
             problemTbox.Text = theRepair.Description.ToString();
 
-            long noBonusesPrice = theRepair.Price - theRepair.Bonuses.Sum(b => b.Price);
+            long noBonusesPrice = theRepair.Price - theRepair?.Bonuses.Sum(b => b.Price) ?? 0;
             priceTbox.Text = noBonusesPrice.ToString();
             
             foreach (Bonus b in theRepair.Bonuses)
