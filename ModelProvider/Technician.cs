@@ -12,13 +12,16 @@ namespace ModelProvider
         public long Id { get; set; }
         [Required]
         public string Name { get; set; }
-        [Required]
-        public string Password { get; set; }
         public string Email { get; set; }
         [Required]
         public string PhoneNumber { get; set; }
 
         public virtual ICollection<RepairTechnician> RepairTechnician { get; set; }
+
+        public override string ToString()
+        {
+            return Id + " " + " " + Name + " " + Email + " " + PhoneNumber;
+        }
 
     }
 }

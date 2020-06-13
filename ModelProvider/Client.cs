@@ -17,5 +17,10 @@ namespace ModelProvider
         public string Email { get; set; }
         [Required]
         public string PhoneNumber { get; set; }
+
+        public override string ToString()
+        {
+            return Id + " " + " " + Name + " " + Email + " " + PhoneNumber;
+        }
     }
 }

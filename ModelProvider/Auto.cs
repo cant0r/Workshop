@@ -21,5 +21,10 @@ namespace ModelProvider
 
         [Required]
         public virtual Client Client { get; set; }
+
+        public override string ToString()
+        {
+            return Id + " " + Brand + " " + Model + " " + LicencePlate;
+        }
     }
 }
