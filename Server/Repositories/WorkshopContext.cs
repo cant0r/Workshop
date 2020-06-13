@@ -13,7 +13,7 @@ namespace Server.Repositories
         public DbSet<Auto> Automobiles { get; set; }
         public DbSet<Client> Clients { get; set; }
 
-        public DbSet<Bonus> Discounts { get; set; }
+        public DbSet<Bonus> Bonuses { get; set; }
         public DbSet<Repair> Repairs { get; set; } 
         public DbSet<RepairLog> RepairLogs { get; set; }
         public DbSet<Technician> Technicians { get; set; }
@@ -28,6 +28,8 @@ namespace Server.Repositories
         {
             optionsBuilder.UseSqlServer(
                 "Data Source=(localdb)\\mssqllocaldb;Database=WorkshopDB;Integrated Security=True;");
+
+            
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -35,17 +37,13 @@ namespace Server.Repositories
             modelBuilder.Entity<RepairTechnician>().HasOne(job => job.Repair)
                 .WithMany(jt => jt.RepairTechnicians)
                 .HasForeignKey(job => job.RepairID);
-            modelBuilder.Entity<RepairTechnician>().HasOne(job => job.Technician)
+            /*modelBuilder.Entity<RepairTechnician>().HasOne(job => job.Technician)
                .WithMany(jt => jt.RepairTechnician)
-               .HasForeignKey(job => job.TechnicianId);
+               .HasForeignKey(job => job.TechnicianId);*/
+            modelBuilder.Entity<Repair>().HasKey(r => r.Id);
+            modelBuilder.Entity<Repair>().HasMany(r => r.Bonuses).WithOne(b => b.Repair);
 
-            modelBuilder.Entity<Technician>().HasIndex("PhoneNumber").IsUnique();
-            modelBuilder.Entity<Manager>().HasIndex("PhoneNumber").IsUnique();
-            modelBuilder.Entity<Client>().HasIndex("PhoneNumber").IsUnique();
             modelBuilder.Entity<Auto>().HasIndex("LicencePlate").IsUnique();
-            modelBuilder.Entity<Technician>().HasIndex("Email").IsUnique();
-            modelBuilder.Entity<Manager>().HasIndex("Email").IsUnique();
-            modelBuilder.Entity<Client>().HasIndex("Email").IsUnique();
         }
     }
 }
