@@ -1,4 +1,5 @@
 ﻿using Client_Manager.Models;
+using Client_Manager.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,8 @@ namespace Client_Manager
 
         public MainWindow()
         {
-            InitializeComponent();            
+            InitializeComponent();
+            new LoginView().ShowDialog();
         }
 
         private void databaseBtn_Click(object sender, RoutedEventArgs e)
