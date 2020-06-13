@@ -19,6 +19,8 @@ namespace Server.Repositories
         public DbSet<Technician> Technicians { get; set; }
         public DbSet<Manager> Managers { get; set; }
 
+        public DbSet<User> Users { get; set; }
+
         public DbSet<RepairTechnician> RepairTechnicians { get; set; }
 
 
