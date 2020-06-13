@@ -2,61 +2,63 @@
 
 namespace Server.Migrations
 {
-    public partial class update30 : Migration
+    public partial class BonusUpdate12 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropIndex(
+                name: "IX_Technicians_PhoneNumber",
+                table: "Technicians");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Managers_PhoneNumber",
+                table: "Managers");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Clients_PhoneNumber",
+                table: "Clients");
+
             migrationBuilder.AlterColumn<string>(
                 name: "PhoneNumber",
                 table: "Technicians",
-                nullable: false,
+                nullable: true,
                 oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
+                oldType: "nvarchar(450)");
 
             migrationBuilder.AlterColumn<string>(
                 name: "PhoneNumber",
                 table: "Managers",
-                nullable: false,
+                nullable: true,
                 oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
+                oldType: "nvarchar(450)");
 
             migrationBuilder.AlterColumn<string>(
                 name: "PhoneNumber",
                 table: "Clients",
-                nullable: false,
+                nullable: true,
                 oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "LicencePlate",
-                table: "Automobiles",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
+                oldType: "nvarchar(450)");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Technicians_PhoneNumber",
                 table: "Technicians",
                 column: "PhoneNumber",
-                unique: true);
+                unique: true,
+                filter: "[PhoneNumber] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Managers_PhoneNumber",
                 table: "Managers",
                 column: "PhoneNumber",
-                unique: true);
+                unique: true,
+                filter: "[PhoneNumber] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Clients_PhoneNumber",
                 table: "Clients",
                 column: "PhoneNumber",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Automobiles_LicencePlate",
-                table: "Automobiles",
-                column: "LicencePlate",
-                unique: true);
+                unique: true,
+                filter: "[PhoneNumber] IS NOT NULL");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -73,37 +75,47 @@ namespace Server.Migrations
                 name: "IX_Clients_PhoneNumber",
                 table: "Clients");
 
-            migrationBuilder.DropIndex(
-                name: "IX_Automobiles_LicencePlate",
-                table: "Automobiles");
-
             migrationBuilder.AlterColumn<string>(
                 name: "PhoneNumber",
                 table: "Technicians",
-                type: "nvarchar(max)",
+                type: "nvarchar(450)",
                 nullable: false,
-                oldClrType: typeof(string));
+                oldClrType: typeof(string),
+                oldNullable: true);
 
             migrationBuilder.AlterColumn<string>(
                 name: "PhoneNumber",
                 table: "Managers",
-                type: "nvarchar(max)",
+                type: "nvarchar(450)",
                 nullable: false,
-                oldClrType: typeof(string));
+                oldClrType: typeof(string),
+                oldNullable: true);
 
             migrationBuilder.AlterColumn<string>(
                 name: "PhoneNumber",
                 table: "Clients",
-                type: "nvarchar(max)",
+                type: "nvarchar(450)",
                 nullable: false,
-                oldClrType: typeof(string));
+                oldClrType: typeof(string),
+                oldNullable: true);
 
-            migrationBuilder.AlterColumn<string>(
-                name: "LicencePlate",
-                table: "Automobiles",
-                type: "nvarchar(max)",
-                nullable: false,
-                oldClrType: typeof(string));
+            migrationBuilder.CreateIndex(
+                name: "IX_Technicians_PhoneNumber",
+                table: "Technicians",
+                column: "PhoneNumber",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Managers_PhoneNumber",
+                table: "Managers",
+                column: "PhoneNumber",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Clients_PhoneNumber",
+                table: "Clients",
+                column: "PhoneNumber",
+                unique: true);
         }
     }
 }

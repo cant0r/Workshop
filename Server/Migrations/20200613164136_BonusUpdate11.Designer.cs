@@ -10,8 +10,8 @@ using Server.Repositories;
 namespace Server.Migrations
 {
     [DbContext(typeof(WorkshopContext))]
-    [Migration("20200608132658_nowWithEnums")]
-    partial class nowWithEnums
+    [Migration("20200613164136_BonusUpdate11")]
+    partial class BonusUpdate11
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,12 +32,12 @@ namespace Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("ClientId")
+                    b.Property<long?>("ClientId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("LicencePlate")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Model")
                         .IsRequired()
@@ -47,7 +47,28 @@ namespace Server.Migrations
 
                     b.HasIndex("ClientId");
 
+                    b.HasIndex("LicencePlate")
+                        .IsUnique();
+
                     b.ToTable("Automobiles");
+                });
+
+            modelBuilder.Entity("ModelProvider.Bonus", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<long>("Price")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("RepairId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Name");
+
+                    b.HasIndex("RepairId");
+
+                    b.ToTable("Bonuses");
                 });
 
             modelBuilder.Entity("ModelProvider.Client", b =>
@@ -58,7 +79,7 @@ namespace Server.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -67,9 +88,16 @@ namespace Server.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
+
+                    b.HasIndex("PhoneNumber")
+                        .IsUnique();
 
                     b.ToTable("Clients");
                 });
@@ -82,7 +110,7 @@ namespace Server.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -91,12 +119,19 @@ namespace Server.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<long?>("TechnicianId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
+
+                    b.HasIndex("PhoneNumber")
+                        .IsUnique();
 
                     b.HasIndex("TechnicianId");
 
@@ -106,27 +141,18 @@ namespace Server.Migrations
             modelBuilder.Entity("ModelProvider.Repair", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<long>("AutoId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("RepairManagerId")
+                    b.Property<long>("Price")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("WorkState")
+                    b.Property<int>("State")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AutoId");
-
-                    b.HasIndex("RepairManagerId");
 
                     b.ToTable("Repairs");
                 });
@@ -138,11 +164,17 @@ namespace Server.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("RepairId")
+                    b.Property<long>("RepairId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("TechnicianId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
@@ -175,29 +207,56 @@ namespace Server.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
+
+                    b.HasIndex("PhoneNumber")
+                        .IsUnique();
+
+                    b.ToTable("Technicians");
+                });
+
+            modelBuilder.Entity("ModelProvider.User", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Technicians");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("ModelProvider.Auto", b =>
                 {
                     b.HasOne("ModelProvider.Client", "Client")
                         .WithMany()
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ClientId");
+                });
+
+            modelBuilder.Entity("ModelProvider.Bonus", b =>
+                {
+                    b.HasOne("ModelProvider.Repair", "Repair")
+                        .WithMany("Bonuses")
+                        .HasForeignKey("RepairId");
                 });
 
             modelBuilder.Entity("ModelProvider.Manager", b =>
@@ -211,13 +270,7 @@ namespace Server.Migrations
                 {
                     b.HasOne("ModelProvider.Auto", "Auto")
                         .WithMany()
-                        .HasForeignKey("AutoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ModelProvider.Manager", "RepairManager")
-                        .WithMany()
-                        .HasForeignKey("RepairManagerId")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -226,7 +279,9 @@ namespace Server.Migrations
                 {
                     b.HasOne("ModelProvider.Repair", "Repair")
                         .WithMany()
-                        .HasForeignKey("RepairId");
+                        .HasForeignKey("RepairId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ModelProvider.RepairTechnician", b =>

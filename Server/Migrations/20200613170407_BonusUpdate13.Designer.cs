@@ -10,8 +10,8 @@ using Server.Repositories;
 namespace Server.Migrations
 {
     [DbContext(typeof(WorkshopContext))]
-    [Migration("20200608125952_initialWorkshopFIXED2.0")]
-    partial class initialWorkshopFIXED20
+    [Migration("20200613170407_BonusUpdate13")]
+    partial class BonusUpdate13
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,12 +32,12 @@ namespace Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("ClientId")
+                    b.Property<long?>("ClientId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("LicencePlate")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Model")
                         .IsRequired()
@@ -47,7 +47,28 @@ namespace Server.Migrations
 
                     b.HasIndex("ClientId");
 
+                    b.HasIndex("LicencePlate")
+                        .IsUnique();
+
                     b.ToTable("Automobiles");
+                });
+
+            modelBuilder.Entity("ModelProvider.Bonus", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<long>("Price")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("RepairId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Name");
+
+                    b.HasIndex("RepairId");
+
+                    b.ToTable("Bonuses");
                 });
 
             modelBuilder.Entity("ModelProvider.Client", b =>
@@ -66,7 +87,6 @@ namespace Server.Migrations
                         .HasMaxLength(64);
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -90,7 +110,6 @@ namespace Server.Migrations
                         .HasMaxLength(64);
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long?>("TechnicianId")
@@ -106,29 +125,18 @@ namespace Server.Migrations
             modelBuilder.Entity("ModelProvider.Repair", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<long>("AutoId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("JobManagerId")
+                    b.Property<long>("Price")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("WorkStateId")
+                    b.Property<int>("State")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AutoId");
-
-                    b.HasIndex("JobManagerId");
-
-                    b.HasIndex("WorkStateId");
 
                     b.ToTable("Repairs");
                 });
@@ -140,49 +148,39 @@ namespace Server.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("JobId")
+                    b.Property<long>("RepairId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("TechnicianId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("JobId");
+                    b.HasIndex("RepairId");
 
                     b.ToTable("RepairLogs");
                 });
 
             modelBuilder.Entity("ModelProvider.RepairTechnician", b =>
                 {
-                    b.Property<long>("JobId")
+                    b.Property<long>("RepairID")
                         .HasColumnType("bigint");
 
                     b.Property<long>("TechnicianId")
                         .HasColumnType("bigint");
 
-                    b.HasKey("JobId", "TechnicianId");
+                    b.HasKey("RepairID", "TechnicianId");
 
                     b.HasIndex("TechnicianId");
 
                     b.ToTable("RepairTechnicians");
-                });
-
-            modelBuilder.Entity("ModelProvider.State", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("States");
                 });
 
             modelBuilder.Entity("ModelProvider.Technician", b =>
@@ -197,11 +195,9 @@ namespace Server.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -209,13 +205,34 @@ namespace Server.Migrations
                     b.ToTable("Technicians");
                 });
 
+            modelBuilder.Entity("ModelProvider.User", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("ModelProvider.Auto", b =>
                 {
                     b.HasOne("ModelProvider.Client", "Client")
                         .WithMany()
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ClientId");
+                });
+
+            modelBuilder.Entity("ModelProvider.Bonus", b =>
+                {
+                    b.HasOne("ModelProvider.Repair", "Repair")
+                        .WithMany("Bonuses")
+                        .HasForeignKey("RepairId");
                 });
 
             modelBuilder.Entity("ModelProvider.Manager", b =>
@@ -229,40 +246,30 @@ namespace Server.Migrations
                 {
                     b.HasOne("ModelProvider.Auto", "Auto")
                         .WithMany()
-                        .HasForeignKey("AutoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ModelProvider.Manager", "JobManager")
-                        .WithMany()
-                        .HasForeignKey("JobManagerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ModelProvider.State", "WorkState")
-                        .WithMany()
-                        .HasForeignKey("WorkStateId")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("ModelProvider.RepairLog", b =>
                 {
-                    b.HasOne("ModelProvider.Repair", "Job")
+                    b.HasOne("ModelProvider.Repair", "Repair")
                         .WithMany()
-                        .HasForeignKey("JobId");
+                        .HasForeignKey("RepairId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ModelProvider.RepairTechnician", b =>
                 {
-                    b.HasOne("ModelProvider.Repair", "Job")
-                        .WithMany("JobTechnicians")
-                        .HasForeignKey("JobId")
+                    b.HasOne("ModelProvider.Repair", "Repair")
+                        .WithMany("RepairTechnicians")
+                        .HasForeignKey("RepairID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ModelProvider.Technician", "Technician")
-                        .WithMany("JobTechnicians")
+                        .WithMany("RepairTechnician")
                         .HasForeignKey("TechnicianId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

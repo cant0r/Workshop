@@ -10,8 +10,8 @@ using Server.Repositories;
 namespace Server.Migrations
 {
     [DbContext(typeof(WorkshopContext))]
-    [Migration("20200612082426_addedPriceAttribute")]
-    partial class addedPriceAttribute
+    [Migration("20200613163843_BonusUpdate10")]
+    partial class BonusUpdate10
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,7 +32,7 @@ namespace Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("ClientId")
+                    b.Property<long?>("ClientId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("LicencePlate")
@@ -51,6 +51,24 @@ namespace Server.Migrations
                         .IsUnique();
 
                     b.ToTable("Automobiles");
+                });
+
+            modelBuilder.Entity("ModelProvider.Bonus", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<long>("Price")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("RepairId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Name");
+
+                    b.HasIndex("RepairId");
+
+                    b.ToTable("Bonuses");
                 });
 
             modelBuilder.Entity("ModelProvider.Client", b =>
@@ -82,19 +100,6 @@ namespace Server.Migrations
                         .IsUnique();
 
                     b.ToTable("Clients");
-                });
-
-            modelBuilder.Entity("ModelProvider.Discount", b =>
-                {
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Percentage")
-                        .HasColumnType("int");
-
-                    b.HasKey("Name");
-
-                    b.ToTable("Discounts");
                 });
 
             modelBuilder.Entity("ModelProvider.Manager", b =>
@@ -136,11 +141,6 @@ namespace Server.Migrations
             modelBuilder.Entity("ModelProvider.Repair", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<long>("AutoId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Description")
@@ -153,8 +153,6 @@ namespace Server.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AutoId");
 
                     b.ToTable("Repairs");
                 });
@@ -174,6 +172,9 @@ namespace Server.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("RepairId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("TechnicianId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
@@ -210,8 +211,7 @@ namespace Server.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
@@ -229,13 +229,34 @@ namespace Server.Migrations
                     b.ToTable("Technicians");
                 });
 
+            modelBuilder.Entity("ModelProvider.User", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("ModelProvider.Auto", b =>
                 {
                     b.HasOne("ModelProvider.Client", "Client")
                         .WithMany()
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ClientId");
+                });
+
+            modelBuilder.Entity("ModelProvider.Bonus", b =>
+                {
+                    b.HasOne("ModelProvider.Repair", "Repair")
+                        .WithMany("Bonuses")
+                        .HasForeignKey("RepairId");
                 });
 
             modelBuilder.Entity("ModelProvider.Manager", b =>
@@ -249,7 +270,7 @@ namespace Server.Migrations
                 {
                     b.HasOne("ModelProvider.Auto", "Auto")
                         .WithMany()
-                        .HasForeignKey("AutoId")
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

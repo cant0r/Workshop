@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Server.Migrations
 {
-    public partial class initialSchema : Migration
+    public partial class BonusUpdate9 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -22,31 +23,31 @@ namespace Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "States",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_States", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Technicians",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(maxLength: 64, nullable: false),
+                    Name = table.Column<string>(nullable: false),
                     Email = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Technicians", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Password = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -58,7 +59,7 @@ namespace Server.Migrations
                     Brand = table.Column<string>(nullable: false),
                     Model = table.Column<string>(nullable: false),
                     LicencePlate = table.Column<string>(nullable: false),
-                    ClientId = table.Column<long>(nullable: false)
+                    ClientId = table.Column<long>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -68,7 +69,7 @@ namespace Server.Migrations
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -94,77 +95,84 @@ namespace Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Jobs",
+                name: "Repairs",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    AutoId = table.Column<long>(nullable: false),
+                    Id = table.Column<long>(nullable: false),
                     Description = table.Column<string>(nullable: true),
-                    JobManagerId = table.Column<long>(nullable: false),
-                    WorkStateId = table.Column<int>(nullable: false)
+                    Price = table.Column<long>(nullable: false),
+                    State = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Jobs", x => x.Id);
+                    table.PrimaryKey("PK_Repairs", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Jobs_Automobiles_AutoId",
-                        column: x => x.AutoId,
+                        name: "FK_Repairs_Automobiles_Id",
+                        column: x => x.Id,
                         principalTable: "Automobiles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Jobs_Managers_JobManagerId",
-                        column: x => x.JobManagerId,
-                        principalTable: "Managers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Jobs_States_WorkStateId",
-                        column: x => x.WorkStateId,
-                        principalTable: "States",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "JobLogs",
+                name: "Bonuses",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(nullable: false),
-                    JobId = table.Column<long>(nullable: true)
+                    Name = table.Column<string>(nullable: false),
+                    Price = table.Column<long>(nullable: false),
+                    RepairId = table.Column<long>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_JobLogs", x => x.Id);
+                    table.PrimaryKey("PK_Bonuses", x => x.Name);
                     table.ForeignKey(
-                        name: "FK_JobLogs_Jobs_JobId",
-                        column: x => x.JobId,
-                        principalTable: "Jobs",
+                        name: "FK_Bonuses_Repairs_RepairId",
+                        column: x => x.RepairId,
+                        principalTable: "Repairs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "JobTechnician",
+                name: "RepairLogs",
                 columns: table => new
                 {
-                    JobId = table.Column<long>(nullable: false),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TechnicianId = table.Column<long>(nullable: false),
+                    Description = table.Column<string>(nullable: false),
+                    Date = table.Column<DateTime>(nullable: false),
+                    RepairId = table.Column<long>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RepairLogs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RepairLogs_Repairs_RepairId",
+                        column: x => x.RepairId,
+                        principalTable: "Repairs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RepairTechnicians",
+                columns: table => new
+                {
+                    RepairID = table.Column<long>(nullable: false),
                     TechnicianId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_JobTechnician", x => new { x.JobId, x.TechnicianId });
+                    table.PrimaryKey("PK_RepairTechnicians", x => new { x.RepairID, x.TechnicianId });
                     table.ForeignKey(
-                        name: "FK_JobTechnician_Jobs_JobId",
-                        column: x => x.JobId,
-                        principalTable: "Jobs",
+                        name: "FK_RepairTechnicians_Repairs_RepairID",
+                        column: x => x.RepairID,
+                        principalTable: "Repairs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_JobTechnician_Technicians_TechnicianId",
+                        name: "FK_RepairTechnicians_Technicians_TechnicianId",
                         column: x => x.TechnicianId,
                         principalTable: "Technicians",
                         principalColumn: "Id",
@@ -177,61 +185,99 @@ namespace Server.Migrations
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_JobLogs_JobId",
-                table: "JobLogs",
-                column: "JobId");
+                name: "IX_Automobiles_LicencePlate",
+                table: "Automobiles",
+                column: "LicencePlate",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Jobs_AutoId",
-                table: "Jobs",
-                column: "AutoId");
+                name: "IX_Bonuses_RepairId",
+                table: "Bonuses",
+                column: "RepairId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Jobs_JobManagerId",
-                table: "Jobs",
-                column: "JobManagerId");
+                name: "IX_Clients_Email",
+                table: "Clients",
+                column: "Email",
+                unique: true,
+                filter: "[Email] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Jobs_WorkStateId",
-                table: "Jobs",
-                column: "WorkStateId");
+                name: "IX_Clients_PhoneNumber",
+                table: "Clients",
+                column: "PhoneNumber",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_JobTechnician_TechnicianId",
-                table: "JobTechnician",
-                column: "TechnicianId");
+                name: "IX_Managers_Email",
+                table: "Managers",
+                column: "Email",
+                unique: true,
+                filter: "[Email] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Managers_PhoneNumber",
+                table: "Managers",
+                column: "PhoneNumber",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Managers_TechnicianId",
                 table: "Managers",
                 column: "TechnicianId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RepairLogs_RepairId",
+                table: "RepairLogs",
+                column: "RepairId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RepairTechnicians_TechnicianId",
+                table: "RepairTechnicians",
+                column: "TechnicianId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Technicians_Email",
+                table: "Technicians",
+                column: "Email",
+                unique: true,
+                filter: "[Email] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Technicians_PhoneNumber",
+                table: "Technicians",
+                column: "PhoneNumber",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "JobLogs");
-
-            migrationBuilder.DropTable(
-                name: "JobTechnician");
-
-            migrationBuilder.DropTable(
-                name: "Jobs");
-
-            migrationBuilder.DropTable(
-                name: "Automobiles");
+                name: "Bonuses");
 
             migrationBuilder.DropTable(
                 name: "Managers");
 
             migrationBuilder.DropTable(
-                name: "States");
+                name: "RepairLogs");
 
             migrationBuilder.DropTable(
-                name: "Clients");
+                name: "RepairTechnicians");
+
+            migrationBuilder.DropTable(
+                name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Repairs");
 
             migrationBuilder.DropTable(
                 name: "Technicians");
+
+            migrationBuilder.DropTable(
+                name: "Automobiles");
+
+            migrationBuilder.DropTable(
+                name: "Clients");
         }
     }
 }
