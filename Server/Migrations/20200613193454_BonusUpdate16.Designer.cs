@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Server.Repositories;
 
 namespace Server.Migrations
 {
     [DbContext(typeof(WorkshopContext))]
-    partial class WorkshopContextModelSnapshot : ModelSnapshot
+    [Migration("20200613193454_BonusUpdate16")]
+    partial class BonusUpdate16
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -217,9 +219,6 @@ namespace Server.Migrations
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("isManager")
-                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
