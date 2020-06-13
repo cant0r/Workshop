@@ -17,15 +17,7 @@ namespace Server.Controllers
             var techRepo = new GenericRepository<Technician>();
             techRepo.Add(tech);
             return Ok();
-        }
-        [Route("technicians/multiple")]
-        [HttpPost]
-        public ActionResult AddTechnicianRange(IEnumerable<Technician> tech)
-        {
-            var techRepo = new GenericRepository<Technician>();
-            techRepo.AddAll(tech);
-            return Ok();
-        }
+        }       
 
         [Route("technicians")]
         [HttpGet]
@@ -56,15 +48,7 @@ namespace Server.Controllers
 
             return Ok();
         }
-        [Route("technicians/multiple")]
-        [HttpDelete]
-        public ActionResult RemoveTechnicianRange(IEnumerable<Technician> tech)
-        {
-            var repo = new GenericRepository<Technician>();
-            repo.RemoveAll(tech);
-
-            return Ok();
-        }
+     
         
         [Route("technicians")]
         [HttpPut]
@@ -81,14 +65,7 @@ namespace Server.Controllers
             return Ok();
                  
         }
-        [Route("technicians/multiple")]
-        [HttpPut]
-        public ActionResult UpdateTechnicianRange(IEnumerable<Technician> tech)
-        {
-            var repo = new GenericRepository<Technician>();    
-            repo.UpdateAll(tech);
-            return Ok();
-        }
+       
         #endregion
         #region CRUDManegers
         [Route("managers")]
@@ -99,15 +76,7 @@ namespace Server.Controllers
             manRepo.Add(man);
             return Ok();
         }
-        [Route("managers/multiple")]
-        [HttpPost]
-        public ActionResult AddManagerRange(IEnumerable<Manager> man)
-        {
-            var manRepo = new GenericRepository<Manager>();
-            manRepo.AddAll(man);
-            return Ok();
-        }
-
+       
         [Route("managers")]
         [HttpGet]
         public ActionResult<IEnumerable<Manager>> GetManagers()
@@ -139,15 +108,7 @@ namespace Server.Controllers
 
             return Ok();
         }
-        [Route("managers/multiple")]
-        [HttpDelete]
-        public ActionResult RemoveManagerRange(IEnumerable<Manager> man)
-        {
-            var repo = new GenericRepository<Manager>();
-            repo.RemoveAll(man);
-
-            return Ok();
-        }
+        
 
         [Route("managers")]
         [HttpPut]
@@ -164,14 +125,7 @@ namespace Server.Controllers
             return Ok();
 
         }
-        [Route("managers/multiple")]
-        [HttpPut]
-        public ActionResult UpdateManagerRange(IEnumerable<Manager> man)
-        {
-            var repo = new GenericRepository<Manager>();
-            repo.UpdateAll(man);
-            return Ok();
-        }
+       
         #endregion
         #region CRUDBonus
         [Route("bonus")]
@@ -180,14 +134,6 @@ namespace Server.Controllers
         {
             var repo = new GenericRepository<Bonus>();
             repo.Add(bonus);
-            return Ok();
-        }
-        [Route("bonus/multiple")]
-        [HttpPost]
-        public ActionResult AddBonusRange(IEnumerable<Bonus> bonus)
-        {
-            var repo = new GenericRepository<Bonus>();
-            repo.AddAll(bonus);
             return Ok();
         }
 
@@ -222,16 +168,6 @@ namespace Server.Controllers
 
             return Ok();
         }
-        [Route("bonus/multiple")]
-        [HttpDelete]
-        public ActionResult RemoveBonusRange(IEnumerable<Bonus> bonus)
-        {
-            var repo = new GenericRepository<Bonus>();
-            repo.RemoveAll(bonus);
-
-            return Ok();
-        }
-
         [Route("bonus")]
         [HttpPut]
         public ActionResult UpdateBonus(Bonus bonus)
@@ -247,13 +183,63 @@ namespace Server.Controllers
             return Ok();
 
         }
-        [Route("bonus/multiple")]
-        [HttpPut]
-        public ActionResult UpdateBonusRange(IEnumerable<Bonus> bonus)
+
+        #endregion
+        #region CRUDUsers
+        [Route("users")]
+        [HttpPost]
+        public ActionResult AddUser(User user)
         {
-            var repo = new GenericRepository<Bonus>();
-            repo.UpdateAll(bonus);
+            var repo = new GenericRepository<User>();
+            repo.Add(user);
             return Ok();
+        }
+
+        [Route("users")]
+        [HttpGet]
+        public ActionResult<IEnumerable<User>> GetUsers()
+        {
+            var them = new GenericRepository<User>().GetAll();
+            return Ok(them);
+        }
+
+        [Route("users/{id:long}")]
+        [HttpGet]
+        public ActionResult<User> GetUserByID(long id)
+        {
+            var user = new GenericRepository<User>().Get(id);
+
+            if (user is null)
+                return NotFound();
+            else
+                return Ok(user);
+        }
+        [Route("users/{id:long}")]
+        [HttpDelete]
+        public ActionResult RemoveUserByID(long id)
+        {
+            var repo = new GenericRepository<User>();
+            var user = repo.Get(id);
+            repo.Remove(user);
+
+            return Ok();
+        }
+
+
+        [Route("users")]
+        [HttpPut]
+        public ActionResult UpdateUser(User user)
+        {
+            var repo = new GenericRepository<User>();
+
+            if (repo.Get(user.Id) is null)
+                AddUser(user);
+            else
+            {
+                repo.Update(user);
+            }
+            return Ok();
+
         }
         #endregion
     }
