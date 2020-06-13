@@ -68,14 +68,18 @@ namespace Client_Manager
             {
                 var repairEntry = new RepairEntryBox();
                 repairEntry.descriptionTblock.Text = r.Description;
-                repairEntry.repairIdLbl.Content = r.Id.ToString();
+                repairEntry.repairIdLbl.Content = "ID: " + r.Id.ToString();
                 repairEntry.repairStateLbl.Content = r.State;
+                repairEntry.licencePlateLbl.Content = r.Auto.LicencePlate.ToString();
 
-                var techIDs = (from repair in r.RepairTechnicians
+                List<long> techIDs = new List<long>();
+                List<Technician> techs = new List<Technician>();
+                if (r.RepairTechnicians != null)
+                    techIDs = (from repair in r.RepairTechnicians
                                where repair.RepairID == r.Id
-                               select repair.TechnicianId);
-
-                var techs = theManager.Technicians.FindAll(t => techIDs.Contains(t.Id));
+                               select repair.TechnicianId).ToList();
+                if (theManager.Technicians != null)
+                    techs = theManager.Technicians.FindAll(t => techIDs.Contains(t.Id));
                 foreach (Technician t in techs)
                 {
                     repairEntry.techsLbox.Items.Add(t.Name);
@@ -110,7 +114,7 @@ namespace Client_Manager
                 if (searchTbox.Text.Length == 0)
                     dataTable.ItemsSource = (System.Collections.IEnumerable)dataGridSource;
                 else
-                    dataTable.ItemsSource = 
+                    dataTable.ItemsSource =
                         dataTable.ItemsSource.OfType<TEntity>().Where(i => i.ToString().Contains(searchTbox.Text));
             };
 
