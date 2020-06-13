@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,7 +12,7 @@ namespace ModelProvider
         [Key]
         public long Id { get; set; }
 
-        [Required]
+        [ForeignKey("Id")]
         public virtual Auto Auto { get; set; }
 
         public string Description { get; set; }
@@ -21,7 +22,7 @@ namespace ModelProvider
 
         [Required]
         public virtual State State { get; set; }
-
+     
         public virtual IEnumerable<Bonus> Bonuses { get; set; }
         public virtual ICollection<RepairTechnician> RepairTechnicians { get; set; }
     }

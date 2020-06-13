@@ -13,7 +13,6 @@ namespace ModelProvider
         [Required]
         public string Name { get; set; }
         public string Email { get; set; }
-        [Required]
         public string PhoneNumber { get; set; }
 
         public virtual ICollection<RepairTechnician> RepairTechnician { get; set; }

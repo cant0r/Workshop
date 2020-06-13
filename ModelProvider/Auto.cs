@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,8 +20,8 @@ namespace ModelProvider
         [Required]
         public string LicencePlate { get; set; }
 
-        [Required]
         public virtual Client Client { get; set; }
+
 
         public override string ToString()
         {

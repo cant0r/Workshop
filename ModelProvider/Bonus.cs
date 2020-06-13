@@ -13,5 +13,6 @@ namespace ModelProvider
         [Required]
         public long Price { get; set; }
 
+        public Repair Repair { get; set; }
     }
 }

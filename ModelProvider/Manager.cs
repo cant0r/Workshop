@@ -15,7 +15,6 @@ namespace ModelProvider
         [MaxLength(64)]
         public string Name { get; set; }
         public string Email { get; set; }
-        [Required]
         public string PhoneNumber { get; set; }
 
         public virtual Technician Technician { get; set; }

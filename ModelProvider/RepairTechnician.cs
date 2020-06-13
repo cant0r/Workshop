@@ -9,11 +9,11 @@ namespace ModelProvider
     public class RepairTechnician
     {
         public long RepairID { get; set; }
-        [Required]
+   
         public virtual Repair Repair { get; set; }
 
         public long TechnicianId { get; set; }
-        [Required]
+      
         public virtual Technician Technician { get; set; }
     }
 }

@@ -14,8 +14,7 @@ namespace ModelProvider
         [Required]
         [MaxLength(64)]
         public string Name { get; set; }
-        public string Email { get; set; }
-        [Required]
+        public string Email { get; set; }     
         public string PhoneNumber { get; set; }
 
         public override string ToString()
