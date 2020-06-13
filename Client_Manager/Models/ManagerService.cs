@@ -52,6 +52,10 @@ namespace Client_Manager.Models
         {
             workshopClient.UploadUpdatedRepair(r);
         }
+        public bool ValidateUser(User u)
+        {
+           return workshopClient.ValidateUser(u);
+        }
 
     }
 }
