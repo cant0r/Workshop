@@ -4,6 +4,16 @@
              xmlns:local="clr-namespace:Client_Manager"
              StartupUri="Views/MainWindow.xaml">
     <Application.Resources>
+        <Style TargetType="CheckBox">
+            <Setter Property="Height" Value="Auto"></Setter>
+            <Setter Property="Width" Value="Auto"></Setter>
+            <Setter Property="Background" Value="#d4f1f4"></Setter>
+            <Setter Property="Foreground" Value="Navy"></Setter>
+            <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+            <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+            <Setter Property="Margin" Value="10 0 0 0"></Setter>
+            <Setter Property="FontSize" Value="16pt"></Setter>
+        </Style>
         <Style TargetType="DataGrid">
             <Setter Property="Background" Value="#05445e"></Setter>
             <Setter Property="Foreground" Value="#05445e"></Setter>

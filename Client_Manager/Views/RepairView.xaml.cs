@@ -40,13 +40,11 @@ namespace Client_Manager.Views
 
             foreach(Bonus b in repair.Bonuses)
             {
-                Label name = new Label();
-                name.Content = b.Name;
-                Label price = new Label();
-                price.Content = b.Price;
-
-                bonusStackPanel.Children.Add(name);
-                bonusPriceStackPanel.Children.Add(price);
+                Label bonus = new Label();
+                bonus.Content = b.Name + " " + b.Price;
+                bonus.HorizontalContentAlignment = HorizontalAlignment.Center;
+                bonus.VerticalContentAlignment = VerticalAlignment.Center;
+                bonusStackPanel.Children.Add(bonus);
 
                
                 foreach(CheckBox cb in bonusLbox.Children)
@@ -68,10 +66,47 @@ namespace Client_Manager.Views
             {
                 CheckBox cbox = new CheckBox();
                 cbox.Content = b.Name;
+                cbox.Checked += (object sender, RoutedEventArgs args) => 
+                {
+                    Label name = new Label();
+                    name.Content = b.Name + " " + b.Price;
+                    AddOrRemoveBonus(name);
+                };
+                cbox.Unchecked += (object sender, RoutedEventArgs args) =>
+                {
+                    Label name = new Label();
+                    name.Content = b.Name + " "  + b.Price;
+                    AddOrRemoveBonus(name);
+                };
                 bonusLbox.Children.Add(cbox);
             }
 
         }
+
+      
+        private void AddOrRemoveBonus(Label name)
+        {
+
+            Action<Label,StackPanel> addOrRemove = (Label c, StackPanel sp) => 
+            {
+                var b_temp = (from ctrl in sp.Children.OfType<UIElement>()
+                              where ((Label)ctrl).Content.ToString().Contains(c.Content.ToString())
+                              select ctrl).FirstOrDefault();
+                if (b_temp != null)
+                {
+                    sp.Children.Remove(b_temp);
+                }
+                else
+                {
+                    sp.Children.Add(c);
+                }
+            };
+
+            addOrRemove(name, bonusStackPanel);
+            
+        }
+
+        
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
