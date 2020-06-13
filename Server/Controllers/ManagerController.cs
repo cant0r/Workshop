@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ModelProvider;
 using Server.Repositories;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -154,5 +155,21 @@ namespace Server.Controllers
                 return Ok(bonuses);
         }
 
+        [Route("users")]
+        [HttpPost]
+        public ActionResult ValidateUser(User u)
+        {
+            var repo = new GenericRepository<User>();
+
+            var result = (from users in repo.GetAll() where u.isManager == true && users.Username == u.Username
+                         && System.Text.Encoding.UTF8.GetString(System.Convert.FromBase64String(users.Password))
+                            == u.Password select users).FirstOrDefault();
+
+
+            if (result is null)
+                return NotFound(false);
+            else
+                return Ok(true);
+        }
     }
 }

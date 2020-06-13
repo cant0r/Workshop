@@ -242,5 +242,21 @@ namespace Server.Controllers
 
         }
         #endregion
+        [Route("clean")]
+        [HttpGet]
+        public ActionResult CleanRepairsAndStuff()
+        {
+            var repo = new GenericRepository<Auto>();
+            repo.RemoveAll(repo.GetAll());
+            var repo2 = new GenericRepository<Client>();
+            repo2.RemoveAll(repo2.GetAll());
+            var repo3 = new GenericRepository<Repair>();
+            repo3.RemoveAll(repo3.GetAll());
+            var repo4 = new GenericRepository<RepairLog>();
+            repo4.RemoveAll(repo4.GetAll());
+            var repo5 = new GenericRepository<RepairTechnician>();
+            repo5.RemoveAll(repo5.GetAll());
+            return Ok();
+        }
     }
 }
