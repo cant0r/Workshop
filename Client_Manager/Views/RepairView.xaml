@@ -22,6 +22,10 @@
             <Label Content="Javítás felvétele" HorizontalContentAlignment="Left" FontWeight="Bold" ></Label>
             <Label Content="Probléma leírása:" HorizontalContentAlignment="Left" FontSize="13pt" ></Label>
         </StackPanel>
+        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Width="Auto">
+            <Label Content="Manager:" HorizontalContentAlignment="Left" Margin="0 0 10 0" FontWeight="Bold"></Label>
+            <Label Content="manager#" x:Name="managerLbl" HorizontalContentAlignment="Center" Width="Auto"></Label>
+        </StackPanel>
         <Border Grid.Row="1" Grid.Column="0" Margin="5">
             <TextBox  x:Name="problemTbox" TextWrapping="Wrap" ScrollViewer.CanContentScroll="True" ></TextBox>
         </Border>

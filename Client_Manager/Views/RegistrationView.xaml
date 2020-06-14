@@ -42,6 +42,10 @@
             <TextBox x:Name="autoPlateTblock" Grid.Row="7" Grid.Column="1" ></TextBox>
             <Button Click="backBtn_Click" Grid.Row="9" Grid.Column="0" x:Name="backBtn" Content="&#x2906;"></Button>
             <Button Click="nextBtn_Click" Grid.Row="9" Grid.Column="1" x:Name="nextBtn" Content="&#x2907;"></Button>
+            <StackPanel Margin="10" Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Width="Auto">
+                <Label Content="Manager:" HorizontalContentAlignment="Left" Margin="0 0 10 0" FontWeight="Bold"></Label>
+                <Label Content="manager#" x:Name="managerLbl" HorizontalContentAlignment="Center" Width="Auto"></Label>
+            </StackPanel>
         </Grid>
     </ScrollViewer>
 </Window>

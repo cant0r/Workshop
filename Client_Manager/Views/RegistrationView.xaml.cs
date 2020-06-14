@@ -28,6 +28,7 @@ namespace Client_Manager
             InitializeComponent();
             this.repair = repair;
             if (!(this.repair is null)) LoadRepair(this.repair);
+            managerLbl.Content = (repair?.Manager?.User.Username ?? ManagerService.GetInstance().CurrentManager?.User.Username) ?? "adminInside%";
         }
 
         private void LoadRepair(Repair repair)
@@ -112,6 +113,7 @@ namespace Client_Manager
             repair.State = State.New;
             repair.Price = 0;
             repair.Bonuses = new List<Bonus>();
+            repair.Manager ??= ManagerService.GetInstance().CurrentManager;
             repair.Description = "";
             repair.RepairTechnicians = new List<RepairTechnician>();
 

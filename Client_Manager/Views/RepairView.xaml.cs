@@ -35,6 +35,7 @@ namespace Client_Manager.Views
                 update = true;
                 LoadRepair(repair);
             }
+            managerLbl.Content = (repair?.Manager?.User.Username ?? ManagerService.GetInstance().CurrentManager?.User.Username) ?? "adminInside%";
         }
 
         private void LoadRepair(Repair repair)

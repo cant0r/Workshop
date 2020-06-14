@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Linq;
 using System.Text;
 using System.Windows.Automation;
 
@@ -14,6 +15,9 @@ namespace Client_Manager.Models
         public List<Repair> Repairs { get; private set; }
         public List<RepairLog> RepairLogs { get; private set; }
         public List<Technician> Technicians { get; private set; }
+        public List<Manager> Managers { get; private set; }
+
+        public Manager CurrentManager { get; set; }
 
         private WorkshopClient workshopClient;
 
@@ -22,12 +26,12 @@ namespace Client_Manager.Models
 
         static ManagerService()
         {
-            instance = new ManagerService(); 
+            instance = new ManagerService();
         }
-        private ManagerService() 
+        private ManagerService()
         {
             workshopClient = WorkshopClient.GetInstance();
-            
+
         }
         public static ManagerService GetInstance()
         {
@@ -54,7 +58,14 @@ namespace Client_Manager.Models
         }
         public bool ValidateUser(User u)
         {
-           return workshopClient.ValidateUser(u);
+            var valid = workshopClient.ValidateUser(u);
+            Manager manager = 
+                (from managers in Managers?.OfType<Manager>() ?? new List<Manager>()
+                 where managers.User.Username == u.Username 
+                 select managers).FirstOrDefault(); 
+            
+            CurrentManager = manager;
+            return valid;
         }
 
     }
