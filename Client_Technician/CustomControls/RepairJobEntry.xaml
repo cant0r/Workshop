@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="Client_Technician.CustomControls.RepairJobEntry"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Client_Technician.CustomControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             Height="600" Width="800"
+             Background="#05445e">
+    <Border BorderThickness="2pt" BorderBrush="#05445e">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Column="0" Grid.Row="0" Height="Auto" Width="Auto">
+                <Label FontSize="16pt"  Content="ID:"  Width="Auto" Height="Auto" x:Name="repairIdLbl"></Label>
+                <Label FontSize="16pt"   Width="Auto" Height="Auto" x:Name="licencePlateLbl"></Label>
+                <Label FontSize="16pt"  Content="Manager:"  Width="Auto" Height="Auto"></Label>
+                <Label FontSize="16pt"   Width="Auto" Height="Auto" x:Name="managerLbl"></Label>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Grid.Row="0" Height="Auto" Width="Auto">
+                <Label  HorizontalContentAlignment="Center" FontSize="16pt" Content="Állapot"  Width="Auto" Height="Auto"></Label>
+                <Label HorizontalAlignment="Center" FontSize="16pt"  Width="Auto" Height="Auto" x:Name="repairStateLbl"></Label>
+            </StackPanel>
+
+            <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2" Height="Auto">
+                <TextBlock 
+                           IsEnabled="False" Width="Auto" x:Name="descriptionTblock"
+                       Background="#7ec8e3" Foreground="#05445e"
+                       ScrollViewer.CanContentScroll="True"
+                       TextWrapping="Wrap" FontSize="22pt"
+                       Text=""></TextBlock>
+            </StackPanel>
+            <UniformGrid  Grid.Row="0" Grid.Column="2">
+                <Button  x:Name="repairLogBtn" 
+                    Content="JAVÍTÁSI NAPLÓ" FontSize="16pt"></Button>
+            </UniformGrid>
+            <UniformGrid Grid.Row="1" Grid.Column="2">
+                <Border BorderBrush="Cyan" BorderThickness="2pt">
+                    <Button x:Name="doneBtn"   Content="Javítás befjezése" FontSize="16pt" Foreground="Cyan"></Button>
+                </Border>
+            </UniformGrid>
+            <ListBox Grid.Row="2" Grid.Column="2" Width="Auto" Height="Auto" ScrollViewer.CanContentScroll="True" x:Name="techsLbox">
+            </ListBox>
+        </Grid>
+    </Border>
+</UserControl>
