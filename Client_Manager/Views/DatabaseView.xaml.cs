@@ -71,6 +71,7 @@ namespace Client_Manager
                 repairEntry.repairIdLbl.Content = "ID: " + r.Id.ToString();
                 repairEntry.repairStateLbl.Content = r.State;
                 repairEntry.licencePlateLbl.Content = r.Auto.LicencePlate.ToString();
+                repairEntry.managerLbl.Content = r.Manager?.User?.Username ?? "adminInside%";
 
                 List<long> techIDs = new List<long>();
                 List<Technician> techs = new List<Technician>();
@@ -93,6 +94,22 @@ namespace Client_Manager
                 repairEntry.editBtn.Click += (object sender, RoutedEventArgs args) =>
                 {
                     new RegistrationView(r).ShowDialog();
+                };
+
+                if (r.State == State.Cancelled || r.State == State.Done)
+                {
+                    repairEntry.deleteBtn.Visibility = Visibility.Collapsed;
+                    ((UIElement)repairEntry.deleteBtn.Parent).Visibility = Visibility.Collapsed;
+                }
+
+                repairEntry.deleteBtn.Click += (object sender, RoutedEventArgs args) =>
+                {
+                    if(MessageBox.Show("A lezárt szereléseket nem lehet a jövőben folytatni.", "Megerősítés szüksgées", MessageBoxButton.OKCancel)
+                     == MessageBoxResult.OK)
+                    {
+                        r.State = State.Cancelled;
+                        theManager.UploadUpdatedRepair(r);
+                    }
                 };
 
                 entryPanel.Children.Add(repairEntry);

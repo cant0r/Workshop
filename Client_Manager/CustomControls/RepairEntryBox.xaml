@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Client_Manager.CustomControls"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Height="400"
+             d:DesignHeight="450" d:DesignWidth="800" Height="600"
              Background="#7ec8e3">
     <Border BorderThickness="2pt" BorderBrush="#05445e">
         <Grid>
@@ -22,6 +22,8 @@
             <StackPanel Grid.Column="0" Grid.Row="0" Height="Auto" Width="Auto">
                 <Label FontSize="16pt" Foreground="#05445e" Content="ID:"  Width="Auto" Height="Auto" x:Name="repairIdLbl"></Label>
                 <Label FontSize="16pt" Foreground="#05445e"  Width="Auto" Height="Auto" x:Name="licencePlateLbl"></Label>
+                <Label FontSize="16pt" Foreground="#05445e" Content="Manager:"  Width="Auto" Height="Auto"></Label>
+                <Label FontSize="16pt" Foreground="#05445e"  Width="Auto" Height="Auto" x:Name="managerLbl"></Label>
             </StackPanel>
             <StackPanel Grid.Column="1" Grid.Row="0" Height="Auto" Width="Auto">
                 <Label FontWeight="Bold" HorizontalContentAlignment="Center" FontSize="16pt" Foreground="#05445e" Content="Állapot"  Width="Auto" Height="Auto"></Label>
@@ -41,8 +43,12 @@
                 <Button  x:Name="repairLogBtn" 
                     Content="JAVÍTÁSI NAPLÓ" FontSize="16pt"></Button>
             </UniformGrid>
-            <UniformGrid Grid.Row="1" Grid.Column="2">
+            <UniformGrid Grid.Row="1" Grid.Column="2" Rows="2">
+                
                 <Button x:Name="editBtn"   Content="Szerkesztés" FontSize="16pt"></Button>
+                <Border BorderBrush="Red" BorderThickness="2pt">
+                    <Button x:Name="deleteBtn"   Content="Javítás lezárása" FontSize="16pt" Foreground="Red"></Button>
+                </Border>
             </UniformGrid>
 
 
