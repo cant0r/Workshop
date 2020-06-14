@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Client_Technician.Views;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,10 +24,24 @@ namespace Client_Technician
         public MainWindow()
         {
             InitializeComponent();
+            new LoginView().ShowDialog();
+        }
+
+        private void newrepairBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void jobBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Hide();
+            if (new Overview().ShowDialog() == true)
+                Show();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            DialogResult = true;
             Application.Current.Shutdown(0);
         }
     }
