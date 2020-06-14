@@ -15,6 +15,9 @@ namespace ModelProvider
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
 
+        [Required]
+        public User User { get; set; }
+
         public virtual ICollection<RepairTechnician> RepairTechnician { get; set; }
 
         public override string ToString()

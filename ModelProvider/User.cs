@@ -10,7 +10,7 @@ namespace ModelProvider
         [Key]
         public long Id { get; set; }
 
-        [Required]
+        [Required]        
         public string Username { get; set; }
 
 
