@@ -27,19 +27,19 @@ namespace Client_Manager
     {
         private Button activeButton;
 
-        private ManagerService theManager;
+        private ManagerService manegerService;
 
         private object dataGridSource;
 
         public DatabaseView()
         {
             InitializeComponent();
-            theManager = ManagerService.GetInstance();
+            manegerService = ManagerService.GetInstance();
             DispatcherTimer timer = new DispatcherTimer();
             timer.Tick += (object sender, EventArgs args) =>
             {
                 entryPanel.Children.Clear();
-                theManager.ParseDatabase();
+                manegerService.ParseDatabase();
 
             };
             timer.Interval = TimeSpan.FromMinutes(5);
@@ -64,7 +64,7 @@ namespace Client_Manager
         private void LoadRepairsViaPredicate(Func<Repair, bool> predicate)
         {
             entryPanel.Children.Clear();
-            foreach (Repair r in theManager.Repairs.FindAll(r => predicate(r)))
+            foreach (Repair r in manegerService.Repairs.FindAll(r => predicate(r)))
             {
                 var repairEntry = new RepairEntryBox();
                 repairEntry.descriptionTblock.Text = r.Description;
@@ -79,8 +79,8 @@ namespace Client_Manager
                     techIDs = (from repair in r.RepairTechnicians
                                where repair.RepairID == r.Id
                                select repair.TechnicianId).ToList();
-                if (theManager.Technicians != null)
-                    techs = theManager.Technicians.FindAll(t => techIDs.Contains(t.Id));
+                if (manegerService.Technicians != null)
+                    techs = manegerService.Technicians.FindAll(t => techIDs.Contains(t.Id));
                 foreach (Technician t in techs)
                 {
                     repairEntry.techsLbox.Items.Add(t.Name);
@@ -109,7 +109,7 @@ namespace Client_Manager
                     {
                         r.State = State.Cancelled;
                         repairEntry.Visibility = Visibility.Collapsed;
-                        theManager.UploadUpdatedRepair(r);
+                        manegerService.UploadUpdatedRepair(r);
                     }
                 };
 
@@ -168,19 +168,19 @@ namespace Client_Manager
         private void techniciansBtn_Click(object sender, RoutedEventArgs e)
         {
             MakeButtonActive((Button)sender);
-            LoadDataIntoGrid(theManager.Technicians);
+            LoadDataIntoGrid(manegerService.Technicians);
         }
 
         private void clientsBtn_Click(object sender, RoutedEventArgs e)
         {
             MakeButtonActive((Button)sender);
-            LoadDataIntoGrid(theManager.Clients);
+            LoadDataIntoGrid(manegerService.Clients);
         }
 
         private void autosBtn_Click(object sender, RoutedEventArgs e)
         {
             MakeButtonActive((Button)sender);
-            LoadDataIntoGrid(theManager.Autos);
+            LoadDataIntoGrid(manegerService.Autos);
         }
     }
 }
