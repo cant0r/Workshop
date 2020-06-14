@@ -2,7 +2,7 @@
 
 namespace Server.Migrations
 {
-    public partial class BonusUpdate15 : Migration
+    public partial class AAAAAAAAAAAAAAAAAAAAAAA2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

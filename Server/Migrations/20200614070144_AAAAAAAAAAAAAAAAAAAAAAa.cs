@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Server.Migrations
 {
-    public partial class BonusUpdate9 : Migration
+    public partial class AAAAAAAAAAAAAAAAAAAAAAa : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,11 +15,26 @@ namespace Server.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(maxLength: 64, nullable: false),
                     Email = table.Column<string>(nullable: true),
-                    PhoneNumber = table.Column<string>(nullable: false)
+                    PhoneNumber = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Clients", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Managers",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(maxLength: 64, nullable: false),
+                    Email = table.Column<string>(nullable: true),
+                    PhoneNumber = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Managers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -30,7 +45,7 @@ namespace Server.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: false),
                     Email = table.Column<string>(nullable: true),
-                    PhoneNumber = table.Column<string>(nullable: false)
+                    PhoneNumber = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -43,7 +58,9 @@ namespace Server.Migrations
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Password = table.Column<string>(nullable: false)
+                    Username = table.Column<string>(nullable: false),
+                    Password = table.Column<string>(nullable: false),
+                    isManager = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -73,32 +90,11 @@ namespace Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Managers",
-                columns: table => new
-                {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(maxLength: 64, nullable: false),
-                    Email = table.Column<string>(nullable: true),
-                    PhoneNumber = table.Column<string>(nullable: false),
-                    TechnicianId = table.Column<long>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Managers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Managers_Technicians_TechnicianId",
-                        column: x => x.TechnicianId,
-                        principalTable: "Technicians",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Repairs",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false),
+                    ManagerId = table.Column<long>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     Price = table.Column<long>(nullable: false),
                     State = table.Column<int>(nullable: false)
@@ -112,6 +108,12 @@ namespace Server.Migrations
                         principalTable: "Automobiles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Repairs_Managers_ManagerId",
+                        column: x => x.ManagerId,
+                        principalTable: "Managers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -196,67 +198,25 @@ namespace Server.Migrations
                 column: "RepairId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Clients_Email",
-                table: "Clients",
-                column: "Email",
-                unique: true,
-                filter: "[Email] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Clients_PhoneNumber",
-                table: "Clients",
-                column: "PhoneNumber",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Managers_Email",
-                table: "Managers",
-                column: "Email",
-                unique: true,
-                filter: "[Email] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Managers_PhoneNumber",
-                table: "Managers",
-                column: "PhoneNumber",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Managers_TechnicianId",
-                table: "Managers",
-                column: "TechnicianId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_RepairLogs_RepairId",
                 table: "RepairLogs",
                 column: "RepairId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Repairs_ManagerId",
+                table: "Repairs",
+                column: "ManagerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RepairTechnicians_TechnicianId",
                 table: "RepairTechnicians",
                 column: "TechnicianId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Technicians_Email",
-                table: "Technicians",
-                column: "Email",
-                unique: true,
-                filter: "[Email] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Technicians_PhoneNumber",
-                table: "Technicians",
-                column: "PhoneNumber",
-                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "Bonuses");
-
-            migrationBuilder.DropTable(
-                name: "Managers");
 
             migrationBuilder.DropTable(
                 name: "RepairLogs");
@@ -275,6 +235,9 @@ namespace Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "Automobiles");
+
+            migrationBuilder.DropTable(
+                name: "Managers");
 
             migrationBuilder.DropTable(
                 name: "Clients");

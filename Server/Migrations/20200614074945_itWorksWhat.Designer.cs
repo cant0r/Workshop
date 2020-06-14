@@ -10,8 +10,8 @@ using Server.Repositories;
 namespace Server.Migrations
 {
     [DbContext(typeof(WorkshopContext))]
-    [Migration("20200613184820_BonusUpdate14")]
-    partial class BonusUpdate14
+    [Migration("20200614074945_itWorksWhat")]
+    partial class itWorksWhat
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -216,6 +216,13 @@ namespace Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isManager")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users");
@@ -230,7 +237,7 @@ namespace Server.Migrations
 
             modelBuilder.Entity("ModelProvider.Bonus", b =>
                 {
-                    b.HasOne("ModelProvider.Repair", "Repair")
+                    b.HasOne("ModelProvider.Repair", null)
                         .WithMany("Bonuses")
                         .HasForeignKey("RepairId");
                 });

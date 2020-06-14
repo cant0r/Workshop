@@ -10,8 +10,8 @@ using Server.Repositories;
 namespace Server.Migrations
 {
     [DbContext(typeof(WorkshopContext))]
-    [Migration("20200613193454_BonusUpdate16")]
-    partial class BonusUpdate16
+    [Migration("20200614070144_AAAAAAAAAAAAAAAAAAAAAAa")]
+    partial class AAAAAAAAAAAAAAAAAAAAAAa
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -219,6 +219,9 @@ namespace Server.Migrations
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isManager")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

@@ -10,8 +10,8 @@ using Server.Repositories;
 namespace Server.Migrations
 {
     [DbContext(typeof(WorkshopContext))]
-    [Migration("20200613213209_safeStateUpdate2")]
-    partial class safeStateUpdate2
+    [Migration("20200614071258_AAAAAAAAAAAAAAAAAAAAAAA3")]
+    partial class AAAAAAAAAAAAAAAAAAAAAAA3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

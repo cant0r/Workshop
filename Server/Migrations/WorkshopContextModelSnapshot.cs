@@ -235,7 +235,7 @@ namespace Server.Migrations
 
             modelBuilder.Entity("ModelProvider.Bonus", b =>
                 {
-                    b.HasOne("ModelProvider.Repair", "Repair")
+                    b.HasOne("ModelProvider.Repair", null)
                         .WithMany("Bonuses")
                         .HasForeignKey("RepairId");
                 });

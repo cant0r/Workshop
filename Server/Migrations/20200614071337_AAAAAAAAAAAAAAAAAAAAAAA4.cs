@@ -2,7 +2,7 @@
 
 namespace Server.Migrations
 {
-    public partial class safeStateUpdate2 : Migration
+    public partial class AAAAAAAAAAAAAAAAAAAAAAA4 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
