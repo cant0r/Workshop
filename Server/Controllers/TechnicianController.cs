@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using ModelProvider;
 using Server.Repositories;
@@ -11,20 +12,10 @@ namespace Server.Controllers
     {
         [Route("repair")]
         [HttpGet]
-        public ActionResult<IEnumerable<Repair>> GetNewRepairJobs()
+        public ActionResult<IEnumerable<Repair>> GetRepairJobs()
         {
             var workshopRepo = new WorkshopRepository();
-            var repairs = workshopRepo.GetNewRepairs();
-            if (repairs is null)
-                return NotFound();
-            return Ok(repairs);
-        }
-        [Route("repair/inprogress")]
-        [HttpGet]
-        public ActionResult<IEnumerable<Repair>> GetTakenRepairJobs()
-        {
-            var workshopRepo = new WorkshopRepository();
-            var repairs = workshopRepo.GetTakenRepairs();
+            var repairs = workshopRepo.GetRepairs();
             if (repairs is null)
                 return NotFound();
             return Ok(repairs);
@@ -76,6 +67,45 @@ namespace Server.Controllers
             else
                 workshopRepo.UpdateRepairLog(log);
             return Ok();
+        }
+        [Route("users")]
+        [HttpPost]
+        public ActionResult ValidateUser(User u)
+        {
+            var repo = new GenericRepository<User>();
+
+            var result = (from users in repo.GetAll()
+                          where users.Username == u.Username &&
+                          System.Text.Encoding.UTF8.GetString(System.Convert.FromBase64String(users.Password)) == u.Password  
+                          select users).FirstOrDefault();
+
+
+            if (result is null)
+                return NotFound(false);
+            else
+                return Ok(true);
+        }
+        [Route("technicians")]
+        [HttpGet]
+        public ActionResult<IEnumerable<Technician>> GetTechnicians()
+        {
+            var workshopRepo = new WorkshopRepository();
+            var techs = workshopRepo.GetTechnicians();
+            if (techs is null)
+                return NotFound();
+            else
+                return Ok(techs);
+        }
+        [Route("technicians/{repairID:long}")]
+        [HttpGet]
+        public ActionResult<IEnumerable<Technician>> GetTechnicians(long repairID)
+        {
+            var workshopRepo = new WorkshopRepository();
+            var techs = workshopRepo.GetTechniciansByRepairID(repairID);
+            if (techs is null)
+                return NotFound();
+            else
+                return Ok(techs);
         }
     }
 }
