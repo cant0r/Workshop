@@ -39,8 +39,7 @@ namespace Server.Repositories
                 .HasForeignKey(job => job.RepairID);
 
             modelBuilder.Entity<Repair>().HasKey(r => r.Id);
-            modelBuilder.Entity<Repair>().HasMany(r => r.Bonuses).WithOne(b => b.Repair);
-
+            modelBuilder.Entity<Repair>().HasMany(r => r.Bonuses).WithOne();
             modelBuilder.Entity<Manager>().HasMany(m => m.Repair).WithOne(r => r.Manager);
             modelBuilder.Entity<Auto>().HasIndex("LicencePlate").IsUnique();
         }
