@@ -108,6 +108,7 @@ namespace Client_Manager
                      == MessageBoxResult.OK)
                     {
                         r.State = State.Cancelled;
+                        repairEntry.Visibility = Visibility.Collapsed;
                         theManager.UploadUpdatedRepair(r);
                     }
                 };
