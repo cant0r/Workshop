@@ -40,6 +40,8 @@ namespace Server.Repositories
 
             modelBuilder.Entity<Repair>().HasKey(r => r.Id);
             modelBuilder.Entity<Repair>().HasMany(r => r.Bonuses).WithOne();
+
+            modelBuilder.Entity<User>().HasIndex("Username").IsUnique();
             modelBuilder.Entity<Manager>().HasMany(m => m.Repair).WithOne(r => r.Manager);
             modelBuilder.Entity<Auto>().HasIndex("LicencePlate").IsUnique();
         }

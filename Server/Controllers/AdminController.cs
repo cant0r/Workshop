@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using ModelProvider;
 using Server.Repositories;
@@ -191,7 +192,7 @@ namespace Server.Controllers
         public ActionResult AddUser(User user)
         {
             var repo = new GenericRepository<User>();
-            repo.Add(user);
+            repo.Add(user);           
             return Ok();
         }
 

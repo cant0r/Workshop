@@ -12,26 +12,26 @@ namespace Server.Repositories
         public IEnumerable<Repair> GetRepairs()
         {
             using var ctx = new WorkshopContext();
-            return ctx.Repairs.Include(r => r.Auto).ThenInclude(a => a.Client).Include(r => r.Bonuses).Include(r => r.RepairTechnicians).ToList();
+            return ctx.Repairs.Include(r => r.Auto).ThenInclude(a => a.Client).Include(r => r.Bonuses).Include(r => r.RepairTechnicians).Include(r => r.Manager).ToList();
         }
         public IEnumerable<Repair> GetFinishedRepairs()
         {
             using var ctx = new WorkshopContext();
-            return (from repairs in ctx.Repairs.Include(r => r.Auto).ThenInclude(a => a.Client).Include(r => r.Bonuses).Include(r => r.RepairTechnicians)
+            return (from repairs in ctx.Repairs.Include(r => r.Auto).ThenInclude(a => a.Client).Include(r => r.Bonuses).Include(r => r.RepairTechnicians).Include(r => r.Manager)
                     where repairs.State == State.Done
                     select repairs);
         }
         public IEnumerable<Repair> GetNewRepairs()
         {
             using var ctx = new WorkshopContext();
-            return (from repairs in ctx.Repairs.Include(r => r.Auto).ThenInclude(a => a.Client).Include(r => r.Bonuses).Include(r => r.RepairTechnicians)
+            return (from repairs in ctx.Repairs.Include(r => r.Auto).ThenInclude(a => a.Client).Include(r => r.Bonuses).Include(r => r.RepairTechnicians).Include(r => r.Manager)
                     where repairs.State == State.New
                     select repairs);
         }
         public IEnumerable<Repair> GetTakenRepairs()
         {
             using var ctx = new WorkshopContext();
-            return (from repairs in ctx.Repairs.Include(r => r.Auto).ThenInclude(a => a.Client).Include(r => r.Bonuses).Include(r => r.RepairTechnicians)
+            return (from repairs in ctx.Repairs.Include(r => r.Auto).ThenInclude(a => a.Client).Include(r => r.Bonuses).Include(r => r.RepairTechnicians).Include(r => r.Manager)
                     where repairs.State == State.InProgress
                     select repairs);
         }
@@ -73,7 +73,7 @@ namespace Server.Repositories
         {
             using var ctx = new WorkshopContext();
             return ctx.Technicians
-                .Include(t => t.RepairTechnician)
+                .Include(t => t.RepairTechnician).Include(r => r.User)
                 .ToList();
         }
         public IEnumerable<Technician> GetTechniciansByRepairID(long id)
