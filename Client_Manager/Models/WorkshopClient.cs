@@ -59,7 +59,7 @@ namespace Client_Manager.Models
             var result = httpClient.GetAsync(baseUri + URIPart).Result;
             if (!result.IsSuccessStatusCode)
             {
-                MessageBox.Show("There's no data available!");
+                MessageBox.Show(result.Content.ToString(), result.ReasonPhrase);
             }
             var rawContent = result.Content.ReadAsStringAsync().Result;
             var parserSettings = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore, MaxDepth = null };
