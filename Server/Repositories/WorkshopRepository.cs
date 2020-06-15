@@ -34,6 +34,8 @@ namespace Server.Repositories
         public void AddRepairLog(RepairLog log)
         {
             using var ctx = new WorkshopContext();
+            var rep = ctx.Repairs.Single(r => r.Id == log.Repair.Id);
+            log.Repair = rep;
             ctx.RepairLogs.Add(log);
         }
         public void RemoveRepairLog(RepairLog log)
@@ -65,6 +67,16 @@ namespace Server.Repositories
                     where technicianIdNumbers.Contains(t.Id)
                     select t);
         }
+        public IEnumerable<Repair> GetRepairsByTechnicianID(long id)
+        {
+            using var ctx = new WorkshopContext();
+            var technicianIdNumbers = (from jt in ctx.RepairTechnicians.Include(rt => rt.Technician).Include(rt => rt.Repair)
+                                       where jt.TechnicianId == id
+                                       select jt.RepairID);
+            return (from t in ctx.Repairs
+                    where technicianIdNumbers.Contains(t.Id)
+                    select t);
+        }
 
         public IEnumerable<Client> GetClients()
         {
@@ -89,13 +101,14 @@ namespace Server.Repositories
         public void RegisterAuto(Auto auto)
         {
             using var ctx = new WorkshopContext();
+            var client = ctx.Clients.Single(c => c.Id == auto.Client.Id);
+            auto.Client = client;
             ctx.Automobiles.Add(auto);
             ctx.SaveChanges();
         }
         public void CreateRepair(Repair repair)
         {
             using var ctx = new WorkshopContext();
-
             ctx.Repairs.Add(repair);
             ctx.SaveChanges();
         }
@@ -114,6 +127,6 @@ namespace Server.Repositories
 
         }
         #endregion
-      
+       
     }
 }
