@@ -18,6 +18,8 @@ namespace ModelProvider
 
         [Required]
         public User User { get; set; }
+
+        public long UserId { get; set; }
         public virtual ICollection<Repair> Repair { get; set; }
     }
 }
