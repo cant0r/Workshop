@@ -36,13 +36,13 @@ namespace Server.Repositories
             modelBuilder.Entity<RepairTechnician>().HasKey(k => new { k.RepairID, k.TechnicianId });
             modelBuilder.Entity<RepairTechnician>().HasOne(job => job.Repair)
                 .WithMany(jt => jt.RepairTechnicians)
-                .HasForeignKey(job => job.RepairID);
+                .HasForeignKey(job => job.RepairID).OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Repair>().HasKey(r => r.Id);
-            modelBuilder.Entity<Repair>().HasMany(r => r.Bonuses).WithOne();
+            modelBuilder.Entity<Repair>().HasMany(r => r.Bonuses).WithOne().OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<User>().HasIndex("Username").IsUnique();
-            modelBuilder.Entity<Manager>().HasMany(m => m.Repair).WithOne(r => r.Manager);
+            modelBuilder.Entity<Manager>().HasMany(m => m.Repair).WithOne(r => r.Manager).OnDelete(DeleteBehavior.SetNull);
             modelBuilder.Entity<Auto>().HasIndex("LicencePlate").IsUnique();
         }
     }
