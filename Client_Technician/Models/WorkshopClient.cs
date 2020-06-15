@@ -74,7 +74,7 @@ namespace Client_Technician.Models
                 MessageBox.Show(e.Message, "NULL vagy kulcs nem létezik hiba", MessageBoxButton.OK);
                 return null;
             }
-            var result = httpClient.GetAsync(baseUri + URIPart + r.Id.ToString()).Result;
+            var result = httpClient.GetAsync(baseUri + URIPart + "/" + r.Id.ToString()).Result;
             if (!result.IsSuccessStatusCode)
             {
                 MessageBox.Show(result.Content.ToString(), result.ReasonPhrase);
@@ -82,6 +82,27 @@ namespace Client_Technician.Models
             var rawContent = result.Content.ReadAsStringAsync().Result;
             var parserSettings = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore, MaxDepth = null };
             return JsonConvert.DeserializeObject<List<Technician>>(rawContent, parserSettings);
+        }
+        public List<Repair> GetRepairsByTechnicianId(Technician r)
+        {
+            string URIPart;
+            try
+            {
+                URIPart = URIparts[typeof(Repair)];
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message, "NULL vagy kulcs nem létezik hiba", MessageBoxButton.OK);
+                return null;
+            }
+            var result = httpClient.GetAsync(baseUri + URIPart + "/" + r.Id.ToString()).Result;
+            if (!result.IsSuccessStatusCode)
+            {
+                MessageBox.Show(result.Content.ToString(), result.ReasonPhrase);
+            }
+            var rawContent = result.Content.ReadAsStringAsync().Result;
+            var parserSettings = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore, MaxDepth = null };
+            return JsonConvert.DeserializeObject<List<Repair>>(rawContent, parserSettings);
         }
         public void UpdateRepair(Repair repair)
         {

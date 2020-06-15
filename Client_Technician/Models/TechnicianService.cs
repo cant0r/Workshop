@@ -57,5 +57,10 @@ namespace Client_Technician.Models
             return valid;
         }
 
+        public IEnumerable<Repair> GetRepairsByTechnicianId(Technician t)
+        {
+            return workshopClient.GetRepairsByTechnicianId(t);
+        }
+
     }
 }
