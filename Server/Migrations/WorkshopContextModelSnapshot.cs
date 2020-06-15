@@ -250,7 +250,8 @@ namespace Server.Migrations
                 {
                     b.HasOne("ModelProvider.Repair", null)
                         .WithMany("Bonuses")
-                        .HasForeignKey("RepairId");
+                        .HasForeignKey("RepairId")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("ModelProvider.Manager", b =>
@@ -272,7 +273,8 @@ namespace Server.Migrations
 
                     b.HasOne("ModelProvider.Manager", "Manager")
                         .WithMany("Repair")
-                        .HasForeignKey("ManagerId");
+                        .HasForeignKey("ManagerId")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("ModelProvider.RepairLog", b =>

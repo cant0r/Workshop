@@ -10,8 +10,8 @@ using Server.Repositories;
 namespace Server.Migrations
 {
     [DbContext(typeof(WorkshopContext))]
-    [Migration("20200614074945_itWorksWhat")]
-    partial class itWorksWhat
+    [Migration("20200615063138_YAY")]
+    partial class YAY
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -112,7 +112,12 @@ namespace Server.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Managers");
                 });
@@ -200,7 +205,12 @@ namespace Server.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Technicians");
                 });
@@ -218,12 +228,15 @@ namespace Server.Migrations
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("isManager")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Username")
+                        .IsUnique();
 
                     b.ToTable("Users");
                 });
@@ -239,7 +252,17 @@ namespace Server.Migrations
                 {
                     b.HasOne("ModelProvider.Repair", null)
                         .WithMany("Bonuses")
-                        .HasForeignKey("RepairId");
+                        .HasForeignKey("RepairId")
+                        .OnDelete(DeleteBehavior.SetNull);
+                });
+
+            modelBuilder.Entity("ModelProvider.Manager", b =>
+                {
+                    b.HasOne("ModelProvider.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ModelProvider.Repair", b =>
@@ -252,7 +275,8 @@ namespace Server.Migrations
 
                     b.HasOne("ModelProvider.Manager", "Manager")
                         .WithMany("Repair")
-                        .HasForeignKey("ManagerId");
+                        .HasForeignKey("ManagerId")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("ModelProvider.RepairLog", b =>
@@ -275,6 +299,15 @@ namespace Server.Migrations
                     b.HasOne("ModelProvider.Technician", "Technician")
                         .WithMany("RepairTechnician")
                         .HasForeignKey("TechnicianId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ModelProvider.Technician", b =>
+                {
+                    b.HasOne("ModelProvider.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
