@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Mvc;
 using ModelProvider;
 using Server.Repositories;
@@ -32,7 +33,7 @@ namespace Server.Controllers
                 return Ok(techs);
         }
         [Route("repair")]
-        [HttpPost]
+        [HttpPut]
         public ActionResult TakeRepairJob(Repair repair)
         {
             var workshopRepo = new WorkshopRepository();
@@ -40,7 +41,7 @@ namespace Server.Controllers
                 return NotFound();
             workshopRepo.UpdateRepair(repair);
             return Ok();
-        }
+        }     
         [Route("logs")]
         [HttpGet]
         public ActionResult<IEnumerable<RepairLog>> GetRepairLogs()
@@ -130,5 +131,8 @@ namespace Server.Controllers
             else
                 return Ok(techs);
         }
+
+        
+       
     }
 }

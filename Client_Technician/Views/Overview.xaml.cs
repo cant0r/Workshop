@@ -22,11 +22,14 @@ namespace Client_Technician.Views
     public partial class Overview : Window
     {
         private TechnicianService technicianService;
-        public Overview()
+        public Overview(bool jobBoard = false)
         {
             InitializeComponent();
             technicianService = TechnicianService.GetInstance();
-            LoadRepairs();
+            if (jobBoard)
+                LoadAvailableRepairs();
+            else
+                LoadRepairs();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -36,6 +39,7 @@ namespace Client_Technician.Views
         private void LoadRepairs()
         {
             var myRepairs = technicianService.GetRepairsByTechnicianId(technicianService.CurrentTechnician);
+            myRepairs = from reps in myRepairs where reps.State == State.InProgress select reps;
 
             foreach (Repair r in myRepairs)
             {
@@ -69,6 +73,7 @@ namespace Client_Technician.Views
                     if (MessageBox.Show("Leadás után a munka automatikusan írásvédett lesz.", "Biztosan leadja a munkát?", MessageBoxButton.YesNo)
                      == MessageBoxResult.Yes)
                         repairEntry.Visibility = Visibility.Collapsed;
+                    technicianService.UpdateRepair(r);
                 };
 
 
@@ -104,6 +109,44 @@ namespace Client_Technician.Views
                 entryPanel.Children.Add(logEntry);
             }
             repairJobIDlbl.Content = repairID.ToString();
+        }
+        private void LoadAvailableRepairs()
+        {
+            var myRepairs = technicianService.GetAvailableRepairs();
+
+            foreach (Repair r in myRepairs)
+            {
+                var repairEntry = new RepairJobEntry();
+                repairEntry.descriptionTblock.Text = r.Description;
+                repairEntry.repairIdLbl.Content = "ID: " + r.Id.ToString();
+                repairEntry.repairStateLbl.Content = r.State;
+                repairEntry.licencePlateLbl.Content = r.Auto.LicencePlate.ToString();
+                repairEntry.managerLbl.Content = r.Manager?.User?.Username ?? "adminInside%";
+
+                List<long> techIDs = new List<long>();
+                List<Technician> techs = new List<Technician>();
+                if (r.RepairTechnicians != null)
+                    techIDs = (from repair in r.RepairTechnicians
+                               where repair.RepairID == r.Id
+                               select repair.TechnicianId).ToList();
+                if (technicianService.Technicians != null)
+                    techs = technicianService.Technicians.FindAll(t => techIDs.Contains(t.Id));
+                foreach (Technician t in techs)
+                {
+                    repairEntry.techsLbox.Items.Add(t.Name);
+                }
+                
+                repairEntry.doneBtn.Click += (object sender, RoutedEventArgs args) =>
+                {
+                    r.State = State.InProgress;
+                    technicianService.UpdateRepair(r);
+                    repairEntry.Visibility = Visibility.Collapsed;
+                };
+                repairEntry.doneBtn.Content = "Felvesz";
+                repairEntry.repairLogBtn.IsEnabled = false;                
+                entryPanel.Children.Add(repairEntry);
+
+            }
         }
     }
 }

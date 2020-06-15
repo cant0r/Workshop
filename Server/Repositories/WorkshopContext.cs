@@ -37,6 +37,10 @@ namespace Server.Repositories
             modelBuilder.Entity<RepairTechnician>().HasOne(job => job.Repair)
                 .WithMany(jt => jt.RepairTechnicians)
                 .HasForeignKey(job => job.RepairID).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<RepairTechnician>().HasOne(job => job.Technician)
+               .WithMany(jt => jt.RepairTechnician)
+               .HasForeignKey(job => job.TechnicianId).OnDelete(DeleteBehavior.Cascade)
+               ;
 
             modelBuilder.Entity<Repair>().HasKey(r => r.Id);
             modelBuilder.Entity<Repair>().HasMany(r => r.Bonuses).WithOne().OnDelete(DeleteBehavior.SetNull);

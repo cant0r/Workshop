@@ -5,22 +5,22 @@
              StartupUri="Views/MainWindow.xaml">
     <Application.Resources>
         <Style TargetType="ListBox">
-            <Setter Property="Background" Value="#189ab4"></Setter>
-            <Setter Property="Foreground" Value="#d4f1f4"></Setter>
+            <Setter Property="Background" Value="#75e6da"></Setter>
+            <Setter Property="Foreground" Value="#05445e"></Setter>
         </Style>
         <Style TargetType="CheckBox">
             <Setter Property="Height" Value="Auto"></Setter>
             <Setter Property="Width" Value="Auto"></Setter>
-            <Setter Property="Background" Value="#d4f1f4"></Setter>
-            <Setter Property="Foreground" Value="Navy"></Setter>
+            <Setter Property="Background" Value="#75e6da"></Setter>
+            <Setter Property="Foreground" Value="#05445e"></Setter>
             <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
             <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
             <Setter Property="Margin" Value="10 0 0 0"></Setter>
             <Setter Property="FontSize" Value="16pt"></Setter>
         </Style>
         <Style TargetType="DataGrid">
-            <Setter Property="Background" Value="#189ab4"></Setter>
-            <Setter Property="Foreground" Value="#d4f1f4"></Setter>
+            <Setter Property="Background" Value="#75e6da"></Setter>
+            <Setter Property="Foreground" Value="#05445e"></Setter>
             <Setter Property="Height" Value="Auto"></Setter>
             <Setter Property="Width" Value="Auto"></Setter>
             <Setter Property="FontSize" Value="12pt"></Setter>
@@ -34,16 +34,16 @@
         <Style TargetType="ComboBox">
             <Setter Property="Height" Value="Auto"></Setter>
             <Setter Property="Width" Value="Auto"></Setter>
-           <Setter Property="Background" Value="#189ab4"></Setter>
-            <Setter Property="Foreground" Value="#d4f1f4"></Setter>
+            <Setter Property="Background" Value="#75e6da"></Setter>
+            <Setter Property="Foreground" Value="#05445e"></Setter>
             <Setter Property="FontSize" Value="13pt"></Setter>
             <Setter Property="ScrollViewer.CanContentScroll" Value="True"></Setter>
         </Style>
         <Style TargetType="TextBox">
             <Setter Property="Height" Value="Auto"></Setter>
             <Setter Property="Width" Value="Auto"></Setter>
-            <Setter Property="Background" Value="#189ab4"></Setter>
-            <Setter Property="Foreground" Value="#d4f1f4"></Setter>
+            <Setter Property="Background" Value="#75e6da"></Setter>
+            <Setter Property="Foreground" Value="#05445e"></Setter>
             <Setter Property="Margin" Value="10"></Setter>
             <Setter Property="IsEnabled" Value="True"></Setter>
             <Setter Property="FontSize" Value="16pt"></Setter>
@@ -51,8 +51,8 @@
         <Style TargetType="PasswordBox">
             <Setter Property="Height" Value="Auto"></Setter>
             <Setter Property="Width" Value="Auto"></Setter>
-            <Setter Property="Background" Value="#189ab4"></Setter>
-            <Setter Property="Foreground" Value="#d4f1f4"></Setter>
+            <Setter Property="Background" Value="#75e6da"></Setter>
+            <Setter Property="Foreground" Value="#05445e"></Setter>
             <Setter Property="Margin" Value="10"></Setter>
             <Setter Property="IsEnabled" Value="True"></Setter>
             <Setter Property="FontSize" Value="16pt"></Setter>
@@ -85,9 +85,9 @@
         <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
         <Style TargetType="{x:Type Button}">
             <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
-            <Setter Property="Background" Value="#189ab4"/>
+            <Setter Property="Background" Value="#75e6da"/>
             <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
-            <Setter Property="Foreground" Value="#d4f1f4"/>
+            <Setter Property="Foreground" Value="#05445e"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>

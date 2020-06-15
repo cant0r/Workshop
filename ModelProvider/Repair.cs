@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -12,7 +13,6 @@ namespace ModelProvider
         [Key]
         public long Id { get; set; }
 
-        [ForeignKey("Id")]
         public virtual Auto Auto { get; set; }
 
         public virtual Manager Manager { get; set; }
@@ -26,6 +26,7 @@ namespace ModelProvider
         public virtual State State { get; set; }
      
         public ICollection<Bonus> Bonuses { get; set; }
-        public virtual ICollection<RepairTechnician> RepairTechnicians { get; set; }
+        
+        public  IList<RepairTechnician> RepairTechnicians { get; set; }
     }
 }

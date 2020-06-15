@@ -59,9 +59,10 @@ namespace Client_Technician.Models
                 MessageBox.Show(result.Content.ToString(), result.ReasonPhrase);
             }
             var rawContent = result.Content.ReadAsStringAsync().Result;
-            var parserSettings = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore, MaxDepth = null };
+            var parserSettings = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore};
             return JsonConvert.DeserializeObject<List<TEntity>>(rawContent, parserSettings);
         }
+       
         public List<Technician> GetTechniciansByRepairId(Repair r)
         {
             string URIPart;
@@ -104,7 +105,7 @@ namespace Client_Technician.Models
             var parserSettings = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore, MaxDepth = null };
             var obj = JsonConvert.DeserializeObject<List<Repair>>(rawContent, parserSettings);
             return obj;
-        }
+        }       
         public void UpdateRepair(Repair repair)
         {
             string URIPart = URIparts[typeof(Repair)];
@@ -119,6 +120,7 @@ namespace Client_Technician.Models
                 MessageBox.Show(result.ReasonPhrase, result.StatusCode.ToString());
             }
         }
+
 
         public bool ValidateUser(User u)
         {

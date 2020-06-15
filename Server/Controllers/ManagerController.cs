@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 
-//TODO FEJEZD BE!!!
 
 namespace Server.Controllers
 {

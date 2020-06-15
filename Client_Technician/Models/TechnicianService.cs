@@ -15,6 +15,7 @@ namespace Client_Technician.Models
         public List<Technician> Technicians { get; private set; }
         public List<RepairLog> RepairLogs { get; private set; }
 
+
         public Technician CurrentTechnician { get; set; }
 
         private WorkshopClient workshopClient;
@@ -44,8 +45,15 @@ namespace Client_Technician.Models
             RepairLogs = workshopClient.RetrieveEntities<RepairLog>() ?? new List<RepairLog>();
         }
 
+     
         public void UpdateRepair(Repair r)
         {
+            var newTechnician = r.RepairTechnicians?.FirstOrDefault(rt => rt.TechnicianId == CurrentTechnician.Id);
+            if(newTechnician is null)
+            { 
+                r.RepairTechnicians.Add(new RepairTechnician {  RepairID = r.Id,
+                    TechnicianId = CurrentTechnician.Id });
+            }
             workshopClient.UpdateRepair(r);
         }
         public bool ValidateUser(User u)
@@ -63,6 +71,15 @@ namespace Client_Technician.Models
         public IEnumerable<Repair> GetRepairsByTechnicianId(Technician t)
         {
             return workshopClient.GetRepairsByTechnicianId(t);
+        }
+        public IEnumerable<Repair> GetAvailableRepairs()
+        {        
+            return from availables in Repairs
+                   where  availables.State == State.New ||
+                     (availables.State == State.InProgress &&
+                           availables.RepairTechnicians
+                            .FirstOrDefault((RepairTechnician rt) => { return rt.TechnicianId == CurrentTechnician.Id; }) == null)
+                   select availables;
         }
 
     }

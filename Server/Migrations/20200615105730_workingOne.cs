@@ -107,7 +107,9 @@ namespace Server.Migrations
                 name: "Repairs",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false),
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AutoId = table.Column<long>(nullable: true),
                     ManagerId = table.Column<long>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     Price = table.Column<long>(nullable: false),
@@ -117,11 +119,11 @@ namespace Server.Migrations
                 {
                     table.PrimaryKey("PK_Repairs", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Repairs_Automobiles_Id",
-                        column: x => x.Id,
+                        name: "FK_Repairs_Automobiles_AutoId",
+                        column: x => x.AutoId,
                         principalTable: "Automobiles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Repairs_Managers_ManagerId",
                         column: x => x.ManagerId,
@@ -220,6 +222,11 @@ namespace Server.Migrations
                 name: "IX_RepairLogs_RepairId",
                 table: "RepairLogs",
                 column: "RepairId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Repairs_AutoId",
+                table: "Repairs",
+                column: "AutoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Repairs_ManagerId",

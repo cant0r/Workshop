@@ -43,8 +43,8 @@
                     Content="JAVÍTÁSI NAPLÓ" FontSize="16pt"></Button>
             </UniformGrid>
             <UniformGrid Grid.Row="1" Grid.Column="2">
-                <Border BorderBrush="Cyan" BorderThickness="2pt">
-                    <Button x:Name="doneBtn"   Content="Javítás befjezése" FontSize="16pt" Foreground="Cyan"></Button>
+                <Border BorderBrush="Cyan" BorderThickness="2pt" x:Name="btnBorder">
+                    <Button x:Name="doneBtn"   Content="Javítás befjezése" FontSize="16pt"></Button>
                 </Border>
             </UniformGrid>
             <ListBox Grid.Row="2" Grid.Column="2" Width="Auto" Height="Auto" ScrollViewer.CanContentScroll="True" x:Name="techsLbox">

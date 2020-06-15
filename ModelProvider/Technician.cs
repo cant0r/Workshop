@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -21,7 +22,7 @@ namespace ModelProvider
         public User User { get; set; }
 
         public long UserId { get; set; }
-        public virtual ICollection<RepairTechnician> RepairTechnician { get; set; }
+        public IList<RepairTechnician> RepairTechnician { get; set; }
 
         public override string ToString()
         {

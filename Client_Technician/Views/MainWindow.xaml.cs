@@ -30,7 +30,9 @@ namespace Client_Technician
 
         private void newrepairBtn_Click(object sender, RoutedEventArgs e)
         {
-
+            Hide();
+            if (new Overview(true).ShowDialog() == true)
+                Show();
         }
 
         private void jobBtn_Click(object sender, RoutedEventArgs e)

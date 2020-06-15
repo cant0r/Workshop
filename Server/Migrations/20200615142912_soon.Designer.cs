@@ -10,8 +10,8 @@ using Server.Repositories;
 namespace Server.Migrations
 {
     [DbContext(typeof(WorkshopContext))]
-    [Migration("20200615065309_workingOne")]
-    partial class workingOne
+    [Migration("20200615142912_soon")]
+    partial class soon
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -125,6 +125,11 @@ namespace Server.Migrations
             modelBuilder.Entity("ModelProvider.Repair", b =>
                 {
                     b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long?>("AutoId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Description")
@@ -140,6 +145,8 @@ namespace Server.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AutoId");
 
                     b.HasIndex("ManagerId");
 
@@ -269,9 +276,7 @@ namespace Server.Migrations
                 {
                     b.HasOne("ModelProvider.Auto", "Auto")
                         .WithMany()
-                        .HasForeignKey("Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AutoId");
 
                     b.HasOne("ModelProvider.Manager", "Manager")
                         .WithMany("Repair")
