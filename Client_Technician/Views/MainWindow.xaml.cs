@@ -1,4 +1,5 @@
-﻿using Client_Technician.Views;
+﻿using Client_Technician.Models;
+using Client_Technician.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,7 +42,7 @@ namespace Client_Technician
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            
+            WorkshopClient.GetInstance().Dispose();
             Application.Current.Shutdown(0);
         }
     }

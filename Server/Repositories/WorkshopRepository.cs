@@ -65,7 +65,7 @@ namespace Server.Repositories
                                        select jt.TechnicianId);
             return (from t in ctx.Technicians
                     where technicianIdNumbers.Contains(t.Id)
-                    select t);
+                    select t).ToList() ?? new List<Technician>();
         }
         public IEnumerable<Repair> GetRepairsByTechnicianID(long id)
         {
@@ -75,7 +75,7 @@ namespace Server.Repositories
                                        select jt.RepairID);
             return (from t in ctx.Repairs
                     where technicianIdNumbers.Contains(t.Id)
-                    select t);
+                    select t).ToList() ?? new List<Repair>();
         }
 
         public IEnumerable<Client> GetClients()

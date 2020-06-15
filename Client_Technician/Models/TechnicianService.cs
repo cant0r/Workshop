@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using System.Windows.Automation;
 
 namespace Client_Technician.Models
@@ -50,9 +51,9 @@ namespace Client_Technician.Models
             var valid = workshopClient.ValidateUser(u);
             Technician tech = 
                 (from techs in Technicians?.OfType<Technician>() ?? new List<Technician>()
-                 where techs.User.Username == u.Username 
-                 select techs).FirstOrDefault(); 
-            
+                 where techs.User.Username == u.Username
+                 select techs).FirstOrDefault();
+           
             CurrentTechnician = tech;
             return valid;
         }

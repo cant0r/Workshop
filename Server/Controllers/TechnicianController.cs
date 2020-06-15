@@ -22,7 +22,7 @@ namespace Server.Controllers
         }
         [Route("repair/{techID:long}")]
         [HttpGet]
-        public ActionResult<IEnumerable<Technician>> GetTechnicians(long techID)
+        public ActionResult<IEnumerable<Repair>> GetRepairs(long techID)
         {
             var workshopRepo = new WorkshopRepository();
             var techs = workshopRepo.GetRepairsByTechnicianID(techID);
