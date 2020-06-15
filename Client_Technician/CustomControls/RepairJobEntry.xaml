@@ -32,12 +32,11 @@
             </StackPanel>
 
             <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2" Height="Auto">
-                <TextBlock 
-                           IsEnabled="False" Width="Auto" x:Name="descriptionTblock"
-                       Background="#7ec8e3" Foreground="#05445e"
+                <TextBox 
+                       IsEnabled="False" Width="Auto" x:Name="descriptionTblock"                       
                        ScrollViewer.CanContentScroll="True"
                        TextWrapping="Wrap" FontSize="22pt"
-                       Text=""></TextBlock>
+                       Text=""></TextBox>
             </StackPanel>
             <UniformGrid  Grid.Row="0" Grid.Column="2">
                 <Button  x:Name="repairLogBtn" 
