@@ -42,6 +42,16 @@ namespace Server.Controllers
             return Ok();
         }
         [Route("logs")]
+        [HttpGet]
+        public ActionResult<IEnumerable<RepairLog>> GetRepairLogs()
+        {
+            var workshopRepo = new WorkshopRepository();
+            var logs = workshopRepo.GetRepairLogs();
+            if (logs is null)
+                return NotFound();
+            return Ok(logs);
+        }
+        [Route("logs")]
         [HttpPost]
         public ActionResult AddRepairLog(RepairLog log)
         {

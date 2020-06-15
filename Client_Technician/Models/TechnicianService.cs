@@ -13,6 +13,7 @@ namespace Client_Technician.Models
     {
         public List<Repair> Repairs { get; private set; }
         public List<Technician> Technicians { get; private set; }
+        public List<RepairLog> RepairLogs { get; private set; }
 
         public Technician CurrentTechnician { get; set; }
 
@@ -40,6 +41,7 @@ namespace Client_Technician.Models
         {          
             Repairs = workshopClient.RetrieveEntities<Repair>() ?? new List<Repair>();
             Technicians = workshopClient.RetrieveEntities<Technician>() ?? new List<Technician>();
+            RepairLogs = workshopClient.RetrieveEntities<RepairLog>() ?? new List<RepairLog>();
         }
 
         public void UpdateRepair(Repair r)

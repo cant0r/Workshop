@@ -13,9 +13,15 @@ namespace Server.Repositories
         {
             using var ctx = new WorkshopContext();
             return ctx.Repairs.Include(r => r.Auto).ThenInclude(a => a.Client).Include(r => r.Bonuses).Include(r => r.RepairTechnicians).Include(r => r.Manager).ToList();
-        }       
+        }
         #endregion
         #region RepairLogs
+        public IEnumerable<RepairLog> GetRepairLogs()
+        {
+            using var ctx = new WorkshopContext();
+            return (from logs in ctx.RepairLogs
+                    select logs).ToList();
+        }
         public IEnumerable<RepairLog> GetRepairLogs(long repairID)
         {
             using var ctx = new WorkshopContext();

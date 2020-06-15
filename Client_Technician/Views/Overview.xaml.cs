@@ -35,7 +35,6 @@ namespace Client_Technician.Views
         }
         private void LoadRepairs()
         {
-
             var myRepairs = technicianService.GetRepairsByTechnicianId(technicianService.CurrentTechnician);
 
             foreach (Repair r in myRepairs)
@@ -59,7 +58,11 @@ namespace Client_Technician.Views
                 {
                     repairEntry.techsLbox.Items.Add(t.Name);
                 }
-
+                repairEntry.repairLogBtn.Click += (object sender, RoutedEventArgs args) =>
+                {
+                    entryPanel.Children.Clear();
+                    LoadRepairLogs(r.Id);
+                };
                 repairEntry.doneBtn.Click += (object sender, RoutedEventArgs args) =>
                 {
                     r.State = State.Done;
@@ -72,6 +75,35 @@ namespace Client_Technician.Views
                 entryPanel.Children.Add(repairEntry);
 
             }
+        }
+        private void LoadRepairLogs(long repairID)
+        {
+           
+            var repairLogs = technicianService.RepairLogs.FindAll(l => l.Repair.Id == repairID);
+
+            Label repairJobIDlbl = new Label();
+            Button backBtn = new Button();
+            backBtn.Click += (object sender, RoutedEventArgs args) =>
+            {
+                entryPanel.Children.Clear();
+                LoadRepairs();
+            };
+            backBtn.FontSize = 16;
+            StackPanel header = new StackPanel();
+            header.Orientation = Orientation.Vertical;
+            header.Children.Add(backBtn);
+            header.Children.Add(repairJobIDlbl);
+
+            entryPanel.Children.Add(header);
+            foreach (RepairLog log in repairLogs)
+            {
+                var logEntry = new RepairLogEntry();
+                logEntry.techIDLbl.Content = log.TechnicianId.ToString();
+                logEntry.logTblock.Text = log.Description.ToString();
+                logEntry.dobLbl.Content = log.Date;
+                entryPanel.Children.Add(logEntry);
+            }
+            repairJobIDlbl.Content = repairID.ToString();
         }
     }
 }
