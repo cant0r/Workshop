@@ -20,6 +20,17 @@ namespace Server.Controllers
                 return NotFound();
             return Ok(repairs);
         }
+        [Route("repair/{techID:long}")]
+        [HttpGet]
+        public ActionResult<IEnumerable<Technician>> GetTechnicians(long techID)
+        {
+            var workshopRepo = new WorkshopRepository();
+            var techs = workshopRepo.GetRepairsByTechnicianID(techID);
+            if (techs is null)
+                return NotFound();
+            else
+                return Ok(techs);
+        }
         [Route("repair")]
         [HttpPost]
         public ActionResult TakeRepairJob(Repair repair)
@@ -35,6 +46,8 @@ namespace Server.Controllers
         public ActionResult AddRepairLog(RepairLog log)
         {
             var workshopRepo = new WorkshopRepository();
+            var repairRepo = new GenericRepository<Repair>();
+            log.Repair = repairRepo.GetAll().Single(r => r.Id == log.Repair.Id);
             workshopRepo.AddRepairLog(log);
             return Ok();
         }
@@ -98,7 +111,7 @@ namespace Server.Controllers
         }
         [Route("technicians/{repairID:long}")]
         [HttpGet]
-        public ActionResult<IEnumerable<Technician>> GetTechnicians(long repairID)
+        public ActionResult<IEnumerable<Technician>> GetTechniciansByRepairID(long repairID)
         {
             var workshopRepo = new WorkshopRepository();
             var techs = workshopRepo.GetTechniciansByRepairID(repairID);
