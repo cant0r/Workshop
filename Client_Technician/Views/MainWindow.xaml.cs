@@ -41,7 +41,7 @@ namespace Client_Technician
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            DialogResult = true;
+            
             Application.Current.Shutdown(0);
         }
     }

@@ -26,15 +26,17 @@ namespace Client_Technician.Views
         {
             InitializeComponent();
             technicianService = TechnicianService.GetInstance();
+            LoadRepairs();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             DialogResult = true;
         }
-        private void LoadRepairs(Predicate<Repair> predicate)
+        private void LoadRepairs()
         {
-            var myRepairs = TechnicianService.GetInstance().Repairs.FindAll(predicate);
+
+            var myRepairs = technicianService.GetRepairsByTechnicianId(technicianService.CurrentTechnician);
 
             foreach (Repair r in myRepairs)
             {

@@ -1,7 +1,9 @@
 ﻿using Client_Technician.Models;
 using ModelProvider;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -52,7 +54,7 @@ namespace Client_Technician.Views
                 DialogResult = true;
                 Close();
             }
-
+            
         }
     }
 }
