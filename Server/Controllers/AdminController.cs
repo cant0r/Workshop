@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using ModelProvider;
@@ -16,7 +17,9 @@ namespace Server.Controllers
         public ActionResult AddTechnician(Technician tech)
         {
             var techRepo = new GenericRepository<Technician>();
-            techRepo.Add(tech);
+            tech.User = new GenericRepository<User>().GetAll().Single((User u) => u.Id == tech.User.Id);            
+            techRepo.Add(tech, tech.User, tech.RepairTechnician);
+            
             return Ok();
         }       
 
@@ -74,7 +77,8 @@ namespace Server.Controllers
         public ActionResult AddManager(Manager man)
         {
             var manRepo = new GenericRepository<Manager>();
-            manRepo.Add(man);
+            man.User = new GenericRepository<User>().GetAll().Single((User u) => u.Id == man.User.Id);
+            manRepo.Add(man, man.User);
             return Ok();
         }
        
@@ -83,8 +87,6 @@ namespace Server.Controllers
         public ActionResult<IEnumerable<Manager>> GetManagers()
         {
             var them = new GenericRepository<Manager>().GetAll();
-            if (them is null)
-                return NotFound();
             return Ok(them);
         }
 
@@ -191,7 +193,7 @@ namespace Server.Controllers
         [HttpPost]
         public ActionResult AddUser(User user)
         {
-            var repo = new GenericRepository<User>();
+            var repo = new GenericRepository<User>();            
             repo.Add(user);           
             return Ok();
         }
