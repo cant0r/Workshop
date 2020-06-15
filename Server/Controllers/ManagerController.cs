@@ -99,7 +99,7 @@ namespace Server.Controllers
         public ActionResult RegisterClient(Client client)
         {
             var workshopRepo = new WorkshopRepository();
-            var clients = workshopRepo.GetClients();
+            var clients = workshopRepo.GetClients();            
             if (clients is null)
                 return NotFound();
             else if (clients.Contains(client))
@@ -130,6 +130,8 @@ namespace Server.Controllers
         {
             var workshopRepo = new WorkshopRepository();
             var autos = workshopRepo.GetAutomobiles();
+            var clientRepo = new GenericRepository<Client>();
+            auto.Client = clientRepo.GetAll().Single(c => c.Id == auto.Client.Id);
             if (autos is null)
                 return NotFound();
             else if (autos.Contains(auto))
