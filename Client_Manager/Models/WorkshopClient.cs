@@ -30,6 +30,7 @@ namespace Client_Manager.Models
                 { typeof(Technician), "/technicians" },
                 { typeof(Client), "/clients" },
                 { typeof(Bonus), "/bonus" },
+                { typeof(Manager), "/managers" },
                 { typeof(User), "/users" }
             };
 
@@ -62,7 +63,7 @@ namespace Client_Manager.Models
                 MessageBox.Show(result.Content.ToString(), result.ReasonPhrase);
             }
             var rawContent = result.Content.ReadAsStringAsync().Result;
-            var parserSettings = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore, MaxDepth = null };
+            var parserSettings = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
             return JsonConvert.DeserializeObject<List<TEntity>>(rawContent, parserSettings);
         }
         public void UploadRepair(Repair repair)

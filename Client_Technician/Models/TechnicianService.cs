@@ -56,11 +56,15 @@ namespace Client_Technician.Models
             }
             workshopClient.UpdateRepair(r);
         }
+        public void UploadRepairLog(RepairLog rl)
+        {        
+            workshopClient.UploadRepairLog(rl);
+        }
         public bool ValidateUser(User u)
         {
             var valid = workshopClient.ValidateUser(u);
             Technician tech = 
-                (from techs in Technicians?.OfType<Technician>() ?? new List<Technician>()
+                (from techs in Technicians ?? new List<Technician>()
                  where techs.User.Username == u.Username
                  select techs).FirstOrDefault();
            

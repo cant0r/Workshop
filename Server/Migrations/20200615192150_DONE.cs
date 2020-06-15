@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Server.Migrations
 {
-    public partial class workingOne : Migration
+    public partial class DONE : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -109,8 +109,8 @@ namespace Server.Migrations
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    AutoId = table.Column<long>(nullable: true),
-                    ManagerId = table.Column<long>(nullable: true),
+                    AutoId = table.Column<long>(nullable: false),
+                    ManagerId = table.Column<long>(nullable: false),
                     Description = table.Column<string>(nullable: true),
                     Price = table.Column<long>(nullable: false),
                     State = table.Column<int>(nullable: false)
@@ -123,13 +123,13 @@ namespace Server.Migrations
                         column: x => x.AutoId,
                         principalTable: "Automobiles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Repairs_Managers_ManagerId",
                         column: x => x.ManagerId,
                         principalTable: "Managers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -148,7 +148,7 @@ namespace Server.Migrations
                         column: x => x.RepairId,
                         principalTable: "Repairs",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -187,8 +187,7 @@ namespace Server.Migrations
                         name: "FK_RepairTechnicians_Repairs_RepairID",
                         column: x => x.RepairID,
                         principalTable: "Repairs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_RepairTechnicians_Technicians_TechnicianId",
                         column: x => x.TechnicianId,

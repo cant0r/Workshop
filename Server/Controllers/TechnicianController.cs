@@ -55,8 +55,12 @@ namespace Server.Controllers
         [Route("logs")]
         [HttpPost]
         public ActionResult AddRepairLog(RepairLog log)
-        {
+        {            
             var workshopRepo = new WorkshopRepository();
+
+            if (workshopRepo.GetRepairLogs().SingleOrDefault(rl => rl.Id == log.Id) != null)
+                return Ok();
+
             var repairRepo = new GenericRepository<Repair>();
             log.Repair = repairRepo.GetAll().Single(r => r.Id == log.Repair.Id);
             workshopRepo.AddRepairLog(log);

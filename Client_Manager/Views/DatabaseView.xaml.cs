@@ -93,12 +93,14 @@ namespace Client_Manager
 
                 repairEntry.editBtn.Click += (object sender, RoutedEventArgs args) =>
                 {
-                    new RegistrationView(r).ShowDialog();
+                    manegerService.Repair = r;
+                    new RegistrationView(true).ShowDialog();
                 };
 
                 if (r.State == State.Cancelled || r.State == State.Done)
                 {
                     repairEntry.deleteBtn.Visibility = Visibility.Collapsed;
+                    repairEntry.editBtn.Visibility = Visibility.Collapsed;
                     ((UIElement)repairEntry.deleteBtn.Parent).Visibility = Visibility.Collapsed;
                 }
 

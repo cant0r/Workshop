@@ -33,7 +33,7 @@
                        VerticalContentAlignment="Center" x:Name="dobLbl"></Label>
             </UniformGrid>
             <TextBlock x:Name="logTblock" Width="Auto" Height="Auto" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1"
-                       TextWrapping="Wrap"
+                       TextWrapping="Wrap" FontSize="24pt"
                        ScrollViewer.CanContentScroll="True" Background="#d4f1f4" Foreground="#05445e"></TextBlock>
 
         </Grid>

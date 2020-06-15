@@ -13,8 +13,9 @@ namespace ModelProvider
         [Key]
         public long Id { get; set; }
 
+        [Required]
         public virtual Auto Auto { get; set; }
-
+        [Required]
         public virtual Manager Manager { get; set; }
 
         public string Description { get; set; }
@@ -25,7 +26,7 @@ namespace ModelProvider
         [Required]
         public virtual State State { get; set; }
      
-        public ICollection<Bonus> Bonuses { get; set; }
+        public IList<BonusRepair> BonusRepairs { get; set; }
         
         public  IList<RepairTechnician> RepairTechnicians { get; set; }
     }

@@ -14,11 +14,16 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="8*"/>
         </Grid.RowDefinitions>
-        <ScrollViewer Grid.Row="0" Grid.Column="0" Width="Auto" Height="Auto">
-            <StackPanel x:Name="entryPanel">
+        <StackPanel Grid.Row="0" Grid.Column="0" x:Name="topbarpanel" Width="Auto" Height="Auto">
+
+        </StackPanel>
+        <ScrollViewer  Width="Auto" Height="Auto" Grid.Row="1" Grid.Column="0">
+            <StackPanel   x:Name="entryPanel" Width="Auto" Height="Auto" ScrollViewer.CanContentScroll="True">
 
             </StackPanel>
-        </ScrollViewer>
+        </ScrollViewer >
+       
     </Grid>
 </Window>

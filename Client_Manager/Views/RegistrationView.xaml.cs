@@ -22,12 +22,14 @@ namespace Client_Manager
     public partial class RegistrationView : Window
     {
         private Repair repair;
+        private bool update;
 
-        public RegistrationView(Repair repair = null)
+        public RegistrationView(bool update = false)
         {
             InitializeComponent();
-            this.repair = repair;
-            if (!(this.repair is null)) LoadRepair(this.repair);
+            this.update = update;
+            this.repair = ManagerService.GetInstance().Repair;
+            if (update) LoadRepair(repair);
             managerLbl.Content = (repair?.Manager?.User.Username ?? ManagerService.GetInstance().CurrentManager?.User.Username) ?? "adminInside%";
         }
 
@@ -71,14 +73,14 @@ namespace Client_Manager
                 regValidator.ValidateAutoInput(new List<TextBox> { autoBrandTblock, autoModelTblock, autoPlateTblock }))
             {
 
-                if (repair is null)
+                if (!update)
                     AssembleNewRepairRecord();
                 else
                     UpdateRepairRecord();                
 
                 DialogResult = true;
                 Hide();
-                if (new RepairView(repair).ShowDialog() == true)
+                if (new RepairView(update).ShowDialog() == true)
                     Close();
             }
 
@@ -107,12 +109,11 @@ namespace Client_Manager
             auto.Model = autoModelTblock.Text;
             auto.LicencePlate = autoPlateTblock.Text;
             auto.Client = newClient;
-
-            repair = new Repair();
+            
             repair.Auto = auto;
             repair.State = State.New;
             repair.Price = 0;
-            repair.Bonuses = new List<Bonus>();
+            repair.BonusRepairs = new List<BonusRepair>();
             repair.Manager ??= ManagerService.GetInstance().CurrentManager;
             repair.Description = "";
             repair.RepairTechnicians = new List<RepairTechnician>();

@@ -37,7 +37,7 @@ namespace Server.Controllers
         [HttpPut]
         public ActionResult UpdateRepair(Repair repair)
         {
-            var workshopRepo = new WorkshopRepository();
+            var workshopRepo = new WorkshopRepository();            
             workshopRepo.UpdateRepair(repair);
             return Ok();
         }
@@ -51,10 +51,10 @@ namespace Server.Controllers
         }
         [Route("logs")]
         [HttpGet]
-        public ActionResult<IEnumerable<RepairLog>> GetRepairLogs(long repairID)
+        public ActionResult<IEnumerable<RepairLog>> GetRepairLogs()
         {
             var workshopRepo = new WorkshopRepository();
-            var repairs = workshopRepo.GetRepairLogs(repairID);
+            var repairs = workshopRepo.GetRepairLogs();
             if (repairs is null)
                 return NotFound();
             else
@@ -155,6 +155,17 @@ namespace Server.Controllers
             else
                 return Ok(bonuses);
         }
+        [Route("managers")]
+        [HttpGet]
+        public ActionResult<IEnumerable<Manager>> GetManagers()
+        {
+            var repo = new WorkshopRepository();
+            var bonuses = repo.GetManagers();
+            if (bonuses is null)
+                return NotFound();
+            else
+                return Ok(bonuses);
+        }
 
         [Route("users")]
         [HttpPost]
@@ -172,5 +183,6 @@ namespace Server.Controllers
             else
                 return Ok(true);
         }
+      
     }
 }

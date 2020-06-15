@@ -26,16 +26,15 @@ namespace Client_Manager.Views
         private IEnumerable<Bonus> bonuses = null;
         private bool update = false;
 
-        public RepairView(Repair repair = null)
+        public RepairView(bool update = false)
         {
             InitializeComponent();
             LoadBonuses();
-            if (!(repair is null))
-            {
-                update = true;
-                LoadRepair(repair);
-            }
-            managerLbl.Content = (repair?.Manager?.User.Username ?? ManagerService.GetInstance().CurrentManager?.User.Username) ?? "adminInside%";
+            theRepair = ManagerService.GetInstance().Repair;
+            this.update = update;
+            LoadRepair(theRepair);
+            
+            managerLbl.Content = (theRepair?.Manager?.User.Username ?? ManagerService.GetInstance().CurrentManager?.User.Username) ?? "adminInside%";
         }
 
         private void LoadRepair(Repair repair)
@@ -43,11 +42,12 @@ namespace Client_Manager.Views
             theRepair = repair;
             realPriceLbl.Content = theRepair.Price;
             problemTbox.Text = theRepair.Description.ToString();
-
-            long noBonusesPrice = theRepair.Price - theRepair?.Bonuses.Sum(b => b.Price) ?? 0;
+            var bns = theRepair?.BonusRepairs.Select(br => br.Bonus).ToList();
+            long noBonusesPrice = theRepair.Price - bns.Sum(b => b.Price);
+ 
             priceTbox.Text = noBonusesPrice.ToString();
 
-            foreach (Bonus b in theRepair.Bonuses)
+            foreach (Bonus b in bns)
             {
                 Label bonus = new Label();
                 bonus.Content = b.Name + " " + b.Price;
@@ -109,8 +109,18 @@ namespace Client_Manager.Views
                     }
                 }
             }
+            theRepair.BonusRepairs.Clear();
+            foreach(Bonus b in selectedBonuses)
+            {
+                theRepair.BonusRepairs.Add(new BonusRepair
+                {
+                    Repair = theRepair,
+                    RepairID = theRepair.Id,
+                    Bonus = b,
+                    BonusName = b.Id
+                });
+            }
 
-            theRepair.Bonuses = selectedBonuses;
         }
 
         private void AddBonus(Label name)
@@ -150,8 +160,10 @@ namespace Client_Manager.Views
         }
         private void UpdateRealPrice()
         {
+            var repBonusCost = theRepair.BonusRepairs.Select(br => br.Bonus).Sum(b => b.Price);
+
             if (new RegistrationFormValidator().ValidateCostValue(priceTbox))
-                realPriceLbl.Content = long.Parse(Regex.Replace(priceTbox.Text, @"\s", "")) + (theRepair?.Bonuses.Sum(b => b.Price) ?? 0);
+                realPriceLbl.Content =  long.Parse(Regex.Replace(priceTbox.Text, @"\s", "")) + repBonusCost;
         }
 
         private void priceTbox_TextChanged(object sender, TextChangedEventArgs e)

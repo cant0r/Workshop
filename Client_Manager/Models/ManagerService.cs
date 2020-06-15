@@ -18,6 +18,7 @@ namespace Client_Manager.Models
         public List<Manager> Managers { get; private set; }
 
         public Manager CurrentManager { get; set; }
+        public Repair Repair { get; set; }
 
         private WorkshopClient workshopClient;
 
@@ -46,6 +47,7 @@ namespace Client_Manager.Models
             Repairs = workshopClient.RetrieveEntities<Repair>() ?? new List<Repair>();
             RepairLogs = workshopClient.RetrieveEntities<RepairLog>() ?? new List<RepairLog>();
             Technicians = workshopClient.RetrieveEntities<Technician>() ?? new List<Technician>();
+            Managers = workshopClient.RetrieveEntities<Manager>() ?? new List<Manager>();
         }
 
         public void UploadRepair(Repair r)
@@ -60,11 +62,12 @@ namespace Client_Manager.Models
         {
             var valid = workshopClient.ValidateUser(u);
             Manager manager = 
-                (from managers in Managers?.OfType<Manager>() ?? new List<Manager>()
+                (from managers in Managers ?? new List<Manager>()
                  where managers.User.Username == u.Username 
                  select managers).FirstOrDefault(); 
             
             CurrentManager = manager;
+            Repair = new Repair();
             return valid;
         }
 

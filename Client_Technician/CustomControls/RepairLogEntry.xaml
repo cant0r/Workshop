@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Client_Technician.CustomControls"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"  Height="400"
+             d:DesignHeight="450" d:DesignWidth="800"  Height="Auto" Width="Auto"
              Background="#75e6da">
     <Border BorderThickness="2pt" BorderBrush="#05445e" Height="Auto" Width="Auto">
         <Grid>
@@ -19,16 +19,16 @@
             </Grid.RowDefinitions>
             <Border Grid.Row="0" Grid.Column="0"  BorderThickness="2pt" BorderBrush="#75e6da" Grid.RowSpan="2"></Border>
             <UniformGrid Background="#05445e" Grid.Row="0" Grid.Column="0" Rows="2" Columns="1">
-                <Label Background="#189ab4" Margin="10" Content="SzerelőID" Height="Auto" Width="Auto" FontSize="24pt" HorizontalContentAlignment="Center"
+                <Label  Margin="10" Content="SzerelőID" Background="#75e6da" Foreground="#05445e" Height="Auto" Width="Auto" FontSize="24pt" HorizontalContentAlignment="Center"
                        VerticalContentAlignment="Center" ></Label>
-                <Label Background="#189ab4" Margin="10" Content="" Height="Auto" Width="Auto" FontSize="22pt" FontWeight="Bold"
+                <Label  Margin="10" Content="" Background="#75e6da" Foreground="#05445e" Height="Auto" Width="Auto" FontSize="22pt" FontWeight="Bold"
                        HorizontalContentAlignment="Center"
                        VerticalContentAlignment="Center" x:Name="techIDLbl"></Label>
             </UniformGrid>
             <UniformGrid Background="#05445e" Grid.Row="1" Grid.Column="0" Rows="2" Columns="1">
-                <Label Background="#189ab4" Margin="10" Content="Bejegyezve" Height="Auto" Width="Auto" FontSize="24pt" HorizontalContentAlignment="Center"
+                <Label  Margin="10" Content="Bejegyezve" Background="#75e6da" Foreground="#05445e" Height="Auto" Width="Auto" FontSize="24pt" HorizontalContentAlignment="Center"
                        VerticalContentAlignment="Center"></Label>
-                <Label Background="#189ab4" Margin="10" Content="" Height="Auto" Width="Auto" FontSize="22pt" FontWeight="Bold"
+                <Label  Margin="10" Content="" Background="#75e6da" Foreground="#05445e" Height="Auto" Width="Auto" FontSize="22pt" FontWeight="Bold"
                        HorizontalContentAlignment="Center"
                        VerticalContentAlignment="Center" x:Name="dobLbl"></Label>
             </UniformGrid>

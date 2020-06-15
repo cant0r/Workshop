@@ -46,8 +46,10 @@ namespace Client_Manager
 
         private void newrepairBtn_Click(object sender, RoutedEventArgs e)
         {
+
+
             Hide();
-            if (new RegistrationView().ShowDialog() == true)
+            if (new RegistrationView(false).ShowDialog() == true)
                 Show();
         }
     }

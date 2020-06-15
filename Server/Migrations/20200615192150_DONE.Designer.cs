@@ -10,8 +10,8 @@ using Server.Repositories;
 namespace Server.Migrations
 {
     [DbContext(typeof(WorkshopContext))]
-    [Migration("20200615105730_workingOne")]
-    partial class workingOne
+    [Migration("20200615192150_DONE")]
+    partial class DONE
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -129,13 +129,13 @@ namespace Server.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long?>("AutoId")
+                    b.Property<long>("AutoId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("ManagerId")
+                    b.Property<long>("ManagerId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("Price")
@@ -259,8 +259,7 @@ namespace Server.Migrations
                 {
                     b.HasOne("ModelProvider.Repair", null)
                         .WithMany("Bonuses")
-                        .HasForeignKey("RepairId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("RepairId");
                 });
 
             modelBuilder.Entity("ModelProvider.Manager", b =>
@@ -276,12 +275,15 @@ namespace Server.Migrations
                 {
                     b.HasOne("ModelProvider.Auto", "Auto")
                         .WithMany()
-                        .HasForeignKey("AutoId");
+                        .HasForeignKey("AutoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ModelProvider.Manager", "Manager")
                         .WithMany("Repair")
                         .HasForeignKey("ManagerId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ModelProvider.RepairLog", b =>
@@ -298,7 +300,7 @@ namespace Server.Migrations
                     b.HasOne("ModelProvider.Repair", "Repair")
                         .WithMany("RepairTechnicians")
                         .HasForeignKey("RepairID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("ModelProvider.Technician", "Technician")

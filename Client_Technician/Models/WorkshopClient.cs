@@ -120,6 +120,20 @@ namespace Client_Technician.Models
                 MessageBox.Show(result.ReasonPhrase, result.StatusCode.ToString());
             }
         }
+        public void UploadRepairLog(RepairLog repair)
+        {
+            string URIPart = URIparts[typeof(RepairLog)];
+            var options = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+            var json = JsonConvert.SerializeObject(repair, options);
+            var rawData = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var result = httpClient.PostAsync(baseUri + URIPart, rawData).Result;
+
+            if (!result.IsSuccessStatusCode)
+            {
+                MessageBox.Show(result.ReasonPhrase, result.StatusCode.ToString());
+            }
+        }
 
 
         public bool ValidateUser(User u)

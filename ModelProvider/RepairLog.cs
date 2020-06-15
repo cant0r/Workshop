@@ -15,7 +15,7 @@ namespace ModelProvider
         public long TechnicianId { get; set; }
 
         [Required]
-        public string Description { get; set; }
+        public string Description { get; set; }  
 
         [Required]
         public DateTime Date { get; set; }
