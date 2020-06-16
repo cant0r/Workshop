@@ -4,10 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Windows;
-using System.Windows.Navigation;
 
 namespace Client_Manager.Models
 {
@@ -31,7 +28,8 @@ namespace Client_Manager.Models
                 { typeof(Client), "/clients" },
                 { typeof(Bonus), "/bonus" },
                 { typeof(Manager), "/managers" },
-                { typeof(User), "/users" }
+                { typeof(User), "/users" },
+                { typeof(BonusRepair), "/br" }
             };
 
         }
@@ -81,7 +79,7 @@ namespace Client_Manager.Models
             }
         }
         public void UploadUpdatedRepair(Repair repair)
-        {
+        {         
             string URIPart = URIparts[typeof(Repair)];
             var options = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
             var json = JsonConvert.SerializeObject(repair, options);

@@ -22,7 +22,7 @@ namespace ModelProvider
         public User User { get; set; }
 
         public long UserId { get; set; }
-        public IList<RepairTechnician> RepairTechnician { get; set; }
+        public virtual IList<RepairTechnician> RepairTechnicians { get; set; }
 
         public override string ToString()
         {

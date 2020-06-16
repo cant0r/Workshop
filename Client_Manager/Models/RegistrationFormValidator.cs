@@ -32,9 +32,19 @@ namespace Client_Manager.Models
 
             var emailValid = true;
 
-            if (controls[2]?.Text == "" || !(controls[2]?.Text.ToString() == new MailAddress(controls[2]?.Text.ToString()).Address))
-                emailValid = false;
+            try
+            {
+                if (controls[2]?.Text == "" || 
+                    !(controls[2]?.Text.ToString() == new MailAddress(controls[2]?.Text.ToString()).Address))
+                    emailValid = false;
 
+            }
+            catch (FormatException e)
+            {
+                Console.Error.WriteLine(e.Message);
+                emailValid = false;
+            }
+           
             if (!emailValid)            
                 controls[2].Foreground = Brushes.Red;
             else if (controls[2].Foreground == Brushes.Red)

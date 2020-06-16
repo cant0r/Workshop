@@ -6,8 +6,8 @@
              xmlns:local="clr-namespace:Client_Technician.CustomControls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"  Height="Auto" Width="Auto"
-             Background="#75e6da">
-    <Border BorderThickness="2pt" BorderBrush="#05445e" Height="Auto" Width="Auto">
+             Background="#189ab4">
+    <Border BorderThickness="2pt" BorderBrush="#189ab4" Height="Auto" Width="Auto">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
@@ -33,7 +33,7 @@
                        VerticalContentAlignment="Center" x:Name="dobLbl"></Label>
             </UniformGrid>
             <TextBox x:Name="logTblock" Width="Auto" Height="Auto" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1"
-                       TextWrapping="Wrap"
+                       TextWrapping="Wrap" Margin="10"
                        ScrollViewer.CanContentScroll="True"></TextBox>
 
         </Grid>

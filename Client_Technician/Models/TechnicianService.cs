@@ -69,7 +69,7 @@ namespace Client_Technician.Models
                  select techs).FirstOrDefault();
            
             CurrentTechnician = tech;
-            return valid;
+            return valid && tech != null;
         }
 
         public IEnumerable<Repair> GetRepairsByTechnicianId(Technician t)
@@ -78,12 +78,14 @@ namespace Client_Technician.Models
         }
         public IEnumerable<Repair> GetAvailableRepairs()
         {        
-            return from availables in Repairs
+            var result = from availables in Repairs
                    where  availables.State == State.New ||
                      (availables.State == State.InProgress &&
                            availables.RepairTechnicians
                             .FirstOrDefault((RepairTechnician rt) => { return rt.TechnicianId == CurrentTechnician.Id; }) == null)
                    select availables;
+
+            return result;
         }
 
     }

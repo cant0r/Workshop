@@ -21,7 +21,7 @@ namespace Client_Technician.Models
         private WorkshopClient()
         {
             httpClient = new HttpClient();
-            baseUri = "https://localhost:5001/api/workshop/technician";
+            baseUri = "http://localhost:5000/api/workshop/technician";
             URIparts = new Dictionary<Type, string>()
             {
                 { typeof(Repair), "/repair" },
@@ -108,12 +108,13 @@ namespace Client_Technician.Models
         }       
         public void UpdateRepair(Repair repair)
         {
+            using  HttpClient client = new HttpClient();
             string URIPart = URIparts[typeof(Repair)];
             var options = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
             var json = JsonConvert.SerializeObject(repair, options);
             var rawData = new StringContent(json, Encoding.UTF8, "application/json");
           
-            var result = httpClient.PutAsync(baseUri + URIPart, rawData).Result;
+            var result = client.PutAsync(baseUri + URIPart, rawData).Result;
 
             if (!result.IsSuccessStatusCode)
             {
@@ -127,7 +128,7 @@ namespace Client_Technician.Models
             var json = JsonConvert.SerializeObject(repair, options);
             var rawData = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var result = httpClient.PostAsync(baseUri + URIPart, rawData).Result;
+            var result = httpClient.PutAsync(baseUri + URIPart, rawData).Result;
 
             if (!result.IsSuccessStatusCode)
             {

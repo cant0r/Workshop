@@ -35,18 +35,24 @@ namespace Server.Repositories
         {
             modelBuilder.Entity<RepairTechnician>().HasKey(k => new { k.RepairID, k.TechnicianId });
             modelBuilder.Entity<RepairTechnician>().HasOne(job => job.Repair)
-                .WithMany(jt => jt.RepairTechnicians)
-                .HasForeignKey(job => job.RepairID).OnDelete(DeleteBehavior.NoAction);
-               
+                .WithMany(jt => jt.RepairTechnicians)               
+                .HasForeignKey(job => job.RepairID).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<RepairTechnician>().HasOne(job => job.Technician)
+               .WithMany(jt => jt.RepairTechnicians)
+               .HasForeignKey(job => job.TechnicianId)
+               .OnDelete(DeleteBehavior.Restrict);
+
 
             modelBuilder.Entity<Repair>().HasKey(r => r.Id);
             modelBuilder.Entity<BonusRepair>().HasKey(k => new { k.RepairID, k.BonusName });
             modelBuilder.Entity<BonusRepair>().HasOne(job => job.Bonus)
                 .WithMany(jt => jt.BonusRepairs)
-                .HasForeignKey(job => job.BonusName).OnDelete(DeleteBehavior.NoAction);
+                .HasForeignKey(job => job.BonusName);
+            modelBuilder.Entity<BonusRepair>().HasOne(job => job.Repair)
+               .WithMany(jt => jt.BonusRepairs)
+               .HasForeignKey(job => job.RepairID);
 
             modelBuilder.Entity<User>().HasIndex("Username").IsUnique();
-            modelBuilder.Entity<Manager>().HasMany(m => m.Repair).WithOne(r => r.Manager);
             modelBuilder.Entity<Auto>().HasIndex("LicencePlate").IsUnique();
         }
     }

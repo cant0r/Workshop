@@ -14,7 +14,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="4*"></RowDefinition>
+            <RowDefinition Height="8*"></RowDefinition>
         </Grid.RowDefinitions>
 
         <Label x:Name="repairJobIDlbl" Height="Auto" Width="Auto" Grid.Column="0" Grid.Row="0" Content="HALLO"

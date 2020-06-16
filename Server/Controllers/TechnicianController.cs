@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Mvc;
@@ -75,25 +76,25 @@ namespace Server.Controllers
             if (logs is null)
                 return NotFound();
             return Ok(logs);
-        }
-        [Route("logs")]
-        [HttpDelete]
-        public ActionResult RemoveRepairLog(RepairLog log)
-        {
-            var workshopRepo = new WorkshopRepository();
-            workshopRepo.RemoveRepairLog(log);
-            return Ok();
-        }
+        }     
         [Route("logs")]
         [HttpPut]
         public ActionResult UpdateRepairLog(RepairLog log)
         {
             var workshopRepo = new WorkshopRepository();
-            var found = new GenericRepository<Repair>().Get(log.Repair.Id);
+            RepairLog found = workshopRepo.GetRepairLogs(log.Repair.Id).SingleOrDefault(rl => rl.Id == log.Id);
+           
+            
             if (found is null)
                 workshopRepo.AddRepairLog(log);
             else
-                workshopRepo.UpdateRepairLog(log);
+            {
+                found.Date = DateTime.Today;
+                found.Description = log.Description;
+                found.TechnicianId = log.TechnicianId;
+                workshopRepo.UpdateRepairLog(found);
+            }
+               
             return Ok();
         }
         [Route("users")]

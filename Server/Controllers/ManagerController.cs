@@ -35,7 +35,7 @@ namespace Server.Controllers
         }
         [Route("repair")]
         [HttpPut]
-        public ActionResult UpdateRepair(Repair repair)
+        public ActionResult UpdateRepair([FromBody] Repair repair)
         {
             var workshopRepo = new WorkshopRepository();            
             workshopRepo.UpdateRepair(repair);
@@ -148,8 +148,19 @@ namespace Server.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Bonus>> GetBonuses()
         {
-            var repo = new GenericRepository<Bonus>();
-            var bonuses = repo.GetAll();
+            var repo = new WorkshopRepository();
+            var bonuses = repo.GetBonuses();
+            if (bonuses is null)
+                return NotFound();
+            else
+                return Ok(bonuses);
+        }
+        [Route("br")]
+        [HttpGet]
+        public ActionResult<IEnumerable<BonusRepair>> GetBonusRepairs()
+        {
+            var repo = new WorkshopRepository();
+            var bonuses = repo.GetBonusRepairs();
             if (bonuses is null)
                 return NotFound();
             else

@@ -18,7 +18,7 @@ namespace Server.Controllers
         {
             var techRepo = new GenericRepository<Technician>();
             tech.User = new GenericRepository<User>().GetAll().Single((User u) => u.Id == tech.User.Id);            
-            techRepo.Add(tech, tech.User, tech.RepairTechnician);
+            techRepo.Add(tech, tech.User, tech.RepairTechnicians);
             
             return Ok();
         }       

@@ -56,6 +56,7 @@ namespace Client_Technician.Views
                 }
                 repairEntry.repairLogBtn.Click += (object sender, RoutedEventArgs args) =>
                 {
+                    
                     topbarpanel.Children.Clear();
                     entryPanel.Children.Clear();
                     LoadRepairLogs(r.Id);
@@ -66,6 +67,7 @@ namespace Client_Technician.Views
                     if (MessageBox.Show("Leadás után a munka automatikusan írásvédett lesz.", "Biztosan leadja a munkát?", MessageBoxButton.YesNo)
                      == MessageBoxResult.Yes)
                         repairEntry.Visibility = Visibility.Collapsed;
+                    r.Manager?.Repair?.Clear();
                     technicianService.UpdateRepair(r);
                 };
 
@@ -76,6 +78,7 @@ namespace Client_Technician.Views
         }
         private void LoadRepairLogs(long repairID)
         {
+            
             technicianService.ParseDatabase();
             var repairLogs = technicianService.RepairLogs.FindAll(l => l.Repair.Id == repairID);
             var topbar = new RepairLogEditorTopbar();
@@ -85,7 +88,7 @@ namespace Client_Technician.Views
                 var logEntry = new RepairLogEntry();
                 logEntry.techIDLbl.Content = technicianService.CurrentTechnician.Id;
                 logEntry.dobLbl.Content = DateTime.Now.ToShortDateString();
-                entryPanel.Children.Add(logEntry);
+                entryPanel.Children.Insert(0,logEntry);
             };
 
             topbar.backBtn.Click += (object sender, RoutedEventArgs args) =>
@@ -102,12 +105,15 @@ namespace Client_Technician.Views
                     if(uiElement is RepairLogEntry)
                     {
                         var rle = (RepairLogEntry)uiElement;
+                        if (!rle.Modified)
+                            continue;
                         var rlog = new RepairLog();
                         rlog.Date = DateTime.Parse(rle.dobLbl.Content.ToString());
                         rlog.TechnicianId = Convert.ToInt64(rle.techIDLbl.Content.ToString());
                         rlog.Description = rle.logTblock.Text;
-                        
+                        rlog.Id = rle.LogId;
                         rlog.Repair = technicianService.Repairs.FirstOrDefault(r => r.Id == repairID);
+                        rlog.Repair?.Manager?.Repair?.Clear();
                         technicianService.UploadRepairLog(rlog);
                     }
                 }
@@ -121,7 +127,8 @@ namespace Client_Technician.Views
                 logEntry.techIDLbl.Content = log.TechnicianId.ToString();
                 logEntry.logTblock.Text = log.Description.ToString();              
                 logEntry.dobLbl.Content = log.Date;
-                entryPanel.Children.Add(logEntry);
+                logEntry.LogId = log.Id;
+                entryPanel.Children.Insert(0,logEntry);                
             }
             topbar.repairIdLbl.Content = repairID.ToString();
         }
@@ -154,6 +161,14 @@ namespace Client_Technician.Views
                 repairEntry.doneBtn.Click += (object sender, RoutedEventArgs args) =>
                 {
                     r.State = State.InProgress;
+                    r.Manager.Repair.Clear();
+                    r.RepairTechnicians.Add(
+                        new RepairTechnician
+                        {
+                            RepairID = r.Id,
+                            TechnicianId = technicianService.CurrentTechnician.Id
+                        }
+                    );
                     technicianService.UpdateRepair(r);
                     repairEntry.Visibility = Visibility.Collapsed;
                 };

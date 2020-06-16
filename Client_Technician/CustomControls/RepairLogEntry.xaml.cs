@@ -18,9 +18,16 @@ namespace Client_Technician.CustomControls
     /// </summary>
     public partial class RepairLogEntry : UserControl
     {
+        public bool Modified { get; set; }
+        public long LogId { get; set; }
         public RepairLogEntry()
         {
             InitializeComponent();
+            Modified = false;
+            logTblock.TextChanged += (object sender, TextChangedEventArgs args) =>
+            {
+                Modified = true;
+            };
         }
     }
 }

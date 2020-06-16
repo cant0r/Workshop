@@ -53,19 +53,13 @@ namespace Server.Migrations
 
             modelBuilder.Entity("ModelProvider.Bonus", b =>
                 {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<long>("Price")
                         .HasColumnType("bigint");
 
-                    b.HasKey("Id");
+                    b.HasKey("Name");
 
                     b.ToTable("Bonuses");
                 });
@@ -75,8 +69,8 @@ namespace Server.Migrations
                     b.Property<long>("RepairID")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("BonusName")
-                        .HasColumnType("bigint");
+                    b.Property<string>("BonusName")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("RepairID", "BonusName");
 
@@ -274,7 +268,7 @@ namespace Server.Migrations
                     b.HasOne("ModelProvider.Bonus", "Bonus")
                         .WithMany("BonusRepairs")
                         .HasForeignKey("BonusName")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ModelProvider.Repair", "Repair")
@@ -322,13 +316,13 @@ namespace Server.Migrations
                     b.HasOne("ModelProvider.Repair", "Repair")
                         .WithMany("RepairTechnicians")
                         .HasForeignKey("RepairID")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("ModelProvider.Technician", "Technician")
-                        .WithMany("RepairTechnician")
+                        .WithMany("RepairTechnicians")
                         .HasForeignKey("TechnicianId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 

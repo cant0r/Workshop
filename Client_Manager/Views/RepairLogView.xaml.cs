@@ -36,7 +36,7 @@ namespace Client_Manager
                 logEntry.techIDLbl.Content = log.TechnicianId.ToString();
                 logEntry.logTblock.Text = log.Description.ToString();
                 logEntry.dobLbl.Content = log.Date;
-                logEntryPanel.Children.Add(logEntry);
+                logEntryPanel.Children.Insert(0,logEntry);
             }
             repairJobIDlbl.Content = repairID.ToString();         
         }

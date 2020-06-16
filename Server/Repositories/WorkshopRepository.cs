@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Server.Repositories
 {
@@ -15,9 +16,9 @@ namespace Server.Repositories
             using var ctx = new WorkshopContext();
             var repairs = ctx.Repairs.Include(r => r.Auto)
                 .ThenInclude(a => a.Client)
-                .Include(r => r.BonusRepairs).ThenInclude(br => br.Bonus)
-                .Include(r => r.Manager).ThenInclude(m => m.User)
-                .Include(r => r.RepairTechnicians).ToList();
+                .Include(r => r.BonusRepairs)
+                .Include(r => r.RepairTechnicians)
+                .Include(r => r.Manager).ThenInclude(r => r.User).ToList();
             return repairs;
         }
         #endregion
@@ -32,11 +33,11 @@ namespace Server.Repositories
         {
             using var ctx = new WorkshopContext();
             var ls = (from logs in ctx.RepairLogs.Include(rl => rl.Repair)
-                    where logs.Repair.Id == repairID
-                    select logs).ToList();
+                      where logs.Repair.Id == repairID
+                      select logs).ToList();
 
             return ls;
-            
+
         }
         public RepairLog GetLatestRepairLog(long repairID)
         {
@@ -49,25 +50,19 @@ namespace Server.Repositories
         public void AddRepairLog(RepairLog log)
         {
             using var ctx = new WorkshopContext();
-            var rep = ctx.Repairs.Single(r => r.Id == log.Repair.Id);
+            var rep = ctx.Repairs.SingleOrDefault(r => r.Id == log.Repair.Id);
             log.Repair = rep;
-            
+            log.Repair?.Manager?.Repair?.Clear();
             ctx.RepairLogs.Add(log);
-            
             ctx.SaveChanges();
         }
-       
-        public void RemoveRepairLog(RepairLog log)
-        {
-            using var ctx = new WorkshopContext();
-            ctx.RepairLogs.Remove(log);
-            ctx.SaveChanges();
-        }
+
         public void UpdateRepairLog(RepairLog log)
         {
             using var ctx = new WorkshopContext();
             var repair = ctx.Repairs.SingleOrDefault(r => r.Id == log.Repair.Id);
             log.Repair = repair;
+            log.Repair?.Manager?.Repair?.Clear();
             ctx.RepairLogs.Update(log);
             ctx.SaveChanges();
         }
@@ -77,7 +72,7 @@ namespace Server.Repositories
         {
             using var ctx = new WorkshopContext();
             return ctx.Technicians
-                .Include(t => t.RepairTechnician).Include(r => r.User)
+                .Include(t => t.RepairTechnicians).Include(r => r.User)
                 .ToList();
         }
         public IEnumerable<Technician> GetTechniciansByRepairID(long id)
@@ -93,24 +88,26 @@ namespace Server.Repositories
         public IEnumerable<Repair> GetRepairsByTechnicianID(long id)
         {
             using var ctx = new WorkshopContext();
-            var technicianIdNumbers = (from jt in ctx.RepairTechnicians.Include(rt => rt.Technician).Include(rt => rt.Repair)
+            var technicianIdNumbers = (from jt in ctx.RepairTechnicians
+                                       .Include(rt => rt.Technician)
+                                       .Include(rt => rt.Repair)
                                        where jt.TechnicianId == id
                                        select jt.RepairID);
             return (from t in ctx.Repairs.Include(r => r.Auto)
                                         .ThenInclude(a => a.Client)
-                                        .Include(r => r.BonusRepairs).ThenInclude(br => br.Bonus)
-                                        .Include(r => r.Manager).ThenInclude(m => m.User)
+                                        .Include(r => r.Manager).ThenInclude(r => r.User)
                                         .Include(r => r.RepairTechnicians)
+                                        .Include(r => r.BonusRepairs)
                     where technicianIdNumbers.Contains(t.Id)
                     select t).ToList() ?? new List<Repair>();
         }
         public IEnumerable<RepairTechnician> GetRepairTechnicians()
         {
             using var ctx = new WorkshopContext();
-            
+
             return ctx.RepairTechnicians.ToList() ?? new List<RepairTechnician>();
         }
-        
+
 
         public IEnumerable<Client> GetClients()
         {
@@ -142,51 +139,61 @@ namespace Server.Repositories
         }
         public void CreateRepair(Repair repair)
         {
+           // repair.Id = 0;
             using var ctx = new WorkshopContext();
+            repair.Manager.User = null;
+            repair.Manager.Repair?.Clear();
+
             ctx.Repairs.Add(repair);
-            var manager = ctx.Managers.FirstOrDefault(m => m.Id == repair.Manager.Id);
-            repair.Manager = manager;
-
-            foreach(BonusRepair br in repair.BonusRepairs)
-            {
-                ctx.Entry(br.Bonus).State = EntityState.Detached;
-            }
-
             ctx.Entry(repair.Manager).State = EntityState.Modified;
-            ctx.Entry(repair.Manager.User).State = EntityState.Modified;
+            foreach (Bonus b in repair.BonusRepairs.Select(br => br.Bonus))
+                ctx.Entry(b).State = EntityState.Modified;
             ctx.SaveChanges();
         }
         public void UpdateRepair(Repair repair)
         {
             using var ctx = new WorkshopContext();
-            var r = ctx.Repairs.Single(er => er.Id == repair.Id);
+            
+            var r = ctx.Repairs.SingleOrDefault(er => er.Id == repair.Id);
+            ctx.Repairs.Update(r);
             var auto = ctx.Automobiles.SingleOrDefault(a => a.Id == repair.Auto.Id);
+            auto.Brand = repair.Auto.Brand;
+            auto.Model = repair.Auto.Model;
+            auto.LicencePlate = repair.Auto.LicencePlate;
             var client = ctx.Clients.SingleOrDefault(c => c.Id == repair.Auto.Client.Id);
+            client.Email = repair.Auto.Client.Email;
+            client.Name = repair.Auto.Client.Name;
+            client.PhoneNumber = repair.Auto.Client.PhoneNumber;
             auto.Client = client;
-
-            var manager = ctx.Managers?.SingleOrDefault(m => m.Id == repair.Manager.Id);
-
-            r.Auto = auto;
+            var manager = ctx.Managers.SingleOrDefault(m => m.Id == repair.Manager.Id);
             r.Manager = manager;
+            r.Auto = auto;
             r.State = repair.State;
+            r.Description = repair.Description;
+            r.Price = repair.Price;
 
-            var rts = new List<RepairTechnician>();
-            var rete = ctx.RepairTechnicians.Where(rt => rt.RepairID == repair.Id);
-            foreach(RepairTechnician rt in rete)
+
+            var rts = ctx.RepairTechnicians.Where(bp => bp.RepairID == repair.Id).ToList();
+            r.RepairTechnicians?.Clear();
+            foreach (RepairTechnician rt in repair.RepairTechnicians)
             {
+                if (rts.SingleOrDefault(b => b.TechnicianId == rt.TechnicianId) == null)
                     rts.Add(rt);
+                else
+                    rts.Remove(rt);
+
             }
             r.RepairTechnicians = rts;
 
-            var rts2 = new List<BonusRepair>();
-            var rete2 = ctx.BonusRepairs.Where(rt => rt.RepairID == repair.Id);
-            foreach (BonusRepair rt in rete2)
+            r.BonusRepairs = ctx.BonusRepairs.Where(br => br.RepairID == r.Id).ToList();
+            r.BonusRepairs?.Clear();
+            foreach (Bonus b in ctx.Bonuses)
             {
-                rts2.Add(rt);
+                if (repair.BonusRepairs?.SingleOrDefault(br => br.BonusName == b.Name) != null)
+                    r.BonusRepairs.Add(new BonusRepair { BonusName = b.Name, RepairID = r.Id });             
+                
             }
-            r.BonusRepairs = rts2;
-
-            ctx.Entry(r).State = EntityState.Modified;                      
+            ctx.Entry(r).State = EntityState.Modified;
             ctx.SaveChanges();
         }
         public void AbortRepair(Repair repair)
@@ -196,6 +203,18 @@ namespace Server.Repositories
             rep.State = State.Cancelled;
             UpdateRepair(repair);
 
+        }
+        public IEnumerable<BonusRepair> GetBonusRepairs()
+        {
+            using var ctx = new WorkshopContext();
+            var brs = ctx.BonusRepairs.Include(br => br.Bonus).ToList() ?? new List<BonusRepair>();
+            return brs;
+        }
+        public IEnumerable<Bonus> GetBonuses()
+        {
+            using var ctx = new WorkshopContext();
+            var brs = ctx.Bonuses.ToList();
+            return brs;
         }
         #endregion
         public IEnumerable<Manager> GetManagers()

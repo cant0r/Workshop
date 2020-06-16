@@ -79,6 +79,7 @@ namespace Client_Manager
                     techIDs = (from repair in r.RepairTechnicians
                                where repair.RepairID == r.Id
                                select repair.TechnicianId).ToList();
+               
                 if (manegerService.Technicians != null)
                     techs = manegerService.Technicians.FindAll(t => techIDs.Contains(t.Id));
                 foreach (Technician t in techs)
@@ -94,6 +95,7 @@ namespace Client_Manager
                 repairEntry.editBtn.Click += (object sender, RoutedEventArgs args) =>
                 {
                     manegerService.Repair = r;
+                    manegerService.Repair.Manager.Repair.Clear();
                     new RegistrationView(true).ShowDialog();
                 };
 
@@ -110,6 +112,7 @@ namespace Client_Manager
                      == MessageBoxResult.OK)
                     {
                         r.State = State.Cancelled;
+                        r.Manager.Repair.Clear();
                         repairEntry.Visibility = Visibility.Collapsed;
                         manegerService.UploadUpdatedRepair(r);
                     }

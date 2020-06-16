@@ -3,10 +3,22 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Server.Migrations
 {
-    public partial class DONE : Migration
+    public partial class http : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Bonuses",
+                columns: table => new
+                {
+                    Name = table.Column<string>(nullable: false),
+                    Price = table.Column<long>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bonuses", x => x.Name);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Clients",
                 columns: table => new
@@ -133,22 +145,27 @@ namespace Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Bonuses",
+                name: "BonusRepairs",
                 columns: table => new
                 {
-                    Name = table.Column<string>(nullable: false),
-                    Price = table.Column<long>(nullable: false),
-                    RepairId = table.Column<long>(nullable: true)
+                    RepairID = table.Column<long>(nullable: false),
+                    BonusName = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Bonuses", x => x.Name);
+                    table.PrimaryKey("PK_BonusRepairs", x => new { x.RepairID, x.BonusName });
                     table.ForeignKey(
-                        name: "FK_Bonuses_Repairs_RepairId",
-                        column: x => x.RepairId,
+                        name: "FK_BonusRepairs_Bonuses_BonusName",
+                        column: x => x.BonusName,
+                        principalTable: "Bonuses",
+                        principalColumn: "Name",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BonusRepairs_Repairs_RepairID",
+                        column: x => x.RepairID,
                         principalTable: "Repairs",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -187,13 +204,14 @@ namespace Server.Migrations
                         name: "FK_RepairTechnicians_Repairs_RepairID",
                         column: x => x.RepairID,
                         principalTable: "Repairs",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_RepairTechnicians_Technicians_TechnicianId",
                         column: x => x.TechnicianId,
                         principalTable: "Technicians",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -208,9 +226,9 @@ namespace Server.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Bonuses_RepairId",
-                table: "Bonuses",
-                column: "RepairId");
+                name: "IX_BonusRepairs_BonusName",
+                table: "BonusRepairs",
+                column: "BonusName");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Managers_UserId",
@@ -252,13 +270,16 @@ namespace Server.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Bonuses");
+                name: "BonusRepairs");
 
             migrationBuilder.DropTable(
                 name: "RepairLogs");
 
             migrationBuilder.DropTable(
                 name: "RepairTechnicians");
+
+            migrationBuilder.DropTable(
+                name: "Bonuses");
 
             migrationBuilder.DropTable(
                 name: "Repairs");

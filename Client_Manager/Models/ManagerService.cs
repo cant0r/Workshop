@@ -16,7 +16,8 @@ namespace Client_Manager.Models
         public List<RepairLog> RepairLogs { get; private set; }
         public List<Technician> Technicians { get; private set; }
         public List<Manager> Managers { get; private set; }
-
+        public List<BonusRepair> BonusRepairs { get; private set; }
+        public List<Bonus> Bonuses { get; private set; }
         public Manager CurrentManager { get; set; }
         public Repair Repair { get; set; }
 
@@ -48,6 +49,8 @@ namespace Client_Manager.Models
             RepairLogs = workshopClient.RetrieveEntities<RepairLog>() ?? new List<RepairLog>();
             Technicians = workshopClient.RetrieveEntities<Technician>() ?? new List<Technician>();
             Managers = workshopClient.RetrieveEntities<Manager>() ?? new List<Manager>();
+            Bonuses = workshopClient.RetrieveEntities<Bonus>() ?? new List<Bonus>();
+            BonusRepairs = workshopClient.RetrieveEntities<BonusRepair>() ?? new List<BonusRepair>();
         }
 
         public void UploadRepair(Repair r)
@@ -68,7 +71,7 @@ namespace Client_Manager.Models
             
             CurrentManager = manager;
             Repair = new Repair();
-            return valid;
+            return valid && manager != null;
         }
 
     }

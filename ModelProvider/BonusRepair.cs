@@ -9,7 +9,7 @@ namespace ModelProvider
         public long RepairID { get; set; }
         public virtual Repair Repair { get; set; }
 
-        public long BonusName { get; set; }
+        public string BonusName { get; set; }
 
         public virtual Bonus Bonus { get; set; }
     }

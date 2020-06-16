@@ -26,8 +26,8 @@ namespace ModelProvider
         [Required]
         public virtual State State { get; set; }
      
-        public IList<BonusRepair> BonusRepairs { get; set; }
+        public virtual IList<BonusRepair> BonusRepairs { get; set; }
         
-        public  IList<RepairTechnician> RepairTechnicians { get; set; }
+        public virtual IList<RepairTechnician> RepairTechnicians { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using ModelProvider;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -28,13 +29,15 @@ namespace Client_Manager.Views
 
         public RepairView(bool update = false)
         {
-            InitializeComponent();
-            LoadBonuses();
+            InitializeComponent();           
             theRepair = ManagerService.GetInstance().Repair;
-            this.update = update;
+            LoadBonuses();
             LoadRepair(theRepair);
             
+            this.update = update;
+            
             managerLbl.Content = (theRepair?.Manager?.User.Username ?? ManagerService.GetInstance().CurrentManager?.User.Username) ?? "adminInside%";
+            priceTbox.MaxLength = Int64.MaxValue.ToString().Length;
         }
 
         private void LoadRepair(Repair repair)
@@ -42,8 +45,8 @@ namespace Client_Manager.Views
             theRepair = repair;
             realPriceLbl.Content = theRepair.Price;
             problemTbox.Text = theRepair.Description.ToString();
-            var bns = theRepair?.BonusRepairs.Select(br => br.Bonus).ToList();
-            long noBonusesPrice = theRepair.Price - bns.Sum(b => b.Price);
+            var bns = ManagerService.GetInstance().BonusRepairs.Where(br => br.RepairID == repair.Id).Select(br => br.Bonus).ToList();
+            long noBonusesPrice = theRepair.Price - bns.Sum(b => b?.Price ?? 0);
  
             priceTbox.Text = noBonusesPrice.ToString();
 
@@ -67,8 +70,7 @@ namespace Client_Manager.Views
         }
         private void LoadBonuses()
         {
-            bonuses = WorkshopClient.GetInstance().RetrieveEntities<Bonus>();
-
+            bonuses = ManagerService.GetInstance().Bonuses;
             foreach (Bonus b in bonuses)
             {
                 CheckBox cbox = new CheckBox();
@@ -109,15 +111,15 @@ namespace Client_Manager.Views
                     }
                 }
             }
-            theRepair.BonusRepairs.Clear();
+            theRepair.BonusRepairs = new List<BonusRepair>();
             foreach(Bonus b in selectedBonuses)
-            {
+            {                
                 theRepair.BonusRepairs.Add(new BonusRepair
                 {
                     Repair = theRepair,
-                    RepairID = theRepair.Id,
                     Bonus = b,
-                    BonusName = b.Id
+                    RepairID = theRepair.Id,
+                    BonusName = b.Name
                 });
             }
 
@@ -160,10 +162,20 @@ namespace Client_Manager.Views
         }
         private void UpdateRealPrice()
         {
-            var repBonusCost = theRepair.BonusRepairs.Select(br => br.Bonus).Sum(b => b.Price);
+            var repBonusCost = theRepair.BonusRepairs?.Select(br => br?.Bonus)?.Sum(b => b?.Price) ?? 0;
 
             if (new RegistrationFormValidator().ValidateCostValue(priceTbox))
-                realPriceLbl.Content =  long.Parse(Regex.Replace(priceTbox.Text, @"\s", "")) + repBonusCost;
+            {
+                try
+                {
+                    realPriceLbl.Content = Math.Abs(Convert.ToInt64(Regex.Replace(priceTbox.Text, @"\s", ""))) + repBonusCost;
+                }
+                catch (Exception e)
+                {
+                    Console.Error.WriteLine(e.ToString());
+                    realPriceLbl.Content = repBonusCost;
+                }
+            }
         }
 
         private void priceTbox_TextChanged(object sender, TextChangedEventArgs e)
