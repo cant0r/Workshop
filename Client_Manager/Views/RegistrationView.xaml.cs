@@ -1,6 +1,8 @@
 ﻿using Client_Manager.Models;
 using Client_Manager.Views;
 using ModelProvider;
+using ModelProvider.Models;
+using ModelProvider.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,7 +23,7 @@ namespace Client_Manager
     /// </summary>
     public partial class RegistrationView : Window
     {
-        private Repair repair;
+        private RepairView repair;
         private bool update;
 
         public RegistrationView(bool update = false)
@@ -30,10 +32,10 @@ namespace Client_Manager
             this.update = update;
             this.repair = ManagerService.GetInstance().Repair;
             if (update) LoadRepair(repair);
-            managerLbl.Content = (repair?.Manager?.User.Username ?? ManagerService.GetInstance().CurrentManager?.User.Username) ?? "adminInside%";
+            managerLbl.Content = ManagerService.GetInstance().CurrentManager?.User.Username ?? "adminInside%";
         }
 
-        private void LoadRepair(Repair repair)
+        private void LoadRepair(ModelProvider.ViewModels.RepairView repair)
         {
             if (repair is null)
             {
@@ -66,7 +68,7 @@ namespace Client_Manager
         private void nextBtn_Click(object sender, RoutedEventArgs e)
         {
 
-            var regValidator = new RegistrationFormValidator();
+            var regValidator = new RegistrationFormValidator(update);
 
             if (regValidator.ValidateClientInput(new List<TextBox> { clientNameTblock, clientPhoneTblock, clientEmailTblock })
                 &&
@@ -80,7 +82,7 @@ namespace Client_Manager
 
                 DialogResult = true;
                 Hide();
-                if (new RepairView(update).ShowDialog() == true)
+                if (new RepairJobView(update).ShowDialog() == true)
                     Close();
             }
 
@@ -99,12 +101,12 @@ namespace Client_Manager
         }
         public void AssembleNewRepairRecord()
         {
-            Client newClient = new Client();
+            ClientView newClient = new ClientView();
             newClient.Name = clientNameTblock.Text;
             newClient.Email = clientEmailTblock.Text;
             newClient.PhoneNumber = clientPhoneTblock.Text;
 
-            Auto auto = new Auto();
+            AutoView auto = new AutoView();
             auto.Brand = autoBrandTblock.Text;
             auto.Model = autoModelTblock.Text;
             auto.LicencePlate = autoPlateTblock.Text;
@@ -113,10 +115,10 @@ namespace Client_Manager
             repair.Auto = auto;
             repair.State = State.New;
             repair.Price = 0;
-            repair.BonusRepairs = new List<BonusRepair>();
+            repair.BonusRepairs = new List<BonusRepairView>();
             repair.Manager ??= ManagerService.GetInstance().CurrentManager;
             repair.Description = "";
-            repair.RepairTechnicians = new List<RepairTechnician>();
+            repair.RepairTechnicians = new List<RepairTechnicianView>();
 
         }
     }

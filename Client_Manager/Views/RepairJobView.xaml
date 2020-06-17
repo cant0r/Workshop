@@ -1,4 +1,4 @@
-﻿<Window x:Class="Client_Manager.Views.RepairView"
+﻿<Window x:Class="Client_Manager.Views.RepairJobView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -27,7 +27,7 @@
             <Label Content="manager#" x:Name="managerLbl" HorizontalContentAlignment="Center" Width="Auto"></Label>
         </StackPanel>
         <Border Grid.Row="1" Grid.Column="0" Margin="5">
-            <TextBox  x:Name="problemTbox" TextWrapping="Wrap" ScrollViewer.CanContentScroll="True" ></TextBox>
+            <TextBox AcceptsReturn="True" x:Name="problemTbox" TextWrapping="Wrap" ScrollViewer.CanContentScroll="True" ></TextBox>
         </Border>
         <Border Grid.Row="1" Grid.Column="1" Margin="5">
             <UniformGrid Grid.Row="1" Grid.Column="1" Rows="2" Columns="1" Width="Auto" Height="Auto">

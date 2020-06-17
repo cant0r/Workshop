@@ -1,5 +1,6 @@
 ﻿using Client_Manager.Models;
 using ModelProvider;
+using ModelProvider.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,14 +21,14 @@ namespace Client_Manager.Views
     /// <summary>
     /// Interaction logic for RepairView.xaml
     /// </summary>
-    public partial class RepairView : Window
+    public partial class RepairJobView : Window
     {
 
-        private Repair theRepair;
-        private IEnumerable<Bonus> bonuses = null;
+        private RepairView theRepair;
+        private IEnumerable<BonusView> bonuses = null;
         private bool update = false;
 
-        public RepairView(bool update = false)
+        public RepairJobView(bool update = false)
         {
             InitializeComponent();           
             theRepair = ManagerService.GetInstance().Repair;
@@ -40,17 +41,18 @@ namespace Client_Manager.Views
             priceTbox.MaxLength = Int64.MaxValue.ToString().Length;
         }
 
-        private void LoadRepair(Repair repair)
+        private void LoadRepair(RepairView repair)
         {
             theRepair = repair;
             realPriceLbl.Content = theRepair.Price;
             problemTbox.Text = theRepair.Description.ToString();
-            var bns = ManagerService.GetInstance().BonusRepairs.Where(br => br.RepairID == repair.Id).Select(br => br.Bonus).ToList();
+            var bnsNames = ManagerService.GetInstance().BonusRepairs.Where(br => br.RepairID == repair.Id).Select(br => br.BonusName).ToList();
+            var bns = ManagerService.GetInstance().Bonuses.Where(b => bnsNames.Contains(b.Name));
             long noBonusesPrice = theRepair.Price - bns.Sum(b => b?.Price ?? 0);
  
             priceTbox.Text = noBonusesPrice.ToString();
 
-            foreach (Bonus b in bns)
+            foreach (BonusView b in bns)
             {
                 Label bonus = new Label();
                 bonus.Content = b.Name + " " + b.Price;
@@ -71,7 +73,7 @@ namespace Client_Manager.Views
         private void LoadBonuses()
         {
             bonuses = ManagerService.GetInstance().Bonuses;
-            foreach (Bonus b in bonuses)
+            foreach (BonusView b in bonuses)
             {
                 CheckBox cbox = new CheckBox();
                 cbox.Content = b.Name;
@@ -98,11 +100,11 @@ namespace Client_Manager.Views
 
         private void RefreshClientBonuses()
         {
-            List<Bonus> selectedBonuses = new List<Bonus>();
+            List<BonusView> selectedBonuses = new List<BonusView>();
 
             foreach (Label bl in bonusStackPanel.Children)
             {
-                foreach (Bonus b in bonuses)
+                foreach (BonusView b in bonuses)
                 {
                     if (bl.Content.ToString().Contains(b.Name))
                     {
@@ -111,13 +113,11 @@ namespace Client_Manager.Views
                     }
                 }
             }
-            theRepair.BonusRepairs = new List<BonusRepair>();
-            foreach(Bonus b in selectedBonuses)
+            theRepair.BonusRepairs = new List<BonusRepairView>();
+            foreach(BonusView b in selectedBonuses)
             {                
-                theRepair.BonusRepairs.Add(new BonusRepair
+                theRepair.BonusRepairs.Add(new BonusRepairView
                 {
-                    Repair = theRepair,
-                    Bonus = b,
                     RepairID = theRepair.Id,
                     BonusName = b.Name
                 });
@@ -162,9 +162,10 @@ namespace Client_Manager.Views
         }
         private void UpdateRealPrice()
         {
-            var repBonusCost = theRepair.BonusRepairs?.Select(br => br?.Bonus)?.Sum(b => b?.Price) ?? 0;
+            List<string> bnsNames = theRepair.BonusRepairs?.Select(br => br?.BonusName).ToList();
+            var repBonusCost = ManagerService.GetInstance().Bonuses?.Where(b => bnsNames.Contains(b.Name)).Sum(b => b?.Price) ?? 0;
 
-            if (new RegistrationFormValidator().ValidateCostValue(priceTbox))
+            if (new RegistrationFormValidator(false).ValidateCostValue(priceTbox))
             {
                 try
                 {

@@ -1,21 +1,14 @@
 ﻿using Client_Manager.CustomControls;
 using Client_Manager.Models;
-using ModelProvider;
+using ModelProvider.Models;
+using ModelProvider.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace Client_Manager
@@ -61,10 +54,10 @@ namespace Client_Manager
             btn.Background = btn.Foreground;
             btn.Foreground = temp;
         }
-        private void LoadRepairsViaPredicate(Func<Repair, bool> predicate)
+        private void LoadRepairsViaPredicate(Func<RepairView, bool> predicate)
         {
             entryPanel.Children.Clear();
-            foreach (Repair r in manegerService.Repairs.FindAll(r => predicate(r)))
+            foreach (RepairView r in manegerService.Repairs.FindAll(r => predicate(r)))
             {
                 var repairEntry = new RepairEntryBox();
                 repairEntry.descriptionTblock.Text = r.Description;
@@ -74,7 +67,7 @@ namespace Client_Manager
                 repairEntry.managerLbl.Content = r.Manager?.User?.Username ?? "adminInside%";
 
                 List<long> techIDs = new List<long>();
-                List<Technician> techs = new List<Technician>();
+                List<TechnicianView> techs = new List<TechnicianView>();
                 if (r.RepairTechnicians != null)
                     techIDs = (from repair in r.RepairTechnicians
                                where repair.RepairID == r.Id
@@ -82,20 +75,19 @@ namespace Client_Manager
                
                 if (manegerService.Technicians != null)
                     techs = manegerService.Technicians.FindAll(t => techIDs.Contains(t.Id));
-                foreach (Technician t in techs)
+                foreach (TechnicianView t in techs)
                 {
                     repairEntry.techsLbox.Items.Add(t.Name);
                 }
 
                 repairEntry.repairLogBtn.Click += (object sender, RoutedEventArgs args) =>
                 {
-                    new RepairLogView(r.Id).ShowDialog();
+                    new RepairJobLogView(r.Id).ShowDialog();
                 };
 
                 repairEntry.editBtn.Click += (object sender, RoutedEventArgs args) =>
                 {
                     manegerService.Repair = r;
-                    manegerService.Repair.Manager.Repair.Clear();
                     new RegistrationView(true).ShowDialog();
                 };
 
@@ -112,7 +104,6 @@ namespace Client_Manager
                      == MessageBoxResult.OK)
                     {
                         r.State = State.Cancelled;
-                        r.Manager.Repair.Clear();
                         repairEntry.Visibility = Visibility.Collapsed;
                         manegerService.UploadUpdatedRepair(r);
                     }
@@ -130,6 +121,12 @@ namespace Client_Manager
             dataTable.ItemsSource = data;
             dataTable.IsReadOnly = true;
 
+            dataTable.AutoGeneratingColumn += (object sender, DataGridAutoGeneratingColumnEventArgs args) =>
+            {
+                if (IsFalseColumn(args.Column))
+                    args.Cancel = true;
+            };
+
             TextBox searchTbox = new TextBox();
 
             searchTbox.TextChanged += (object sender, TextChangedEventArgs args) =>
@@ -143,8 +140,21 @@ namespace Client_Manager
 
             entryPanel.Children.Add(searchTbox);
             entryPanel.Children.Add(dataTable);
+            
         }
-
+        private bool IsFalseColumn(DataGridColumn c)
+        {
+            return c.Header switch
+            {
+                "RepairTechnicians" => true,
+                "BonusTechnicians" => true,
+                "Client" => true,
+                "User" => true,
+                "Manager" => true,
+                "UserId" => true,
+                _ => false
+            };            
+        }
         private void backBtn_Click(object sender, RoutedEventArgs e)
         {
             Close();
@@ -160,14 +170,14 @@ namespace Client_Manager
             //Justification for the Button casting: Only a single Button instance's click event is tied to this method.
             MakeButtonActive((Button)sender);
             LoadRepairsViaPredicate(
-                (Repair r) => { return r.State == State.InProgress || r.State == State.New; });
+                (RepairView r) => { return r.State == State.InProgress || r.State == State.New; });
         }
 
         private void closedBtn_Click(object sender, RoutedEventArgs e)
         {
             MakeButtonActive((Button)sender);
             LoadRepairsViaPredicate(
-                (Repair r) => { return r.State == State.Cancelled || r.State == State.Done; });
+                (RepairView r) => { return r.State == State.Cancelled || r.State == State.Done; });
         }
 
         private void techniciansBtn_Click(object sender, RoutedEventArgs e)

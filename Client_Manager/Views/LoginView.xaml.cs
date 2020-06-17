@@ -1,5 +1,6 @@
 ﻿using Client_Manager.Models;
 using ModelProvider;
+using ModelProvider.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -41,10 +42,11 @@ namespace Client_Manager.Views
 
         private void loginBtn_Click(object sender, RoutedEventArgs e)
         {
-            User u = new User();
+            UserView u = new UserView();
             u.Username = usernameTbox.Text.ToString();
             u.Password = passwordBox.Password.ToString();
             u.isManager = true;
+            u.Email = null;
 
             if (ManagerService.GetInstance().ValidateUser(u))
             {               

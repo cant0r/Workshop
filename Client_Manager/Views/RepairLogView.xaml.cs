@@ -1,5 +1,6 @@
-﻿using Client_Manager.CustomControls;
-using Client_Manager.Models;
+﻿using Client_Manager.Models;
+using ModelProvider.ViewModels;
+using ModelProvider.Models;
 using ModelProvider;
 using System;
 using System.Collections.Generic;
@@ -12,15 +13,16 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Client_Manager.CustomControls;
 
 namespace Client_Manager
 {
     /// <summary>
     /// Interaction logic for RepairLogView.xaml
     /// </summary>
-    public partial class RepairLogView : Window
+    public partial class RepairJobLogView : Window
     {
-        public RepairLogView(long repairID)
+        public RepairJobLogView(long repairID)
         {
             InitializeComponent();
             LoadRepairLogs(repairID);
@@ -30,12 +32,12 @@ namespace Client_Manager
         {
             var repairLogs = ManagerService.GetInstance().RepairLogs.FindAll(l => l.Repair.Id == repairID);
             
-            foreach(RepairLog log in repairLogs)
+            foreach(RepairLogView log in repairLogs)
             {
                 var logEntry = new RepairLogEntry();
                 logEntry.techIDLbl.Content = log.TechnicianId.ToString();
                 logEntry.logTblock.Text = log.Description.ToString();
-                logEntry.dobLbl.Content = log.Date;
+                logEntry.dobLbl.Content = log.Date.ToShortDateString();
                 logEntryPanel.Children.Insert(0,logEntry);
             }
             repairJobIDlbl.Content = repairID.ToString();         
