@@ -1,4 +1,5 @@
 ﻿using ModelProvider;
+using ModelProvider.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -24,10 +25,10 @@ namespace Client_Technician.Models
             baseUri = "http://localhost:5000/api/workshop/technician";
             URIparts = new Dictionary<Type, string>()
             {
-                { typeof(Repair), "/repair" },
-                { typeof(RepairLog), "/logs" },
-                { typeof(User), "/users" },
-                { typeof(Technician), "/technicians" }
+                { typeof(RepairView), "/repair" },
+                { typeof(RepairLogView), "/logs" },
+                { typeof(UserView), "/users" },
+                { typeof(TechnicianView), "/technicians" }
             };
 
         }
@@ -63,12 +64,12 @@ namespace Client_Technician.Models
             return JsonConvert.DeserializeObject<List<TEntity>>(rawContent, parserSettings);
         }
        
-        public List<Technician> GetTechniciansByRepairId(Repair r)
+        public List<TechnicianView> GetTechniciansByRepairId(RepairView r)
         {
             string URIPart;
             try
             {
-                URIPart = URIparts[typeof(Technician)];
+                URIPart = URIparts[typeof(TechnicianView)];
             }
             catch (Exception e)
             {
@@ -82,14 +83,14 @@ namespace Client_Technician.Models
             }
             var rawContent = result.Content.ReadAsStringAsync().Result;
             var parserSettings = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore, MaxDepth = null };
-            return JsonConvert.DeserializeObject<List<Technician>>(rawContent, parserSettings);
+            return JsonConvert.DeserializeObject<List<TechnicianView>>(rawContent, parserSettings);
         }
-        public List<Repair> GetRepairsByTechnicianId(Technician r)
+        public List<RepairView> GetRepairsByTechnicianId(TechnicianView r)
         {
             string URIPart;
             try
             {
-                URIPart = URIparts[typeof(Repair)];
+                URIPart = URIparts[typeof(RepairView)];
             }
             catch (Exception e)
             {
@@ -103,13 +104,13 @@ namespace Client_Technician.Models
             }
             var rawContent = result.Content.ReadAsStringAsync().Result;
             var parserSettings = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore, MaxDepth = null };
-            var obj = JsonConvert.DeserializeObject<List<Repair>>(rawContent, parserSettings);
+            var obj = JsonConvert.DeserializeObject<List<RepairView>>(rawContent, parserSettings);
             return obj;
         }       
-        public void UpdateRepair(Repair repair)
+        public void UpdateRepair(RepairView repair)
         {
             using  HttpClient client = new HttpClient();
-            string URIPart = URIparts[typeof(Repair)];
+            string URIPart = URIparts[typeof(RepairView)];
             var options = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
             var json = JsonConvert.SerializeObject(repair, options);
             var rawData = new StringContent(json, Encoding.UTF8, "application/json");
@@ -121,9 +122,9 @@ namespace Client_Technician.Models
                 MessageBox.Show(result.ReasonPhrase, result.StatusCode.ToString());
             }
         }
-        public void UploadRepairLog(RepairLog repair)
+        public void UploadRepairLog(RepairLogView repair)
         {
-            string URIPart = URIparts[typeof(RepairLog)];
+            string URIPart = URIparts[typeof(RepairLogView)];
             var options = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
             var json = JsonConvert.SerializeObject(repair, options);
             var rawData = new StringContent(json, Encoding.UTF8, "application/json");
@@ -137,9 +138,9 @@ namespace Client_Technician.Models
         }
 
 
-        public bool ValidateUser(User u)
+        public bool ValidateUser(UserView u)
         {
-            string URIPart = URIparts[typeof(User)];
+            string URIPart = URIparts[typeof(UserView)];
             var options = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
             var json = JsonConvert.SerializeObject(u, options);
             var rawData = new StringContent(json, Encoding.UTF8, "application/json");
@@ -153,6 +154,7 @@ namespace Client_Technician.Models
             }
             return true;
         }
+      
 
         public void Dispose() => Dispose(true);
 

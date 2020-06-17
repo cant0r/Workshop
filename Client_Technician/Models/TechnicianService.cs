@@ -1,4 +1,6 @@
 ﻿using ModelProvider;
+using ModelProvider.Models;
+using ModelProvider.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -11,12 +13,12 @@ namespace Client_Technician.Models
 {
     public sealed class TechnicianService
     {
-        public List<Repair> Repairs { get; private set; }
-        public List<Technician> Technicians { get; private set; }
-        public List<RepairLog> RepairLogs { get; private set; }
+        public List<RepairView> Repairs { get; private set; }
+        public List<TechnicianView> Technicians { get; private set; }
+        public List<RepairLogView> RepairLogs { get; private set; }
 
 
-        public Technician CurrentTechnician { get; set; }
+        public TechnicianView CurrentTechnician { get; set; }
 
         private WorkshopClient workshopClient;
 
@@ -40,31 +42,31 @@ namespace Client_Technician.Models
 
         public void ParseDatabase()
         {          
-            Repairs = workshopClient.RetrieveEntities<Repair>() ?? new List<Repair>();
-            Technicians = workshopClient.RetrieveEntities<Technician>() ?? new List<Technician>();
-            RepairLogs = workshopClient.RetrieveEntities<RepairLog>() ?? new List<RepairLog>();
+            Repairs = workshopClient.RetrieveEntities<RepairView>() ?? new List<RepairView>();
+            Technicians = workshopClient.RetrieveEntities<TechnicianView>() ?? new List<TechnicianView>();
+            RepairLogs = workshopClient.RetrieveEntities<RepairLogView>() ?? new List<RepairLogView>();
         }
 
      
-        public void UpdateRepair(Repair r)
+        public void UpdateRepair(RepairView r)
         {
             var newTechnician = r.RepairTechnicians?.FirstOrDefault(rt => rt.TechnicianId == CurrentTechnician.Id);
             if(newTechnician is null)
             { 
-                r.RepairTechnicians.Add(new RepairTechnician {  RepairID = r.Id,
+                r.RepairTechnicians.Add(new RepairTechnicianView {  RepairID = r.Id,
                     TechnicianId = CurrentTechnician.Id });
             }
             workshopClient.UpdateRepair(r);
         }
-        public void UploadRepairLog(RepairLog rl)
+        public void UploadRepairLog(RepairLogView rl)
         {        
             workshopClient.UploadRepairLog(rl);
         }
-        public bool ValidateUser(User u)
+        public bool ValidateUser(UserView u)
         {
             var valid = workshopClient.ValidateUser(u);
-            Technician tech = 
-                (from techs in Technicians ?? new List<Technician>()
+            TechnicianView tech = 
+                (from techs in Technicians ?? new List<TechnicianView>()
                  where techs.User.Username == u.Username
                  select techs).FirstOrDefault();
            
@@ -72,17 +74,17 @@ namespace Client_Technician.Models
             return valid && tech != null;
         }
 
-        public IEnumerable<Repair> GetRepairsByTechnicianId(Technician t)
+        public IEnumerable<RepairView> GetRepairsByTechnicianId(TechnicianView t)
         {
             return workshopClient.GetRepairsByTechnicianId(t);
         }
-        public IEnumerable<Repair> GetAvailableRepairs()
+        public IEnumerable<RepairView> GetAvailableRepairs()
         {        
             var result = from availables in Repairs
                    where  availables.State == State.New ||
                      (availables.State == State.InProgress &&
                            availables.RepairTechnicians
-                            .FirstOrDefault((RepairTechnician rt) => { return rt.TechnicianId == CurrentTechnician.Id; }) == null)
+                            .FirstOrDefault((RepairTechnicianView rt) => { return rt.TechnicianId == CurrentTechnician.Id; }) == null)
                    select availables;
 
             return result;
