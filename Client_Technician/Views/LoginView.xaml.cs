@@ -1,5 +1,6 @@
 ﻿using Client_Technician.Models;
 using ModelProvider;
+using ModelProvider.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -43,7 +44,7 @@ namespace Client_Technician.Views
 
         private void loginBtn_Click(object sender, RoutedEventArgs e)
         {
-            User u = new User();
+            UserView u = new UserView();
             u.Username = usernameTbox.Text.ToString();
             u.Password = passwordBox.Password.ToString();
             u.isManager = false;

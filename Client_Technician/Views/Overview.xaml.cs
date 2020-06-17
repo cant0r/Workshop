@@ -1,6 +1,8 @@
 ﻿using Client_Technician.CustomControls;
 using Client_Technician.Models;
 using ModelProvider;
+using ModelProvider.Models;
+using ModelProvider.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +35,7 @@ namespace Client_Technician.Views
             var myRepairs = technicianService.GetRepairsByTechnicianId(technicianService.CurrentTechnician);
             myRepairs = from reps in myRepairs where reps.State == State.InProgress select reps;
 
-            foreach (Repair r in myRepairs)
+            foreach (RepairView r in myRepairs)
             {
                 var repairEntry = new RepairJobEntry();
                 repairEntry.descriptionTblock.Text = r.Description;
@@ -43,20 +45,19 @@ namespace Client_Technician.Views
                 repairEntry.managerLbl.Content = r.Manager?.User?.Username ?? "adminInside%";
 
                 List<long> techIDs = new List<long>();
-                List<Technician> techs = new List<Technician>();
+                List<TechnicianView> techs = new List<TechnicianView>();
                 if (r.RepairTechnicians != null)
                     techIDs = (from repair in r.RepairTechnicians
                                where repair.RepairID == r.Id
                                select repair.TechnicianId).ToList();
                 if (technicianService.Technicians != null)
                     techs = technicianService.Technicians.FindAll(t => techIDs.Contains(t.Id));
-                foreach (Technician t in techs)
+                foreach (TechnicianView t in techs)
                 {
                     repairEntry.techsLbox.Items.Add(t.Name);
                 }
                 repairEntry.repairLogBtn.Click += (object sender, RoutedEventArgs args) =>
                 {
-                    
                     topbarpanel.Children.Clear();
                     entryPanel.Children.Clear();
                     LoadRepairLogs(r.Id);
@@ -67,7 +68,6 @@ namespace Client_Technician.Views
                     if (MessageBox.Show("Leadás után a munka automatikusan írásvédett lesz.", "Biztosan leadja a munkát?", MessageBoxButton.YesNo)
                      == MessageBoxResult.Yes)
                         repairEntry.Visibility = Visibility.Collapsed;
-                    r.Manager?.Repair?.Clear();
                     technicianService.UpdateRepair(r);
                 };
 
@@ -107,13 +107,12 @@ namespace Client_Technician.Views
                         var rle = (RepairLogEntry)uiElement;
                         if (!rle.Modified)
                             continue;
-                        var rlog = new RepairLog();
+                        var rlog = new RepairLogView();
                         rlog.Date = DateTime.Parse(rle.dobLbl.Content.ToString());
                         rlog.TechnicianId = Convert.ToInt64(rle.techIDLbl.Content.ToString());
                         rlog.Description = rle.logTblock.Text;
                         rlog.Id = rle.LogId;
                         rlog.Repair = technicianService.Repairs.FirstOrDefault(r => r.Id == repairID);
-                        rlog.Repair?.Manager?.Repair?.Clear();
                         technicianService.UploadRepairLog(rlog);
                     }
                 }
@@ -121,12 +120,12 @@ namespace Client_Technician.Views
             };
             topbarpanel.Children.Add(topbar);
 
-            foreach (RepairLog log in repairLogs)
+            foreach (RepairLogView log in repairLogs)
             {
                 var logEntry = new RepairLogEntry();
                 logEntry.techIDLbl.Content = log.TechnicianId.ToString();
                 logEntry.logTblock.Text = log.Description.ToString();              
-                logEntry.dobLbl.Content = log.Date;
+                logEntry.dobLbl.Content = log.Date.ToShortDateString();
                 logEntry.LogId = log.Id;
                 entryPanel.Children.Insert(0,logEntry);                
             }
@@ -136,7 +135,7 @@ namespace Client_Technician.Views
         {
             var myRepairs = technicianService.GetAvailableRepairs();
 
-            foreach (Repair r in myRepairs)
+            foreach (RepairView r in myRepairs)
             {
                 var repairEntry = new RepairJobEntry();
                 repairEntry.descriptionTblock.Text = r.Description;
@@ -146,14 +145,14 @@ namespace Client_Technician.Views
                 repairEntry.managerLbl.Content = r.Manager?.User?.Username ?? "adminInside%";
 
                 List<long> techIDs = new List<long>();
-                List<Technician> techs = new List<Technician>();
+                List<TechnicianView> techs = new List<TechnicianView>();
                 if (r.RepairTechnicians != null)
                     techIDs = (from repair in r.RepairTechnicians
                                where repair.RepairID == r.Id
                                select repair.TechnicianId).ToList();
                 if (technicianService.Technicians != null)
                     techs = technicianService.Technicians.FindAll(t => techIDs.Contains(t.Id));
-                foreach (Technician t in techs)
+                foreach (TechnicianView t in techs)
                 {
                     repairEntry.techsLbox.Items.Add(t.Name);
                 }
@@ -161,9 +160,8 @@ namespace Client_Technician.Views
                 repairEntry.doneBtn.Click += (object sender, RoutedEventArgs args) =>
                 {
                     r.State = State.InProgress;
-                    r.Manager.Repair.Clear();
                     r.RepairTechnicians.Add(
-                        new RepairTechnician
+                        new RepairTechnicianView
                         {
                             RepairID = r.Id,
                             TechnicianId = technicianService.CurrentTechnician.Id
