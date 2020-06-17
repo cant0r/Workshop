@@ -19,7 +19,7 @@ namespace Server.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("ModelProvider.Auto", b =>
+            modelBuilder.Entity("ModelProvider.Models.Auto", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -51,7 +51,7 @@ namespace Server.Migrations
                     b.ToTable("Automobiles");
                 });
 
-            modelBuilder.Entity("ModelProvider.Bonus", b =>
+            modelBuilder.Entity("ModelProvider.Models.Bonus", b =>
                 {
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(450)");
@@ -64,7 +64,7 @@ namespace Server.Migrations
                     b.ToTable("Bonuses");
                 });
 
-            modelBuilder.Entity("ModelProvider.BonusRepair", b =>
+            modelBuilder.Entity("ModelProvider.Models.BonusRepair", b =>
                 {
                     b.Property<long>("RepairID")
                         .HasColumnType("bigint");
@@ -79,7 +79,7 @@ namespace Server.Migrations
                     b.ToTable("BonusRepairs");
                 });
 
-            modelBuilder.Entity("ModelProvider.Client", b =>
+            modelBuilder.Entity("ModelProvider.Models.Client", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -87,7 +87,8 @@ namespace Server.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -95,22 +96,23 @@ namespace Server.Migrations
                         .HasMaxLength(64);
 
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email")
+                        .IsUnique();
+
                     b.ToTable("Clients");
                 });
 
-            modelBuilder.Entity("ModelProvider.Manager", b =>
+            modelBuilder.Entity("ModelProvider.Models.Manager", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -130,7 +132,7 @@ namespace Server.Migrations
                     b.ToTable("Managers");
                 });
 
-            modelBuilder.Entity("ModelProvider.Repair", b =>
+            modelBuilder.Entity("ModelProvider.Models.Repair", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -161,7 +163,7 @@ namespace Server.Migrations
                     b.ToTable("Repairs");
                 });
 
-            modelBuilder.Entity("ModelProvider.RepairLog", b =>
+            modelBuilder.Entity("ModelProvider.Models.RepairLog", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -188,7 +190,7 @@ namespace Server.Migrations
                     b.ToTable("RepairLogs");
                 });
 
-            modelBuilder.Entity("ModelProvider.RepairTechnician", b =>
+            modelBuilder.Entity("ModelProvider.Models.RepairTechnician", b =>
                 {
                     b.Property<long>("RepairID")
                         .HasColumnType("bigint");
@@ -203,15 +205,12 @@ namespace Server.Migrations
                     b.ToTable("RepairTechnicians");
                 });
 
-            modelBuilder.Entity("ModelProvider.Technician", b =>
+            modelBuilder.Entity("ModelProvider.Models.Technician", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -230,12 +229,15 @@ namespace Server.Migrations
                     b.ToTable("Technicians");
                 });
 
-            modelBuilder.Entity("ModelProvider.User", b =>
+            modelBuilder.Entity("ModelProvider.Models.User", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -250,85 +252,89 @@ namespace Server.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
+
                     b.HasIndex("Username")
                         .IsUnique();
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ModelProvider.Auto", b =>
+            modelBuilder.Entity("ModelProvider.Models.Auto", b =>
                 {
-                    b.HasOne("ModelProvider.Client", "Client")
+                    b.HasOne("ModelProvider.Models.Client", "Client")
                         .WithMany()
                         .HasForeignKey("ClientId");
                 });
 
-            modelBuilder.Entity("ModelProvider.BonusRepair", b =>
+            modelBuilder.Entity("ModelProvider.Models.BonusRepair", b =>
                 {
-                    b.HasOne("ModelProvider.Bonus", "Bonus")
+                    b.HasOne("ModelProvider.Models.Bonus", "Bonus")
                         .WithMany("BonusRepairs")
                         .HasForeignKey("BonusName")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ModelProvider.Repair", "Repair")
+                    b.HasOne("ModelProvider.Models.Repair", "Repair")
                         .WithMany("BonusRepairs")
                         .HasForeignKey("RepairID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ModelProvider.Manager", b =>
+            modelBuilder.Entity("ModelProvider.Models.Manager", b =>
                 {
-                    b.HasOne("ModelProvider.User", "User")
+                    b.HasOne("ModelProvider.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ModelProvider.Repair", b =>
+            modelBuilder.Entity("ModelProvider.Models.Repair", b =>
                 {
-                    b.HasOne("ModelProvider.Auto", "Auto")
+                    b.HasOne("ModelProvider.Models.Auto", "Auto")
                         .WithMany()
                         .HasForeignKey("AutoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ModelProvider.Manager", "Manager")
+                    b.HasOne("ModelProvider.Models.Manager", "Manager")
                         .WithMany("Repair")
                         .HasForeignKey("ManagerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ModelProvider.RepairLog", b =>
+            modelBuilder.Entity("ModelProvider.Models.RepairLog", b =>
                 {
-                    b.HasOne("ModelProvider.Repair", "Repair")
+                    b.HasOne("ModelProvider.Models.Repair", "Repair")
                         .WithMany()
                         .HasForeignKey("RepairId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ModelProvider.RepairTechnician", b =>
+            modelBuilder.Entity("ModelProvider.Models.RepairTechnician", b =>
                 {
-                    b.HasOne("ModelProvider.Repair", "Repair")
+                    b.HasOne("ModelProvider.Models.Repair", "Repair")
                         .WithMany("RepairTechnicians")
                         .HasForeignKey("RepairID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ModelProvider.Technician", "Technician")
+                    b.HasOne("ModelProvider.Models.Technician", "Technician")
                         .WithMany("RepairTechnicians")
                         .HasForeignKey("TechnicianId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ModelProvider.Technician", b =>
+            modelBuilder.Entity("ModelProvider.Models.Technician", b =>
                 {
-                    b.HasOne("ModelProvider.User", "User")
+                    b.HasOne("ModelProvider.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

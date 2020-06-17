@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Server.Migrations
 {
-    public partial class http : Migration
+    public partial class coolZone : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -26,8 +26,8 @@ namespace Server.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(maxLength: 64, nullable: false),
-                    Email = table.Column<string>(nullable: true),
-                    PhoneNumber = table.Column<string>(nullable: true)
+                    Email = table.Column<string>(nullable: false),
+                    PhoneNumber = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -41,6 +41,7 @@ namespace Server.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Username = table.Column<string>(nullable: false),
+                    Email = table.Column<string>(nullable: true),
                     Password = table.Column<string>(nullable: false),
                     isManager = table.Column<bool>(nullable: false)
                 },
@@ -78,7 +79,6 @@ namespace Server.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(maxLength: 64, nullable: false),
-                    Email = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
                     UserId = table.Column<long>(nullable: false)
                 },
@@ -100,7 +100,6 @@ namespace Server.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: false),
-                    Email = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
                     UserId = table.Column<long>(nullable: false)
                 },
@@ -231,6 +230,12 @@ namespace Server.Migrations
                 column: "BonusName");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Clients_Email",
+                table: "Clients",
+                column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Managers_UserId",
                 table: "Managers",
                 column: "UserId");
@@ -259,6 +264,13 @@ namespace Server.Migrations
                 name: "IX_Technicians_UserId",
                 table: "Technicians",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Email",
+                table: "Users",
+                column: "Email",
+                unique: true,
+                filter: "[Email] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Username",
