@@ -54,6 +54,7 @@
 
 
             <ListBox Grid.Row="2" Grid.Column="2" Width="Auto" Height="Auto" ScrollViewer.CanContentScroll="True" x:Name="techsLbox" Background="#7ec8e3"
+                      FontSize="20pt"
                       Foreground="#05445e">
             </ListBox>
         </Grid>
