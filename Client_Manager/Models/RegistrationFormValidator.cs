@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Net.Mail;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -10,6 +11,13 @@ namespace Client_Manager.Models
 {
     public class RegistrationFormValidator
     {
+        private ManagerService manager = ManagerService.GetInstance();
+        private bool Update { get; set; }
+
+        public RegistrationFormValidator(bool update)
+        {
+            Update = update;
+        }
         public bool ValidateClientInput(List<TextBox> controls)
         {
             Regex fullNameRegex = new Regex(@"[A-Za-z]+ [A-Za-z]+( [A-Za-z]+)*", RegexOptions.Compiled);
@@ -34,7 +42,7 @@ namespace Client_Manager.Models
 
             try
             {
-                if (controls[2]?.Text == "" || 
+                if (controls[2]?.Text == "" || (!Update && !manager.ValidateClientEmail(controls[2]?.Text)) ||
                     !(controls[2]?.Text.ToString() == new MailAddress(controls[2]?.Text.ToString()).Address))
                     emailValid = false;
 
@@ -69,8 +77,14 @@ namespace Client_Manager.Models
                     t.Foreground = new TextBox().Foreground;
                 }
             }
-
-            return result;
+            var valid = Regex.IsMatch(controls[2]?.Text, @"[A-Z0-9]+([\s\S\-]*[A-Z0-9]*)*");
+            if(valid)
+                valid = Update || manager.ValidateLicencePlate(controls[2]?.Text);
+            if(!valid)
+            {
+                controls[2].Foreground = Brushes.Red;
+            }
+            return result & valid;
         }
 
         public bool ValidateCostValue(TextBox t)

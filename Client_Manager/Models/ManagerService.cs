@@ -1,4 +1,5 @@
 ﻿using ModelProvider;
+using ModelProvider.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -10,16 +11,16 @@ namespace Client_Manager.Models
 {
     public sealed class ManagerService
     {
-        public List<Auto> Autos { get; private set; }
-        public List<Client> Clients { get; private set; }
-        public List<Repair> Repairs { get; private set; }
-        public List<RepairLog> RepairLogs { get; private set; }
-        public List<Technician> Technicians { get; private set; }
-        public List<Manager> Managers { get; private set; }
-        public List<BonusRepair> BonusRepairs { get; private set; }
-        public List<Bonus> Bonuses { get; private set; }
-        public Manager CurrentManager { get; set; }
-        public Repair Repair { get; set; }
+        public List<AutoView> Autos { get; private set; }
+        public List<ClientView> Clients { get; private set; }
+        public List<RepairView> Repairs { get; private set; }
+        public List<RepairLogView> RepairLogs { get; private set; }
+        public List<TechnicianView> Technicians { get; private set; }
+        public List<ManagerView> Managers { get; private set; }
+        public List<BonusRepairView> BonusRepairs { get; private set; }
+        public List<BonusView> Bonuses { get; private set; }
+        public ManagerView CurrentManager { get; set; }
+        public RepairView Repair { get; set; }
 
         private WorkshopClient workshopClient;
 
@@ -43,35 +44,46 @@ namespace Client_Manager.Models
 
         public void ParseDatabase()
         {
-            Autos = workshopClient.RetrieveEntities<Auto>() ?? new List<Auto>();
-            Clients = workshopClient.RetrieveEntities<Client>() ?? new List<Client>();
-            Repairs = workshopClient.RetrieveEntities<Repair>() ?? new List<Repair>();
-            RepairLogs = workshopClient.RetrieveEntities<RepairLog>() ?? new List<RepairLog>();
-            Technicians = workshopClient.RetrieveEntities<Technician>() ?? new List<Technician>();
-            Managers = workshopClient.RetrieveEntities<Manager>() ?? new List<Manager>();
-            Bonuses = workshopClient.RetrieveEntities<Bonus>() ?? new List<Bonus>();
-            BonusRepairs = workshopClient.RetrieveEntities<BonusRepair>() ?? new List<BonusRepair>();
+            Autos = workshopClient.RetrieveEntities<AutoView>() ?? new List<AutoView>();
+            Clients = workshopClient.RetrieveEntities<ClientView>() ?? new List<ClientView>();
+            Repairs = workshopClient.RetrieveEntities<RepairView>() ?? new List<RepairView>();
+            RepairLogs = workshopClient.RetrieveEntities<RepairLogView>() ?? new List<RepairLogView>();
+            Technicians = workshopClient.RetrieveEntities<TechnicianView>() ?? new List<TechnicianView>();
+            Managers = workshopClient.RetrieveEntities<ManagerView>() ?? new List<ManagerView>();
+            Bonuses = workshopClient.RetrieveEntities<BonusView>() ?? new List<BonusView>();
+            BonusRepairs = workshopClient.RetrieveEntities<BonusRepairView>() ?? new List<BonusRepairView>();
         }
 
-        public void UploadRepair(Repair r)
+        public void UploadRepair(RepairView r)
         {
             workshopClient.UploadRepair(r);
         }
-        public void UploadUpdatedRepair(Repair r)
+        public void UploadUpdatedRepair(RepairView r)
         {
             workshopClient.UploadUpdatedRepair(r);
         }
-        public bool ValidateUser(User u)
+        public bool ValidateUser(UserView u)
         {
             var valid = workshopClient.ValidateUser(u);
-            Manager manager = 
-                (from managers in Managers ?? new List<Manager>()
+            ManagerView manager = 
+                (from managers in Managers ?? new List<ManagerView>()
                  where managers.User.Username == u.Username 
                  select managers).FirstOrDefault(); 
             
             CurrentManager = manager;
-            Repair = new Repair();
+            Repair = new RepairView();
             return valid && manager != null;
+        }
+
+        public bool ValidateLicencePlate(string a)
+        {
+            var valid = workshopClient.ValidateLicencePlate(a);
+            return valid;
+        }
+        public bool ValidateClientEmail(string m)
+        {
+            var valid = workshopClient.ValidateClientEmail(m);
+            return valid;
         }
 
     }

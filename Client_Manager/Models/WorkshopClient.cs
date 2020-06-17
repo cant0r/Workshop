@@ -1,9 +1,11 @@
 ﻿using ModelProvider;
+using ModelProvider.ViewModels;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 
 namespace Client_Manager.Models
@@ -21,15 +23,15 @@ namespace Client_Manager.Models
             baseUri = "https://localhost:5001/api/workshop/manager";
             URIparts = new Dictionary<Type, string>()
             {
-                { typeof(Auto), "/autos" },
-                { typeof(Repair), "/repair" },
-                { typeof(RepairLog), "/logs" },
-                { typeof(Technician), "/technicians" },
-                { typeof(Client), "/clients" },
-                { typeof(Bonus), "/bonus" },
-                { typeof(Manager), "/managers" },
-                { typeof(User), "/users" },
-                { typeof(BonusRepair), "/br" }
+                { typeof(AutoView), "/autos" },
+                { typeof(RepairView), "/repair" },
+                { typeof(RepairLogView), "/logs" },
+                { typeof(TechnicianView), "/technicians" },
+                { typeof(ClientView), "/clients" },
+                { typeof(BonusView), "/bonus" },
+                { typeof(ManagerView), "/managers" },
+                { typeof(UserView), "/users" },
+                { typeof(BonusRepairView), "/br" }
             };
 
         }
@@ -64,9 +66,9 @@ namespace Client_Manager.Models
             var parserSettings = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
             return JsonConvert.DeserializeObject<List<TEntity>>(rawContent, parserSettings);
         }
-        public void UploadRepair(Repair repair)
+        public void UploadRepair(RepairView repair)
         {
-            string URIPart = URIparts[typeof(Repair)];
+            string URIPart = URIparts[typeof(RepairView)];
             var options = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
             var json = JsonConvert.SerializeObject(repair, options);
             var rawData = new StringContent(json, Encoding.UTF8, "application/json");
@@ -78,9 +80,9 @@ namespace Client_Manager.Models
                 MessageBox.Show(result.ReasonPhrase, result.StatusCode.ToString());
             }
         }
-        public void UploadUpdatedRepair(Repair repair)
+        public void UploadUpdatedRepair(RepairView repair)
         {         
-            string URIPart = URIparts[typeof(Repair)];
+            string URIPart = URIparts[typeof(RepairView)];
             var options = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
             var json = JsonConvert.SerializeObject(repair, options);
             var rawData = new StringContent(json, Encoding.UTF8, "application/json");
@@ -93,9 +95,9 @@ namespace Client_Manager.Models
             }
         }
 
-        public bool ValidateUser(User u)
+        public bool ValidateUser(UserView u)
         {
-            string URIPart = URIparts[typeof(User)];
+            string URIPart = URIparts[typeof(UserView)];
             var options = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
             var json = JsonConvert.SerializeObject(u, options);
             var rawData = new StringContent(json, Encoding.UTF8, "application/json");
@@ -109,7 +111,33 @@ namespace Client_Manager.Models
             }
             return true;
         }
-
+        public bool ValidateLicencePlate(string u)
+        {
+            string URIPart = URIparts[typeof(AutoView)];
+            var options = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+           
+            var result = httpClient.GetAsync(baseUri + URIPart + "/plate"+ "/"+u).Result;
+            var response = result.Content.ReadAsStringAsync().Result;
+            if (!result.IsSuccessStatusCode)
+            {
+                MessageBox.Show(result.ReasonPhrase, result.StatusCode.ToString());                
+            }
+            var valid =  JsonConvert.DeserializeObject(response, options).ToString();
+            return Regex.IsMatch(valid, @"[Tt]rue");
+        }
+        public bool ValidateClientEmail(string u)
+        {
+            string URIPart = URIparts[typeof(ClientView)];
+            var options = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };      
+            var result = httpClient.GetAsync(baseUri + URIPart + "/email/"+u).Result;
+            var response = result.Content.ReadAsStringAsync().Result;
+            if (!result.IsSuccessStatusCode)
+            {
+                MessageBox.Show(result.ReasonPhrase, result.StatusCode.ToString());
+            }
+            var valid = JsonConvert.DeserializeObject(response, options).ToString();
+            return Regex.IsMatch(valid, @"[Tt]rue");
+        }
         public void Dispose() => Dispose(true);
 
         protected virtual void Dispose(bool disposing)
