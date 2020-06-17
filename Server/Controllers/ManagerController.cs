@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ModelProvider;
+using ModelProvider.ViewModels;
+using ModelProvider.Models;
 using Server.Repositories;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,7 +16,7 @@ namespace Server.Controllers
     {
         [Route("repair")]
         [HttpGet]
-        public ActionResult<IEnumerable<Repair>> GetAllRepairs()
+        public ActionResult<IEnumerable<RepairView>> GetAllRepairs()
         {
             var workshopRepo = new WorkshopRepository();
             var repairs = workshopRepo.GetRepairs();
@@ -27,7 +27,7 @@ namespace Server.Controllers
         }
         [Route("repair")]
         [HttpPost]
-        public ActionResult CreateRepair(Repair repair)
+        public ActionResult CreateRepair(RepairView repair)
         {
             var workshopRepo = new WorkshopRepository();
             workshopRepo.CreateRepair(repair);
@@ -35,23 +35,15 @@ namespace Server.Controllers
         }
         [Route("repair")]
         [HttpPut]
-        public ActionResult UpdateRepair([FromBody] Repair repair)
+        public ActionResult UpdateRepair(RepairView repair)
         {
             var workshopRepo = new WorkshopRepository();            
             workshopRepo.UpdateRepair(repair);
             return Ok();
-        }
-        [Route("repair")]
-        [HttpDelete]
-        public ActionResult AbortRepair(Repair repair)
-        {
-            var workshopRepo = new WorkshopRepository();
-            workshopRepo.AbortRepair(repair);
-            return Ok();
-        }
+        }       
         [Route("logs")]
         [HttpGet]
-        public ActionResult<IEnumerable<RepairLog>> GetRepairLogs()
+        public ActionResult<IEnumerable<RepairLogView>> GetRepairLogs()
         {
             var workshopRepo = new WorkshopRepository();
             var repairs = workshopRepo.GetRepairLogs();
@@ -62,7 +54,7 @@ namespace Server.Controllers
         }
         [Route("technicians")]
         [HttpGet]
-        public ActionResult<IEnumerable<Technician>> GetTechnicians()
+        public ActionResult<IEnumerable<TechnicianView>> GetTechnicians()
         {
             var workshopRepo = new WorkshopRepository();
             var techs = workshopRepo.GetTechnicians();
@@ -73,7 +65,7 @@ namespace Server.Controllers
         }
         [Route("technicians/{repairID:long}")]
         [HttpGet]
-        public ActionResult<IEnumerable<Technician>> GetTechnicians(long repairID)
+        public ActionResult<IEnumerable<TechnicianView>> GetTechnicians(long repairID)
         {
             var workshopRepo = new WorkshopRepository();
             var techs = workshopRepo.GetTechniciansByRepairID(repairID);
@@ -84,7 +76,7 @@ namespace Server.Controllers
         }
         [Route("clients")]
         [HttpGet]
-        public ActionResult<IEnumerable<Client>> GetClients()
+        public ActionResult<IEnumerable<ClientView>> GetClients()
         {
             var workshopRepo = new WorkshopRepository();
             var clients = workshopRepo.GetClients();
@@ -95,7 +87,7 @@ namespace Server.Controllers
         }
         [Route("clients")]
         [HttpPost]
-        public ActionResult RegisterClient(Client client)
+        public ActionResult RegisterClient(ClientView client)
         {
             var workshopRepo = new WorkshopRepository();
             var clients = workshopRepo.GetClients();            
@@ -112,9 +104,20 @@ namespace Server.Controllers
             }
                
         }
+        [Route("clients/email/{m}")]
+        [HttpGet]
+        public ActionResult ValidateClientEmail(string m)
+        {
+            var workshopRepo = new WorkshopRepository();
+            var autos = workshopRepo.ValidateClientEmail(m);
+            if (!autos)
+                return NotFound(false);
+            else
+                return Ok(true);
+        }
         [Route("autos")]
         [HttpGet]
-        public ActionResult<IEnumerable<Auto>> GetAutomobiles()
+        public ActionResult<IEnumerable<AutoView>> GetAutomobiles()
         {
             var workshopRepo = new WorkshopRepository();
             var autos = workshopRepo.GetAutomobiles();
@@ -123,30 +126,22 @@ namespace Server.Controllers
             else
                 return Ok(autos);
         }
-        [Route("autos")]
-        [HttpPost]
-        public ActionResult RegisterAuto(Auto auto)
+
+        [Route("autos/plate/{plate}")]
+        [HttpGet]
+        public ActionResult ValidatePlate(string plate)
         {
             var workshopRepo = new WorkshopRepository();
-            var autos = workshopRepo.GetAutomobiles();
-            var clientRepo = new GenericRepository<Client>();
-            auto.Client = clientRepo.GetAll().Single(c => c.Id == auto.Client.Id);
-            if (autos is null)
-                return NotFound();
-            else if (autos.Contains(auto))
-            {
-                return Ok("Already registered.");
-            }
+            var autos = workshopRepo.ValidatePlate(plate);
+            if (!autos)
+                return NotFound(false);
             else
-            {
-                workshopRepo.RegisterAuto(auto);
-                return Ok();
-            }
-
+                return Ok(true);
         }
+
         [Route("bonus")]
         [HttpGet]
-        public ActionResult<IEnumerable<Bonus>> GetBonuses()
+        public ActionResult<IEnumerable<BonusView>> GetBonuses()
         {
             var repo = new WorkshopRepository();
             var bonuses = repo.GetBonuses();
@@ -157,7 +152,7 @@ namespace Server.Controllers
         }
         [Route("br")]
         [HttpGet]
-        public ActionResult<IEnumerable<BonusRepair>> GetBonusRepairs()
+        public ActionResult<IEnumerable<BonusRepairView>> GetBonusRepairs()
         {
             var repo = new WorkshopRepository();
             var bonuses = repo.GetBonusRepairs();
@@ -168,7 +163,7 @@ namespace Server.Controllers
         }
         [Route("managers")]
         [HttpGet]
-        public ActionResult<IEnumerable<Manager>> GetManagers()
+        public ActionResult<IEnumerable<ManagerView>> GetManagers()
         {
             var repo = new WorkshopRepository();
             var bonuses = repo.GetManagers();
@@ -180,14 +175,13 @@ namespace Server.Controllers
 
         [Route("users")]
         [HttpPost]
-        public ActionResult ValidateUser(User u)
+        public ActionResult ValidateUser(UserView u)
         {
-            var repo = new GenericRepository<User>();
+            var repo = new WorkshopRepository().GetUsers();
 
-            var result = (from users in repo.GetAll() where u.isManager == true && users.Username == u.Username
+            var result = (from users in repo where u.isManager == true && users.Username == u.Username
                          && System.Text.Encoding.UTF8.GetString(System.Convert.FromBase64String(users.Password))
                             == u.Password select users).FirstOrDefault();
-
 
             if (result is null)
                 return NotFound(false);

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Mvc;
 using ModelProvider;
+using ModelProvider.ViewModels;
 using Server.Repositories;
 
 namespace Server.Controllers
@@ -14,7 +15,7 @@ namespace Server.Controllers
     {
         [Route("repair")]
         [HttpGet]
-        public ActionResult<IEnumerable<Repair>> GetRepairJobs()
+        public ActionResult<IEnumerable<RepairView>> GetRepairJobs()
         {
             var workshopRepo = new WorkshopRepository();
             var repairs = workshopRepo.GetRepairs();
@@ -24,7 +25,7 @@ namespace Server.Controllers
         }
         [Route("repair/{techID:long}")]
         [HttpGet]
-        public ActionResult<IEnumerable<Repair>> GetRepairs(long techID)
+        public ActionResult<IEnumerable<RepairView>> GetRepairs(long techID)
         {
             var workshopRepo = new WorkshopRepository();
             var techs = workshopRepo.GetRepairsByTechnicianID(techID);
@@ -35,7 +36,7 @@ namespace Server.Controllers
         }
         [Route("repair")]
         [HttpPut]
-        public ActionResult TakeRepairJob(Repair repair)
+        public ActionResult TakeRepairJob(RepairView repair)
         {
             var workshopRepo = new WorkshopRepository();
             if (repair is null)
@@ -45,7 +46,7 @@ namespace Server.Controllers
         }     
         [Route("logs")]
         [HttpGet]
-        public ActionResult<IEnumerable<RepairLog>> GetRepairLogs()
+        public ActionResult<IEnumerable<RepairLogView>> GetRepairLogs()
         {
             var workshopRepo = new WorkshopRepository();
             var logs = workshopRepo.GetRepairLogs();
@@ -55,21 +56,21 @@ namespace Server.Controllers
         }
         [Route("logs")]
         [HttpPost]
-        public ActionResult AddRepairLog(RepairLog log)
+        public ActionResult AddRepairLog(RepairLogView log)
         {            
             var workshopRepo = new WorkshopRepository();
 
             if (workshopRepo.GetRepairLogs().SingleOrDefault(rl => rl.Id == log.Id) != null)
                 return Ok();
 
-            var repairRepo = new GenericRepository<Repair>();
-            log.Repair = repairRepo.GetAll().Single(r => r.Id == log.Repair.Id);
+            var repairRepo = workshopRepo.GetRepairs();
+            log.Repair = repairRepo.Single(r => r.Id == log.Repair.Id);
             workshopRepo.AddRepairLog(log);
             return Ok();
         }
         [Route("logs/{repairID:long}")]
         [HttpGet]
-        public ActionResult<IEnumerable<RepairLog>> GetRepairLogs(long repairID)
+        public ActionResult<IEnumerable<RepairLogView>> GetRepairLogs(long repairID)
         {
             var workshopRepo = new WorkshopRepository();
             var logs = workshopRepo.GetRepairLogs(repairID);
@@ -79,10 +80,10 @@ namespace Server.Controllers
         }     
         [Route("logs")]
         [HttpPut]
-        public ActionResult UpdateRepairLog(RepairLog log)
+        public ActionResult UpdateRepairLog(RepairLogView log)
         {
             var workshopRepo = new WorkshopRepository();
-            RepairLog found = workshopRepo.GetRepairLogs(log.Repair.Id).SingleOrDefault(rl => rl.Id == log.Id);
+            RepairLogView found = workshopRepo.GetRepairLogs(log.Repair.Id).SingleOrDefault(rl => rl.Id == log.Id);
            
             
             if (found is null)
@@ -99,11 +100,11 @@ namespace Server.Controllers
         }
         [Route("users")]
         [HttpPost]
-        public ActionResult ValidateUser(User u)
+        public ActionResult ValidateUser(UserView u)
         {
-            var repo = new GenericRepository<User>();
+            var repo = new WorkshopRepository().GetUsers();
 
-            var result = (from users in repo.GetAll()
+            var result = (from users in repo
                           where users.Username == u.Username &&
                           System.Text.Encoding.UTF8.GetString(System.Convert.FromBase64String(users.Password)) == u.Password  
                           select users).FirstOrDefault();
@@ -116,7 +117,7 @@ namespace Server.Controllers
         }
         [Route("technicians")]
         [HttpGet]
-        public ActionResult<IEnumerable<Technician>> GetTechnicians()
+        public ActionResult<IEnumerable<TechnicianView>> GetTechnicians()
         {
             var workshopRepo = new WorkshopRepository();
             var techs = workshopRepo.GetTechnicians();
@@ -127,7 +128,7 @@ namespace Server.Controllers
         }
         [Route("technicians/{repairID:long}")]
         [HttpGet]
-        public ActionResult<IEnumerable<Technician>> GetTechniciansByRepairID(long repairID)
+        public ActionResult<IEnumerable<TechnicianView>> GetTechniciansByRepairID(long repairID)
         {
             var workshopRepo = new WorkshopRepository();
             var techs = workshopRepo.GetTechniciansByRepairID(repairID);
