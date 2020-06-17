@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ModelProvider;
+using ModelProvider.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,7 +43,6 @@ namespace Server.Repositories
                .HasForeignKey(job => job.TechnicianId)
                .OnDelete(DeleteBehavior.Restrict);
 
-
             modelBuilder.Entity<Repair>().HasKey(r => r.Id);
             modelBuilder.Entity<BonusRepair>().HasKey(k => new { k.RepairID, k.BonusName });
             modelBuilder.Entity<BonusRepair>().HasOne(job => job.Bonus)
@@ -54,6 +54,8 @@ namespace Server.Repositories
 
             modelBuilder.Entity<User>().HasIndex("Username").IsUnique();
             modelBuilder.Entity<Auto>().HasIndex("LicencePlate").IsUnique();
+            modelBuilder.Entity<Client>().HasIndex("Email").IsUnique();
+            modelBuilder.Entity<User>().HasIndex("Email").IsUnique();
         }
     }
 }
