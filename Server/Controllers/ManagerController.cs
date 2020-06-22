@@ -13,7 +13,8 @@ namespace Server.Controllers
     [Route("api/workshop/manager")]
     [ApiController]
     public class ManagerController : ControllerBase
-    {
+    {      
+
         [Route("repair")]
         [HttpGet]
         public ActionResult<IEnumerable<RepairView>> GetAllRepairs()

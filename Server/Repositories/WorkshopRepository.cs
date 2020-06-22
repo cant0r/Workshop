@@ -209,9 +209,7 @@ namespace Server.Repositories
             {
                 repair.BonusRepairs.Add(new BonusRepair { BonusName = bonus, RepairID = repair.Id });
             }
-            //ctx.Entry(repair.Manager).State = EntityState.Modified;
-            /* foreach (Bonus b in repairView.BonusRepairs.Select(br => br.))
-                 ctx.Entry(b).State = EntityState.Modified;*/
+
             ctx.Entry(repair.Auto).State = EntityState.Modified;
             ctx.SaveChanges();
         }

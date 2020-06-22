@@ -9,10 +9,12 @@ using Server.Repositories;
 
 namespace Server.Controllers
 {
+  
+
     [Route("api/workshop/technician")]
     [ApiController]
     public class TechnicianController : ControllerBase
-    {
+    {       
         [Route("repair")]
         [HttpGet]
         public ActionResult<IEnumerable<RepairView>> GetRepairJobs()

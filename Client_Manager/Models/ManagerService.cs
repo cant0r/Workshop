@@ -9,7 +9,7 @@ using System.Windows.Automation;
 
 namespace Client_Manager.Models
 {
-    public sealed class ManagerService
+    public sealed class ManagerService : IManager
     {
         public List<AutoView> Autos { get; private set; }
         public List<ClientView> Clients { get; private set; }
@@ -54,13 +54,13 @@ namespace Client_Manager.Models
             BonusRepairs = workshopClient.RetrieveEntities<BonusRepairView>() ?? new List<BonusRepairView>();
         }
 
-        public void UploadRepair(RepairView r)
+        public bool UploadRepair(RepairView r)
         {
-            workshopClient.UploadRepair(r);
+            return workshopClient.UploadRepair(r);
         }
-        public void UploadUpdatedRepair(RepairView r)
+        public bool UploadUpdatedRepair(RepairView r)
         {
-            workshopClient.UploadUpdatedRepair(r);
+           return  workshopClient.UploadUpdatedRepair(r);
         }
         public bool ValidateUser(UserView u)
         {

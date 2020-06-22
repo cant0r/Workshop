@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModelProvider", "ModelProvi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client_Manager", "Client_Manager\Client_Manager.csproj", "{C7D10979-579C-4856-AB3D-C0ACE1BB8B88}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client_Technician", "Client_Technician\Client_Technician.csproj", "{AD82ACF7-280C-4CB6-B7A0-8E7B3D78B258}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client_Technician", "Client_Technician\Client_Technician.csproj", "{AD82ACF7-280C-4CB6-B7A0-8E7B3D78B258}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

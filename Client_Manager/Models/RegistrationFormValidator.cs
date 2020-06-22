@@ -11,12 +11,18 @@ namespace Client_Manager.Models
 {
     public class RegistrationFormValidator
     {
-        private ManagerService manager = ManagerService.GetInstance();
+        private IManager manager;
         private bool Update { get; set; }
 
         public RegistrationFormValidator(bool update)
         {
             Update = update;
+            manager = ManagerService.GetInstance();
+        }
+        public RegistrationFormValidator(bool update, IManager service)
+        {
+            Update = update;
+            manager = service;
         }
         public bool ValidateClientInput(List<TextBox> controls)
         {

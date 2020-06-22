@@ -66,7 +66,7 @@ namespace Client_Manager.Models
             var parserSettings = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
             return JsonConvert.DeserializeObject<List<TEntity>>(rawContent, parserSettings);
         }
-        public void UploadRepair(RepairView repair)
+        public bool UploadRepair(RepairView repair)
         {
             string URIPart = URIparts[typeof(RepairView)];
             var options = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
@@ -79,8 +79,9 @@ namespace Client_Manager.Models
             {
                 MessageBox.Show(result.ReasonPhrase, result.StatusCode.ToString());
             }
+            return result.IsSuccessStatusCode;
         }
-        public void UploadUpdatedRepair(RepairView repair)
+        public bool UploadUpdatedRepair(RepairView repair)
         {         
             string URIPart = URIparts[typeof(RepairView)];
             var options = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
@@ -93,6 +94,7 @@ namespace Client_Manager.Models
             {
                 MessageBox.Show(result.ReasonPhrase, result.StatusCode.ToString());
             }
+            return result.IsSuccessStatusCode;
         }
 
         public bool ValidateUser(UserView u)
